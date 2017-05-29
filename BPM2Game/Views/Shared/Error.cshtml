@@ -1,13 +1,13 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
-</body>
-</html>
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<ins><h1 class="text-danger">Error</h1></ins>
+<h2 class="text-danger">Controller: @Model.ControllerName</h2>
+<h2 class="text-danger">Action: @Model.ActionName</h2>
+<h2 class="text-danger">Details:</h2>
+<p>
+    @Model.Exception
+</p>

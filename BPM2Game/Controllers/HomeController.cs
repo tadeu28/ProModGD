@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Bpm2GP.Model.DataBase;
 
 namespace BPM2Game.Controllers
 {
@@ -15,21 +16,7 @@ namespace BPM2Game.Controllers
         {
             return View();
         }
-
-        [AllowAnonymous]
-        public ActionResult LogIn()
-        {
-            //Verificar autenticação aqui
-            FormsAuthentication.SetAuthCookie("tadeuclasse", true);
-            return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult LogOff()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
-        }
-
+        
         public ActionResult ModeloProcesso()
         {
             return View();

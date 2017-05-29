@@ -1,0 +1,43 @@
+﻿@model Bpm2GP.Model.DataBase.Models.User
+
+<form method="POST" action="@Url.Action("SaveNewUser", "User")"
+      class="dropdown-menu panel panel-info" style="padding-bottom: 0px;border-top-width: 0px;padding-top: 1px;width: 350px;">
+    <div class="panel-heading"><h5><i class="glyphicon glyphicon-user"></i> New User</h5></div>
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "User Name" } })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "E-Mail" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.PswConfirm, new { htmlAttributes = new { @class = "form-control", placeholder = "Password confirmation" } })
+                    @Html.ValidationMessageFor(model => model.PswConfirm, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</form>

@@ -1,10 +1,6 @@
-﻿@{
-    var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-    FormsAuthenticationTicket ticket = null;
-    if (authCookie != null)
-    {
-        ticket = FormsAuthentication.Decrypt(authCookie.Value);
-    }
+﻿@using Bpm2GP.Model.Utils
+@{
+    var user = LoginUtils.User;
 }
 
 <!DOCTYPE html>
@@ -17,51 +13,43 @@
 
     <title>BPM2GameProject - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
 
     <link rel="stylesheet" href="../../Scripts/bower_components/bpmn-js/dist/assets/diagram-js.css">
     <link rel="stylesheet" href="../../Scripts/bower_components/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css">
-
-    @Scripts.Render("~/bundles/modernizr")
+    
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </head>
 <body>
-    <div class="navbar navbar-custom navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("BPM2GP", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Projects", "Index", "Projeto", new {id = 1}, new {})</li>
-                    <li>@Html.ActionLink("Modelo de Processo", "ModeloProcesso", "Home")</li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (ticket == null)
-                    {
-                        <li><a href="@Url.Action("LogIn", "Home")"><i class="glyphicon glyphicon-log-in"></i> Entrar</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("LogOff", "Home")"><i class="glyphicon glyphicon-log-out"></i> Sair</a></li>
-                    }
-                </ul>
-            </div>
-        </div>
+
+<nav class="navbar navbar-custom navbar-fixed-top">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @Html.ActionLink("BPM2GP", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
     </div>
-    <div class="container body-content">
-        <br/>
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Tadeu Classe</p>
-        </footer>
-    </div>
+
+    <div class="collapse navbar-collapse">
+        @(user == null ? Html.Partial("_UnloggedMenu") : Html.Partial("_LoggedMenu"))
+    </div><!-- /.navbar-collapse -->
+</nav>
+<div class="container body-content">
+    <br/>
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Tadeu Classe</p>
+    </footer>
+
+
+
+</div>
 </body>
 </html>
