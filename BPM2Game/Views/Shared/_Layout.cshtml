@@ -24,7 +24,6 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
-
 <nav class="navbar navbar-custom navbar-fixed-top">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -40,16 +39,13 @@
         @(user == null ? Html.Partial("_UnloggedMenu") : Html.Partial("_LoggedMenu"))
     </div><!-- /.navbar-collapse -->
 </nav>
-<div class="container body-content">
+<div class="body-content">
     <br/>
     @RenderBody()
     <hr/>
     <footer>
-        <p>&copy; @DateTime.Now.Year - Tadeu Classe</p>
+        <p>&copy; @DateTime.Now.Year - Tadeu Classe | Rio de Janeiro (Brazil) | <a href="mailto:tadeu.classe@gmail.com"> Contact us</a></p>
     </footer>
-
-
-
 </div>
 </body>
 </html>

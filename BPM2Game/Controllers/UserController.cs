@@ -55,7 +55,7 @@ namespace BPM2Game.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, Message = "" + ex.Message });
+                return Json(new { success = false, Message = "" + ex.Message});
             }
         }
 
@@ -64,6 +64,35 @@ namespace BPM2Game.Controllers
             LoginUtils.Deslogar();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public ActionResult UserProfile()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+
+                return View(designer);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "User", "UserProfile"));
+            }
+        }
+
+        public PartialViewResult SaveProfile(Designer designer)
+        {
+            try
+            {
+                LoginUtils.User.Designer = DbFactory.Instance.DesignerRepository.Save(designer);
+
+                return PartialView("_DesignerProfile", LoginUtils.User.Designer);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "User", "SaveProfile"));
+            }
         }
     }
 }

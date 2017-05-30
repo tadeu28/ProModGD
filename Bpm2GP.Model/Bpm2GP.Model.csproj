@@ -106,7 +106,11 @@
   <ItemGroup>
     <Compile Include="DataBase\DbFactory.cs" />
     <Compile Include="DataBase\Models\Designer.cs" />
+    <Compile Include="DataBase\Models\DesignerTeam.cs" />
+    <Compile Include="DataBase\Models\Project.cs" />
     <Compile Include="DataBase\Models\User.cs" />
+    <Compile Include="DataBase\Repository\DesignerRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectRepository.cs" />
     <Compile Include="DataBase\Repository\RepositoryBase.cs" />
     <Compile Include="DataBase\Repository\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

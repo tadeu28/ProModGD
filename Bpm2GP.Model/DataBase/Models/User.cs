@@ -43,7 +43,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(customer => customer.Designer, map =>
             {
                 map.Cascade(Cascade.All);
-                map.Lazy(LazyRelation.Proxy);
+                map.Lazy(LazyRelation.NoProxy);
                 map.Column("IdDesigner");
             });
         }

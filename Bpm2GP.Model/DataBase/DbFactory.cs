@@ -28,12 +28,16 @@ namespace Bpm2GP.Model.DataBase
         public static DbFactory Instance => _instance ?? (_instance = new DbFactory());
 
         public UserRepository UserRepository { get; set; }
+        public DesignerRepository DesignerRepository { get; set; }
+        public ProjectRepository ProjectRepository { get; set; }
 
         private DbFactory()
         {
             Conectar();
 
             this.UserRepository = new UserRepository(this.Session);
+            this.DesignerRepository = new DesignerRepository(this.Session);
+            this.ProjectRepository = new ProjectRepository(this.Session);
         }
 
         public void Initialize(object obj)
