@@ -20,6 +20,26 @@ namespace BPM2Game.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult UserCompare(string UserName)
+        {
+            try
+            {
+                var user =
+                    DbFactory.Instance.UserRepository.FindAll()
+                        .FirstOrDefault(f => String.Equals(f.UserName, UserName, StringComparison.CurrentCultureIgnoreCase));
+
+                if(user == null)
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult SaveNewUser(User user)
         {
@@ -32,6 +52,8 @@ namespace BPM2Game.Controllers
                 DbFactory.Instance.UserRepository.Save(user);
 
                 LoginUtils.Logar(user);
+
+                user.Designer.User = user;
 
                 return RedirectToAction("Index", "Home");
             }

@@ -7,6 +7,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using System.ComponentModel.DataAnnotations;
 using System.Management.Instrumentation;
+using System.Web.Mvc;
 
 namespace Bpm2GP.Model.DataBase.Models
 {
@@ -14,6 +15,7 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public virtual Guid Id { get; set; }
         [Required(ErrorMessage = "User name is required.")]
+        [Remote("UserCompare", "User", ErrorMessage = "Aready exists this user name, please try another.")]
         public virtual string UserName { get; set; }
         [Required(ErrorMessage = "E-mail is required.")]
         [DataType(DataType.EmailAddress)]
@@ -21,7 +23,7 @@ namespace Bpm2GP.Model.DataBase.Models
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
         public virtual string Password { get; set; }
-        [Compare("Password", ErrorMessage = "The password is different of confirmation.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password is different of confirmation.")]
         [DataType(DataType.Password)]
         public virtual string PswConfirm { get; set; }
         public virtual Designer Designer { get; set; }
