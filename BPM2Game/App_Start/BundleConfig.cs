@@ -25,6 +25,7 @@ namespace BPM2Game
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/fileinput*",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bpmn-js").Include(
@@ -34,6 +35,7 @@ namespace BPM2Game
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-custom.css",
+                      "~/Content/bootstrap-fileinput/css/fileinput*",
                       "~/Content/DataTables/css/dataTables.bootstrap*",
                       "~/Content/site.css",
                       "~/Scripts/bpmn-js/assets/diagram-js.css",
