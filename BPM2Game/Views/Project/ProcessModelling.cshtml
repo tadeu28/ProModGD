@@ -1,0 +1,28 @@
+﻿<h2>Processo Modelling</h2>
+<hr/>
+
+<div class="alert alert-success row">
+    <div class="col-md-6 text-left">
+        <button class="btn btn-default">
+            <i class="glyphicon glyphicon-file "></i> New Model
+        </button>
+        <button class="btn btn-default">
+            <i class="glyphicon glyphicon-floppy-disk"></i> Save Model
+        </button>
+    </div>
+    <div class="col-md-6 text-right">
+        <input type="file" class="form-control"/>
+        <button class="btn btn-default">
+            <i class="glyphicon glyphicon-paperclip "></i> Upload Model
+        </button>
+    </div>
+</div>
+
+<button id="save-button">Save Diagram</button>
+<!-- element to draw bpmn diagram in -->
+<div class="well" style="height: 600px" id="canvas"></div>
+<!-- scripts -->
+<!-- bpmn-js modeler -->
+<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
+<!-- application -->
+<script src="../../Scripts/modeler.js"></script>

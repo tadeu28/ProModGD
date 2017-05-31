@@ -17,9 +17,6 @@ namespace BPM2Game.Controllers
             return View();
         }
         
-        public ActionResult ModeloProcesso()
-        {
-            return View();
-        }
+        
     }
 }

@@ -82,12 +82,12 @@
             <td class="text-center">
                 @if (!string.IsNullOrEmpty(item.BpmnModelPath))
                 {
-                    <a href="@Url.Action("ModeloProcesso", "Home")" class="btn btn-default"
+                    <a href="@Url.Action("ProcessModelling", "Project")" class="btn btn-default"
                        data-toggle="tooltip" data-placement="top" title="Edit Process Model"><i class="glyphicon glyphicon-edit"></i></a>
                 }
                 else
                 {
-                    <a href="@Url.Action("ModeloProcesso", "Home")" class="btn btn-default"
+                    <a href="@Url.Action("ProcessModelling", "Project")" class="btn btn-default"
                        data-toggle="tooltip" data-placement="top" title="Create Process Model"><i class="glyphicon glyphicon-plus"></i></a>
                 }
                 <a class="btn btn-default"

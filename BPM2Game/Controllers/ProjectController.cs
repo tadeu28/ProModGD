@@ -87,5 +87,10 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "DeleteProjects"));
             }
         }
+
+        public ActionResult ProcessModelling()
+        {
+            return View();
+        }
     }
 }
