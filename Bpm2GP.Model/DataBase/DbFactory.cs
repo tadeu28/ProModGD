@@ -136,6 +136,9 @@ namespace Bpm2GP.Model.DataBase
             var config = new Configuration();
             try
             {
+                //Exibição de SQL no console
+                ConfigureLog4Net();
+
                 //Integração com o Banco de Dados
                 config.DataBaseIntegration(c =>
                 {
@@ -150,7 +153,7 @@ namespace Bpm2GP.Model.DataBase
                     // GERA LOG DOS SQL EXECUTADOS NO CONSOLE
                     c.LogSqlInConsole = true;
                     // DESCOMENTAR CASO QUEIRA VISUALIZAR O LOG DE SQL FORMATADO NO CONSOLE
-                    //c.LogFormattedSql = true;
+                    c.LogFormattedSql = true;
                     // CRIA O SCHEMA DO BANCO DE DADOS SEMPRE QUE A CONFIGURATION FOR UTILIZADA
                     c.SchemaAction = SchemaAutoAction.Update;
                 });
@@ -205,6 +208,8 @@ namespace Bpm2GP.Model.DataBase
                         return _sessionFactory.GetCurrentSession();
 
                     var session = _sessionFactory.OpenSession();
+                    session.FlushMode = FlushMode.Commit;
+
                     CurrentSessionContext.Bind(session);
 
                     return session;
@@ -214,6 +219,41 @@ namespace Bpm2GP.Model.DataBase
                     throw new Exception("Não foi possível criar a Sessão.", ex);
                 }
             }
+        }
+
+        public static void ConfigureLog4Net()
+        {
+            log4net.Config.XmlConfigurator.Configure();
+
+            /***
+            Exemplo de configuração do log para nhibernate no arquivo app.config
+            -------------------------------------------------------------------
+              <configSections>
+                <section name="log4net"
+                  type="log4net.Config.Log4NetConfigurationSectionHandler, log4net"/>
+              </configSections>
+              <log4net>
+                <appender name="NHLog" type="log4net.Appender.RollingFileAppender, log4net" >
+                  <param name="File" value="NHLog.txt" />
+                  <param name="AppendToFile" value="true" />
+                  <param name="maximumFileSize" value="200KB" />
+                  <param name="maxSizeRollBackups" value="1" />
+                  <layout type="log4net.Layout.PatternLayout, log4net">
+                    <conversionPattern
+                    value="%date{yyyy.MM.dd hh:mm:ss} %-5level [%thread] - %message%newline" />
+                  </layout>
+                </appender>
+                <!-- levels: ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF -->
+                <root>
+                  <level value="INFO" />
+                  <appender-ref ref="NHLog" />
+                </root>
+                <logger name="NHBase.SQL">
+                  <level value="ALL" />
+                  <appender-ref ref="NHLog" />
+                </logger>
+              </log4net>
+            ***/
         }
     }
 }

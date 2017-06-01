@@ -6,8 +6,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace BPM2Game
-{
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+namespace BPM2Game { 
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()

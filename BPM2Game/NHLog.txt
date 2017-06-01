@@ -1,0 +1,75 @@
+2017.05.31 11:13:09 INFO  [7] - Using dialect: NHibernate.Dialect.MySQLDialect
+2017.05.31 11:13:09 INFO  [7] - Mapping class: Bpm2GP.Model.DataBase.Models.Designer -> Designer
+2017.05.31 11:13:09 INFO  [7] - Mapping class: Bpm2GP.Model.DataBase.Models.DesignTeam -> DesignTeam
+2017.05.31 11:13:09 INFO  [7] - Mapping class: Bpm2GP.Model.DataBase.Models.Project -> Project
+2017.05.31 11:13:09 INFO  [7] - Mapping class: Bpm2GP.Model.DataBase.Models.User -> User
+2017.05.31 11:13:12 INFO  [7] - checking mappings queue
+2017.05.31 11:13:12 INFO  [7] - processing one-to-many association mappings
+2017.05.31 11:13:12 INFO  [7] - mapping collection: Bpm2GP.Model.DataBase.Models.Designer.Projects -> Project
+2017.05.31 11:13:12 INFO  [7] - mapping collection: Bpm2GP.Model.DataBase.Models.Designer.Teams -> DesignTeam
+2017.05.31 11:13:12 INFO  [7] - processing one-to-one association property references
+2017.05.31 11:13:12 INFO  [7] - processing foreign key constraints
+2017.05.31 11:13:12 INFO  [7] - processing filters (second pass)
+2017.05.31 11:13:12 INFO  [7] - Using dialect: NHibernate.Dialect.MySQLDialect
+2017.05.31 11:13:12 INFO  [7] - Using dialect: NHibernate.Dialect.MySQLDialect
+2017.05.31 11:13:12 INFO  [7] - Using dialect defined converter
+2017.05.31 11:13:12 INFO  [7] - Generate SQL with comments: disabled
+2017.05.31 11:13:12 INFO  [7] - Initializing connection provider: NHibernate.Connection.DriverConnectionProvider, NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4
+2017.05.31 11:13:12 INFO  [7] - Configuring ConnectionProvider
+2017.05.31 11:13:12 INFO  [7] - Transaction factory: NHibernate.Transaction.AdoNetWithDistributedTransactionFactory
+2017.05.31 11:13:12 INFO  [7] - Optimize cache for minimal puts: False
+2017.05.31 11:13:12 INFO  [7] - Connection release mode: auto
+2017.05.31 11:13:12 INFO  [7] - Default batch fetch size: 1
+2017.05.31 11:13:12 INFO  [7] - echoing all SQL to stdout
+2017.05.31 11:13:12 INFO  [7] - Statistics: disabled
+2017.05.31 11:13:12 INFO  [7] - Deleted entity synthetic identifier rollback: disabled
+2017.05.31 11:13:12 INFO  [7] - Query translator: NHibernate.Hql.Ast.ANTLR.ASTQueryTranslatorFactory
+2017.05.31 11:13:12 INFO  [7] - Query provider: NHibernate.Linq.DefaultQueryProvider
+2017.05.31 11:13:12 INFO  [7] - Query language substitutions: {}
+2017.05.31 11:13:12 INFO  [7] - cache provider: NHibernate.Cache.NoCacheProvider, NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4
+2017.05.31 11:13:12 INFO  [7] - Order SQL inserts for batching: disabled
+2017.05.31 11:13:12 INFO  [7] - Order SQL updates for batching: disabled
+2017.05.31 11:13:12 INFO  [7] - Batcher factory: NHibernate.AdoNet.NonBatchingBatcherFactory, NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4
+2017.05.31 11:13:12 INFO  [7] - Default flush mode: Auto
+2017.05.31 11:13:12 INFO  [7] - Default entity-mode: Poco
+2017.05.31 11:13:12 INFO  [7] - Named query checking : enabled
+2017.05.31 11:13:12 INFO  [7] - Ignoring exceptions in BeforeTransactionCompletion : disabled
+2017.05.31 11:13:12 INFO  [7] - building session factory
+2017.05.31 11:13:12 INFO  [7] - no-proxy property fetching available for: Bpm2GP.Model.DataBase.Models.User
+2017.05.31 11:13:12 INFO  [7] - no name configured
+2017.05.31 11:13:12 INFO  [7] - Using dialect: NHibernate.Dialect.MySQLDialect
+2017.05.31 11:13:12 INFO  [7] - Running hbm2ddl schema update
+2017.05.31 11:13:12 INFO  [7] - fetching database metadata
+2017.05.31 11:13:12 INFO  [7] - Initializing connection provider: NHibernate.Connection.DriverConnectionProvider, NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4
+2017.05.31 11:13:12 INFO  [7] - Configuring ConnectionProvider
+2017.05.31 11:13:12 INFO  [7] - updating schema
+2017.05.31 11:13:12 INFO  [7] - checking mappings queue
+2017.05.31 11:13:12 INFO  [7] - processing one-to-many association mappings
+2017.05.31 11:13:12 INFO  [7] - processing one-to-one association property references
+2017.05.31 11:13:12 INFO  [7] - processing foreign key constraints
+2017.05.31 11:13:12 INFO  [7] - processing filters (second pass)
+2017.05.31 11:13:13 INFO  [7] - table found: def.bpm2gp.designer
+2017.05.31 11:13:13 INFO  [7] - columns: id, name, shortbio
+2017.05.31 11:13:13 INFO  [7] - foreign keys: 
+2017.05.31 11:13:13 INFO  [7] - indexes: primary
+2017.05.31 11:13:13 INFO  [7] - table found: def.bpm2gp.designteam
+2017.05.31 11:13:13 INFO  [7] - columns: id, iddesigner, idproject
+2017.05.31 11:13:13 INFO  [7] - foreign keys: fk41254420638896e9, fk412544206bcbafa8
+2017.05.31 11:13:13 INFO  [7] - indexes: primary, iddesigner, idproject
+2017.05.31 11:13:13 INFO  [7] - table found: def.bpm2gp.project
+2017.05.31 11:13:13 INFO  [7] - columns: id, title, description, startdate, lastupdate, bpmnmodelpath, iddesigner, inactive
+2017.05.31 11:13:13 INFO  [7] - foreign keys: fkcfc6d85a638896e9
+2017.05.31 11:13:13 INFO  [7] - indexes: primary, iddesigner
+2017.05.31 11:13:13 INFO  [7] - table found: def.bpm2gp.user
+2017.05.31 11:13:13 INFO  [7] - columns: id, username, email, password, iddesigner
+2017.05.31 11:13:13 INFO  [7] - foreign keys: fk7185c17c638896e9
+2017.05.31 11:13:13 INFO  [7] - indexes: primary, iddesigner
+2017.05.31 11:13:13 INFO  [7] - schema update complete
+2017.05.31 11:13:19 INFO  [7] - SELECT this_.Id as Id1_3_0_, this_.UserName as UserNa2_3_0_, this_.Email as Email3_3_0_, this_.Password as Passwo4_3_0_, this_.IdDesigner as IdDesi5_3_0_ FROM User this_
+2017.05.31 11:13:19 INFO  [10] - SELECT this_.Id as Id1_3_0_, this_.UserName as UserNa2_3_0_, this_.Email as Email3_3_0_, this_.Password as Passwo4_3_0_, this_.IdDesigner as IdDesi5_3_0_ FROM User this_
+2017.05.31 11:13:19 INFO  [8] - SELECT designer0_.Id as Id1_0_1_, designer0_.Name as Name2_0_1_, designer0_.ShortBio as ShortB3_0_1_, user1_.Id as Id1_3_0_, user1_.UserName as UserNa2_3_0_, user1_.Email as Email3_3_0_, user1_.Password as Passwo4_3_0_, user1_.IdDesigner as IdDesi5_3_0_ FROM Designer designer0_ left outer join User user1_ on designer0_.Id=user1_.IdDesigner WHERE designer0_.Id=?p0
+2017.05.31 11:13:19 INFO  [8] - SELECT user0_.Id as Id1_3_0_, user0_.UserName as UserNa2_3_0_, user0_.Email as Email3_3_0_, user0_.Password as Passwo4_3_0_, user0_.IdDesigner as IdDesi5_3_0_ FROM User user0_ WHERE user0_.IdDesigner=?p0
+2017.05.31 11:13:19 INFO  [8] - SELECT teams0_.idDesigner as idDesi2_1_1_, teams0_.Id as Id1_1_1_, teams0_.Id as Id1_1_0_, teams0_.IdDesigner as IdDesi2_1_0_, teams0_.IdProject as IdProj3_1_0_ FROM DesignTeam teams0_ WHERE teams0_.idDesigner=?p0
+2017.05.31 11:13:19 INFO  [8] - SELECT project0_.Id as Id1_2_1_, project0_.Title as Title2_2_1_, project0_.Description as Descri3_2_1_, project0_.StartDate as StartD4_2_1_, project0_.LastUpdate as LastUp5_2_1_, project0_.BpmnModelPath as BpmnMo6_2_1_, project0_.Inactive as Inacti7_2_1_, project0_.idDesigner as idDesi8_2_1_, designteam1_.Id as Id1_1_0_, designteam1_.IdDesigner as IdDesi2_1_0_, designteam1_.IdProject as IdProj3_1_0_ FROM Project project0_ left outer join DesignTeam designteam1_ on project0_.Id=designteam1_.IdProject WHERE project0_.Id=?p0
+2017.05.31 11:13:19 INFO  [8] - SELECT designteam0_.Id as Id1_1_0_, designteam0_.IdDesigner as IdDesi2_1_0_, designteam0_.IdProject as IdProj3_1_0_ FROM DesignTeam designteam0_ WHERE designteam0_.IdProject=?p0
+2017.05.31 11:13:19 INFO  [8] - SELECT projects0_.idDesigner as idDesi8_2_2_, projects0_.Id as Id1_2_2_, projects0_.Id as Id1_2_1_, projects0_.Title as Title2_2_1_, projects0_.Description as Descri3_2_1_, projects0_.StartDate as StartD4_2_1_, projects0_.LastUpdate as LastUp5_2_1_, projects0_.BpmnModelPath as BpmnMo6_2_1_, projects0_.Inactive as Inacti7_2_1_, projects0_.idDesigner as idDesi8_2_1_, designteam1_.Id as Id1_1_0_, designteam1_.IdDesigner as IdDesi2_1_0_, designteam1_.IdProject as IdProj3_1_0_ FROM Project projects0_ left outer join DesignTeam designteam1_ on projects0_.Id=designteam1_.IdProject WHERE projects0_.idDesigner=?p0
