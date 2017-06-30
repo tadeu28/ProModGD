@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -88,9 +89,45 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public ActionResult ProcessModelling()
+        public ActionResult ProcessModelling(Guid id)
         {
+            ViewBag.ProjectId = id;
             return View();
+        }
+
+        public ActionResult ViewModelling(Guid id)
+        {
+            var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+
+            var strBpmnModel = Encoding.UTF8.GetString(project.BpmnModel);
+
+            ViewBag.ProjectId = id;
+            ViewBag.BpmnModel = strBpmnModel.ToString().Replace('\n', ' ').Replace('\"', '"');
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult SalvarXML(string xml, string id)
+        {
+            try
+            {
+                var guidId = Guid.Parse(id);
+
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(guidId);
+
+                var str = Server.UrlDecode(xml);
+
+                var xmlByteFile = Encoding.UTF8.GetBytes(str);
+
+                project.BpmnModel = xmlByteFile;
+                DbFactory.Instance.ProjectRepository.Save(project);
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

@@ -6,14 +6,42 @@
  */
 (function(BpmnModeler) {
 
-    
   // create modeler
   var bpmnModeler = new BpmnModeler({
     container: '#canvas'
   });
+    
+  $("#fileSelected").submit(function (event) {
+
+      var inputElements = $("#fileSelected")["0"].outerText.split("\n");
+      var filePath = inputElements[0].trim();
+
+      var file = $('#input-1a').fileinput('getFileStack')[0];
+
+      if (filePath.indexOf(".bpmn") > 0) {
+
+          var read = new FileReader();
+
+          read.readAsBinaryString(file);
+
+          read.onloadend = function () {
+
+              var xml = read.result;
+              importXML(xml);
+          }
+          
+      } else {
+          alert("This file is not a bpmn file. Please try to reload other file.");
+      }
+
+      event.preventDefault();
+    });
+    
 
   // import function
   function importXML(xml) {
+
+    $("#modelArea").removeClass("hide");
 
     // import diagram
     bpmnModeler.importXML(xml, function(err) {
@@ -30,21 +58,35 @@
       
     // save diagram on button click
     var saveButton = document.querySelector('#save-button');
-      
 
-    saveButton.addEventListener('click', function() {
+    saveButton.addEventListener('click', function(ev) {
 
       // get the diagram contents
-      bpmnModeler.saveXML({ format: true }, function(err, xml) {
+      bpmnModeler.saveXML({ format: false }, function(err, xml) {
+
+          console.log(xml);
 
         if (err) {
-          console.error('diagram save failed', err);
+            console.error('Did not possible to save the model.', err);
         } else {
-          console.info('diagram saved');
-          console.info(xml);
+            $.ajax({
+                dataType: "text",
+                type: "POST",
+                url: "/Project/SalvarXML?id=" + $("#projectId").val(),
+                data: { 'xml': encodeURIComponent(xml) },
+                success: function (dados) {
+                    if (dados) {
+                        $("#save-button").notify(
+                          "The model was save with success!",
+                            {
+                                className: 'success',
+                                position: "bottom"
+                            }
+                        );
+                    }
+                }
+            });
         }
-
-        alert('diagram saved (see console (F12))');
       });
     });
   }
@@ -68,7 +110,6 @@
   $("#modelArea").addClass("hide");
 
   $('#newProcess').click(function () {
-      $("#modelArea").removeClass("hide");
       importXML(diagramXML);
   });
 

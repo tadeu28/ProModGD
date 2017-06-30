@@ -22,6 +22,7 @@ namespace Bpm2GP.Model.DataBase.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm:ss}", ApplyFormatInEditMode = true)]
         public virtual DateTime LastUpdate { get; set; }
         public virtual String BpmnModelPath { get; set; }
+        public virtual byte[] BpmnModel { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual Designer Owner { get; set; }
         public virtual DesignTeam DesignTeam { get; set; }
@@ -46,6 +47,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Property(x => x.LastUpdate);
             Property(x => x.Inactive);
             Property(x => x.BpmnModelPath);
+            Property(x => x.BpmnModel);
 
             ManyToOne(x => x.Owner, m =>
             {

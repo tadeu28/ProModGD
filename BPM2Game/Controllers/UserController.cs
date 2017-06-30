@@ -33,7 +33,7 @@ namespace BPM2Game.Controllers
                 else
                     return Json(false, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }

@@ -487,6 +487,7 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\viwer-bpmn.js" />
     <Content Include="Scripts\fileinput.js" />
     <Content Include="Scripts\fileinput.min.js" />
     <Content Include="Scripts\fileinput_locale_ar.js" />
@@ -557,6 +558,7 @@
     <Content Include="Views\Project\_TblProjects.cshtml" />
     <Content Include="Views\Project\_AddProject.cshtml" />
     <Content Include="Views\Project\ProcessModelling.cshtml" />
+    <Content Include="Views\Project\ViewModelling.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

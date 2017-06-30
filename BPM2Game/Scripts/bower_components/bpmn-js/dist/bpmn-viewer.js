@@ -11668,6 +11668,9 @@ function SelectionBehavior(eventBus, selection, canvas, elementRegistry) {
   eventBus.on('element.click', function(event) {
 
     var element = event.element;
+	
+	//Tadeu: Click de elemento
+      $("#selElementView").text("Id:" + element.id + " | Type: " + element.type + " | Name:" + element.businessObject.name);
 
     // do not select the root element
     // or connections
