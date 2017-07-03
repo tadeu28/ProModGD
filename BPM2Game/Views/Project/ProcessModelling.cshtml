@@ -1,6 +1,10 @@
 ﻿<h2>Process Modelling</h2>
 <hr />
-
+<script type="text/javascript">
+    var edit = "@ViewBag.Edit";
+    var modelFile = "@ViewBag.ProjectId" + ".txt";
+    console.log(edit);
+</script>
 <div class="alert alert-success row">
     <div class="col-md-3 text-left">
         <button class="btn btn-default"style="height: 54px" id="newProcess">
@@ -18,6 +22,7 @@
 <!-- element to draw bpmn diagram in -->
 <div id="modelArea">
     <div class="well" style="height: 600px" id="canvas"></div>
+    <div id="js-properties-panel"></div>
 </div>
 <!-- scripts -->
 <!-- bpmn-js modeler -->

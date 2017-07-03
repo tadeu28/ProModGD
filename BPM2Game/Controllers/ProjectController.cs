@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -91,8 +92,21 @@ namespace BPM2Game.Controllers
 
         public ActionResult ProcessModelling(Guid id)
         {
-            ViewBag.ProjectId = id;
-            return View();
+            try {
+                ViewBag.Edit = false;
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                if (project.BpmnModelPath != "")
+                {
+                    ViewBag.Edit = true;
+                }
+                ViewBag.ProjectId = id;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProcessModelling"));
+            }
+            
         }
 
         public ActionResult ViewModelling(Guid id)
@@ -107,20 +121,27 @@ namespace BPM2Game.Controllers
         }
 
         [HttpPost]
-        public JsonResult SalvarXML(string xml, string id)
+        public JsonResult SalvarXML(string id)
         {
             try
             {
                 var guidId = Guid.Parse(id);
-
                 var project = DbFactory.Instance.ProjectRepository.FindFirstById(guidId);
 
-                var str = Server.UrlDecode(xml);
+                foreach (string fileName in Request.Files)
+                {
+                    var file = Request.Files[fileName];
+                    if (file != null)
+                    {
+                        var uploadPath = Server.MapPath("~/files/bpmn");
+                        string caminhoArquivo = Path.Combine(@uploadPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(caminhoArquivo);
 
-                var xmlByteFile = Encoding.UTF8.GetBytes(str);
-
-                project.BpmnModel = xmlByteFile;
-                DbFactory.Instance.ProjectRepository.Save(project);
+                        project.BpmnModel = new BinaryReader(file.InputStream).ReadBytes(file.ContentLength);
+                        project.BpmnModelPath = caminhoArquivo;
+                        DbFactory.Instance.ProjectRepository.Save(project);
+                    }
+                }
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }

@@ -604,7 +604,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>23222</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:23527/</IISUrl>
+          <IISUrl>http://localhost:23529/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

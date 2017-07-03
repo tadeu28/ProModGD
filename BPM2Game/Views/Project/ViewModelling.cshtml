@@ -1,14 +1,10 @@
 ﻿<h2>Process View</h2>
 <hr />
 <script type="text/javascript">
-    //var x = "@ViewBag.BpmnModel";
-
-    //bpmnData = decodeURIComponent(x);
-
-    var bpmnData = $('<textarea />').html("@(ViewBag.BpmnModel)").text();
+    var modelFile = "@ViewBag.ProjectId" + ".txt";
 </script>
 <form class="col-md-9 text-right">
-    <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
+    <input id="projectId" type="hidden" value="@ViewBag.ProjectId"/>
 </form>
 <!-- element to draw bpmn diagram in -->
 <div>
@@ -20,6 +16,6 @@
 <p id="selElementView"></p>
 <!-- scripts -->
 <!-- bpmn-js modeler -->
-<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-viewer.js"></script>
+<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-navigated-viewer.js"></script>
 <!-- application -->
 <script src="../../Scripts/viwer-bpmn.js"></script>

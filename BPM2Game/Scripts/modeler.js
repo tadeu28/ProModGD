@@ -4,11 +4,15 @@
  * This is an example script that loads an embedded diagram file <diagramXML>
  * and opens it using the bpmn-js modeler.
  */
-(function(BpmnModeler) {
+
+(function (BpmnModeler) {
 
   // create modeler
   var bpmnModeler = new BpmnModeler({
-    container: '#canvas'
+      container: '#canvas',
+      propertiesPanel: {
+          parent: '#js-properties-panel'
+      }
   });
     
   $("#fileSelected").submit(function (event) {
@@ -37,12 +41,12 @@
       event.preventDefault();
     });
     
-
+  
   // import function
   function importXML(xml) {
 
     $("#modelArea").removeClass("hide");
-
+    
     // import diagram
     bpmnModeler.importXML(xml, function(err) {
 
@@ -56,28 +60,32 @@
       canvas.zoom('fit-viewport');
     });
       
-    // save diagram on button click
+      // save diagram on button click
     var saveButton = document.querySelector('#save-button');
-
     saveButton.addEventListener('click', function(ev) {
-
+        
       // get the diagram contents
       bpmnModeler.saveXML({ format: false }, function(err, xml) {
-
-          console.log(xml);
-
+          
+        var blob = new Blob([xml], { type: 'text/xml' });
+        console.log(blob);
+          
         if (err) {
             console.error('Did not possible to save the model.', err);
         } else {
+            var formData = new FormData();
+            formData.append("file", blob, $("#projectId").val() + ".txt");
             $.ajax({
-                dataType: "text",
                 type: "POST",
-                url: "/Project/SalvarXML?id=" + $("#projectId").val(),
-                data: { 'xml': encodeURIComponent(xml) },
+                 url: "/Project/SalvarXML?id=" + $("#projectId").val(),
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
                 success: function (dados) {
                     if (dados) {
                         $("#save-button").notify(
-                          "The model was save with success!",
+                            "The model was save with success!",
                             {
                                 className: 'success',
                                 position: "bottom"
@@ -113,4 +121,17 @@
       importXML(diagramXML);
   });
 
-})(window.BpmnJS);
+  if (edit) {
+      var url = "http://localhost:23529/files/bpmn/" + modelFile;
+
+      $.ajax({
+          type: 'GET',
+          url: url,
+          processData: false,
+          success: function (data) {
+              importXML(data);
+          }
+      });
+  }
+
+})(window.BpmnJS, window.saveAs);
