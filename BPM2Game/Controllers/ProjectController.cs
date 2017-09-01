@@ -100,6 +100,7 @@ namespace BPM2Game.Controllers
                     ViewBag.Edit = true;
                 }
                 ViewBag.ProjectId = id;
+                ViewBag.BpmnFilePath = Request.Url.Authority + "/files/bpmn/" + project.Id + ".txt";
                 return View();
             }
             catch (Exception ex)
@@ -113,10 +114,10 @@ namespace BPM2Game.Controllers
         {
             var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
 
-            var strBpmnModel = Encoding.UTF8.GetString(project.BpmnModel);
+            //var strBpmnModel = Encoding.UTF8.GetString(project.BpmnModel);
 
             ViewBag.ProjectId = id;
-            ViewBag.BpmnModel = strBpmnModel.ToString().Replace('\n', ' ').Replace('\"', '"');
+            ViewBag.BpmnFilePath = Request.Url.Authority + "/files/bpmn/" + project.Id +".txt";
             return View();
         }
 

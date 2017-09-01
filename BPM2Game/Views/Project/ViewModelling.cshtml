@@ -1,11 +1,21 @@
 ﻿<h2>Process View</h2>
 <hr />
 <script type="text/javascript">
-    var modelFile = "@ViewBag.ProjectId" + ".txt";
+    var modelFile = "@ViewBag.BpmnFilePath";
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
-<form class="col-md-9 text-right">
-    <input id="projectId" type="hidden" value="@ViewBag.ProjectId"/>
-</form>
+<div class="alert alert-success row">
+    <form class="form-inline">
+        <div class="left text-left">
+            <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
+            <a href="" class="btn btn-warning" id="save-download" data-toggle="tooltip" data-placement="bottom" title="Download Process Model">
+                <i class="glyphicon glyphicon-cloud-download"></i>
+            </a>
+        </div>
+    </form>
+</div>
 <!-- element to draw bpmn diagram in -->
 <div>
     <div class="well" style="height: 600px" id="canvas"></div>

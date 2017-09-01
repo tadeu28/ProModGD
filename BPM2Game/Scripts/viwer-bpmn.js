@@ -12,12 +12,21 @@
     container: '#canvas'
   });
 
+    var downloadBtn = document.querySelector('#save-download');
+    downloadBtn.addEventListener("click", function (e) {
+        bpmnViewer.saveXML({ format: true }, function (err, xml) {
+            var encodedData = encodeURIComponent(xml);
+
+            $('#save-download').addClass('active').attr({
+                'href': 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData,
+                'download': $("#projectId").val() + ".bpmn"
+            });
+        });
+    });
 
   // import function
   function importXML() {
-      
-      var url = "http://localhost:23529/files/bpmn/" + modelFile;
-      
+      var url = "http://" + modelFile;
       $.ajax({
           type: 'GET',
           url: url,
@@ -39,7 +48,7 @@
       });
   }
 
-    //Essa variável foi carregada na ViewModelling
+  //Essa variável foi carregada na ViewModelling
   importXML();
 
 })(window.BpmnJS);

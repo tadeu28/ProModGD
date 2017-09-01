@@ -17,12 +17,8 @@
     
   $("#fileSelected").submit(function (event) {
 
-      var inputElements = $("#fileSelected")["0"].outerText.split("\n");
-      var filePath = inputElements[0].trim();
-
-      var file = $('#input-1a').fileinput('getFileStack')[0];
-
-      if (filePath.indexOf(".bpmn") > 0) {
+      var file = $('#edtBpmnInput').prop('files')[0];
+      if (file.name.indexOf(".bpmn") > 0) {
 
           var read = new FileReader();
 
@@ -41,6 +37,18 @@
       event.preventDefault();
     });
     
+
+  var downloadBtn = document.querySelector('#save-download');
+    downloadBtn.addEventListener("click", function(e) {
+        bpmnModeler.saveXML({ format: true }, function (err, xml) {
+            var encodedData = encodeURIComponent(xml);
+
+            $('#save-download').addClass('active').attr({
+                'href': 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData,
+                'download': $("#projectId").val() + ".bpmn"
+            });
+        });
+    });
   
   // import function
   function importXML(xml) {
@@ -122,7 +130,7 @@
   });
 
   if (edit) {
-      var url = "http://localhost:23529/files/bpmn/" + modelFile;
+      var url = "http://" + modelFile;
 
       $.ajax({
           type: 'GET',
