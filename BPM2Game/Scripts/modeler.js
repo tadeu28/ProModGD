@@ -14,6 +14,9 @@
           parent: '#js-properties-panel'
       }
   });
+
+    //Habilita o uso do teclado e atalhos no modelo
+  bpmnModeler.get("keyboard").bind(document);
     
   $("#fileSelected").submit(function (event) {
 

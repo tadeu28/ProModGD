@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Linq;
 
 namespace Bpm2GP.Model.DataBase.Repository
@@ -22,9 +23,38 @@ namespace Bpm2GP.Model.DataBase.Repository
             return this.Session.CreateCriteria(typeof(T)).List<T>();
         }
 
+        public T FindFirstById(Guid id)
+        {
+            return this.Session.CreateCriteria<T>()
+                        .Add(Restrictions.Eq("Id", id))
+                        .SetMaxResults(1)
+                        .List<T>()
+                        .FirstOrDefault();
+        }
+
         public T FindFirstOrDefault()
         {
             return this.Session.Query<T>().FirstOrDefault();
+        }
+
+        public virtual T SaveOrUpdate(T entity)
+        {
+            try
+            {
+                this.Session.Clear();
+
+                var transacao = this.Session.BeginTransaction();
+
+                this.Session.SaveOrUpdate(entity);
+
+                transacao.Commit();
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível salvar " + typeof(T) + "\nErro:" + ex.Message);
+            }
         }
 
         public virtual T Save(T entity)
@@ -35,7 +65,7 @@ namespace Bpm2GP.Model.DataBase.Repository
 
                 var transacao = this.Session.BeginTransaction();
 
-                this.Session.SaveOrUpdate(entity);
+                this.Session.Save(entity);
 
                 transacao.Commit();
 
@@ -63,7 +93,7 @@ namespace Bpm2GP.Model.DataBase.Repository
             }
         }
 
-        public void Delete(T entity, int id)
+        public void Delete(T entity, string id)
         {
             try
             {

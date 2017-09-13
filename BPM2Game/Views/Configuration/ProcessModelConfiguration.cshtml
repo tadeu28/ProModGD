@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Bpm2GP.Model.DataBase.Models.ModelingLanguage>
+
+@{
+    ViewBag.Title = "Process Modeling Languages";
+}
+
+<h2>Process Modeling Languages</h2>
+<hr/>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function OpenElementTab() {
+        $("#tblLanguages").removeClass("col-md-12");
+        $("#tblLanguages").addClass("col-md-6");
+        $("#btnShowElement").addClass("hide");
+        $("#btnReloadLanguages").addClass("hide");
+        $("#btnAddLanguage").addClass("hide");
+
+        $("#tblElements").removeClass("hide");
+        $("#tblElements").attr("style", "border-left: 1px solid silver");
+    }
+</script>
+
+
+<div id="tblLanguages" class="col-md-12">
+    @Html.Partial("_TblLanguages", Model)
+</div>
+<div id="tblElements" class="col-md-6 hide">
+    
+</div>
+<div class="container">
+    
+</div>

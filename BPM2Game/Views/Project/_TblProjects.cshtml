@@ -84,14 +84,14 @@
                 {
                     <a href="@Url.Action("ProcessModelling", "Project", new {id = item.Id})" class="btn btn-default"
                        data-toggle="tooltip" data-placement="top" title="Edit Process Model"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a href="@Url.Action("ViewModelling", "Project", new {id = item.Id})" class="btn btn-default"
+                       data-toggle="tooltip" data-placement="top" title="View Process Model"><i class="glyphicon glyphicon-eye-open"></i></a>
                 }
                 else
                 {
                     <a href="@Url.Action("ProcessModelling", "Project", new {id = item.Id})" class="btn btn-default"
                        data-toggle="tooltip" data-placement="top" title="Create Process Model"><i class="glyphicon glyphicon-plus"></i></a>
                 }
-                <a href="@Url.Action("ViewModelling", "Project", new {id = item.Id})" class="btn btn-default"
-                   data-toggle="tooltip" data-placement="top" title="View Process Model"><i class="glyphicon glyphicon-eye-open"></i></a>
             </td>
             <td class="text-center">
                 <a href="" class="btn btn-default"

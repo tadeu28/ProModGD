@@ -1,0 +1,71 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model IEnumerable<Bpm2GP.Model.DataBase.Models.ModelingLanguageElement>
+
+@{
+    var language = new ModelingLanguage()
+    {
+        Id = (Guid)ViewBag.IdLanguage
+    };
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tblModelElements').DataTable({
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+
+        $("#btnFechar").click(function () {
+            $("#tblLanguages").addClass("col-md-12");
+            $("#tblLanguages").removeClass("col-md-6");
+            $("#btnShowElement").removeClass("hide");
+            $("#btnReloadLanguages").removeClass("hide");
+            $("#btnAddLanguage").removeClass("hide");
+
+            $("#tblElements").addClass("hide");
+        });
+    });
+
+</script>
+<h4>Elements</h4>
+<hr/>
+<table id="tblModelElements" class="table table-responsive table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Metamodel)
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Metamodel)
+            </td>
+        </tr>
+
+        @(language = item.Language)
+    }
+    </tbody>
+    <tfoot></tfoot>
+</table>
+<hr/>
+<div class="text-right">
+    <button class="btn btn-default" id="btnFechar"><i class="glyphicon glyphicon-arrow-left"></i> Hide Elements</button>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#dlgElements"><i class="glyphicon glyphicon-plus-sign"></i> Add Element</button>
+</div>
+
+@Html.Partial("_AddElement", new ModelingLanguageElement() { Language = language})

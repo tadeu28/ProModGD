@@ -16,11 +16,13 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual User User { get; set; }
         public virtual IList<Project>  Projects { get; set; }
         public virtual IList<DesignTeam> Teams { get; set; }
+        public virtual IList<ModelingLanguage> Languages { get; set; }
 
         public Designer()
         {
             this.Projects = new List<Project>();    
             this.Teams = new List<DesignTeam>();
+            this.Languages = new List<ModelingLanguage>();
         }
     }
 
@@ -40,22 +42,27 @@ namespace Bpm2GP.Model.DataBase.Models
             {
                 map.PropertyReference(typeof (User).GetProperty("Designer"));
                 map.Lazy(LazyRelation.Proxy);
-                map.Cascade(Cascade.All);
             });
 
             Bag<Project>(x => x.Projects, m =>
             {
                 m.Key(k => k.Column("idDesigner"));
                 m.Inverse(true);
-                m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.NoLazy);
+                m.Lazy(CollectionLazy.Lazy);
+            }, o => o.OneToMany());
+
+            Bag<ModelingLanguage>(x => x.Languages, m =>
+            {
+                m.Key(k => k.Column("idDesigner"));
+                m.Inverse(true);
+                m.Cascade(Cascade.DeleteOrphans);
+                m.Lazy(CollectionLazy.Lazy);
             }, o => o.OneToMany());
 
             Bag<DesignTeam>(x => x.Teams, map =>
             {
-                map.Cascade(Cascade.All);
                 map.Inverse(true);
-                map.Lazy(CollectionLazy.NoLazy);
+                map.Lazy(CollectionLazy.Lazy);
                 map.Key(k => k.Column("idDesigner"));
             }, o => o.OneToMany());
         }

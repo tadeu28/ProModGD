@@ -39,7 +39,8 @@ namespace BPM2Game
                       "~/Content/DataTables/css/dataTables.bootstrap*",
                       "~/Content/site.css",
                       "~/Scripts/bpmn-js/assets/diagram-js.css",
-                      "~/Scripts/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css"));
+                      "~/Scripts/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css",
+                      "~/Content/flaticon.css"));
         }
     }
 }

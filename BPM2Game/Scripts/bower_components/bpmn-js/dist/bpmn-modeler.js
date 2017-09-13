@@ -4098,13 +4098,11 @@ module.exports = {
  * @param {EditorActions} editorActions
  */
 function BpmnKeyBindings(keyboard, editorActions) {
-
+    
   keyboard.addListener(function(key, modifiers) {
-
     // ctrl + a -> select all elements
     if (key === 65 && keyboard.isCmd(modifiers)) {
-      editorActions.trigger('selectElements');
-
+        editorActions.trigger('selectElements');
       return true;
     }
 

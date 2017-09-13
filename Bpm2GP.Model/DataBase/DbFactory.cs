@@ -30,6 +30,8 @@ namespace Bpm2GP.Model.DataBase
         public UserRepository UserRepository { get; set; }
         public DesignerRepository DesignerRepository { get; set; }
         public ProjectRepository ProjectRepository { get; set; }
+        public ModelingLanguageRepository ModelingLanguageRepository { get; set; }
+        public ModelingLanguageElementRepository ModelingLanguageElementRepository { get; set; }
 
         private DbFactory()
         {
@@ -38,6 +40,8 @@ namespace Bpm2GP.Model.DataBase
             this.UserRepository = new UserRepository(this.Session);
             this.DesignerRepository = new DesignerRepository(this.Session);
             this.ProjectRepository = new ProjectRepository(this.Session);
+            this.ModelingLanguageRepository = new ModelingLanguageRepository(this.Session);
+            this.ModelingLanguageElementRepository = new ModelingLanguageElementRepository(this.Session);
         }
 
         public void Initialize(object obj)
@@ -198,7 +202,7 @@ namespace Bpm2GP.Model.DataBase
             }
         }
 
-        private ISession Session
+        public ISession Session
         {
             get
             {
