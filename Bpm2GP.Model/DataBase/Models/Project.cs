@@ -53,14 +53,12 @@ namespace Bpm2GP.Model.DataBase.Models
             {
                 m.Column("idDesigner");
                 m.Lazy(LazyRelation.NoLazy);
-                m.Cascade(Cascade.All);
             });
 
             OneToOne(x => x.DesignTeam, map =>
             {
                 map.PropertyReference(typeof(DesignTeam).GetProperty("Project"));
                 map.Lazy(LazyRelation.NoLazy);
-                map.Cascade(Cascade.All);
             });
         }   
     }

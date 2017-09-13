@@ -75,7 +75,7 @@ namespace BPM2Game.Controllers
                         if (prjs.ToList().Exists(e => e.Equals(f.Id.ToString())))
                         {
                             f.Inactive = true;
-                            DbFactory.Instance.ProjectRepository.Save(f);
+                            DbFactory.Instance.ProjectRepository.Update(f);
                         }
                     });
 
@@ -138,15 +138,15 @@ namespace BPM2Game.Controllers
                         string caminhoArquivo = Path.Combine(@uploadPath, Path.GetFileName(file.FileName));
                         file.SaveAs(caminhoArquivo);
 
-                        project.BpmnModel = new BinaryReader(file.InputStream).ReadBytes(file.ContentLength);
+                        //project.BpmnModel = new BinaryReader(file.InputStream).ReadBytes(file.ContentLength);
                         project.BpmnModelPath = caminhoArquivo;
-                        DbFactory.Instance.ProjectRepository.Save(project);
+                        DbFactory.Instance.ProjectRepository.Update(project);
                     }
                 }
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }

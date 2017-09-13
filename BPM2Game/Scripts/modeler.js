@@ -84,6 +84,8 @@
         if (err) {
             console.error('Did not possible to save the model.', err);
         } else {
+            console.log("Passou");
+
             var formData = new FormData();
             formData.append("file", blob, $("#projectId").val() + ".txt");
             $.ajax({
@@ -128,7 +130,7 @@
 
   $("#modelArea").addClass("hide");
 
-  $('#newProcess').click(function () {
+  $('#newProcess').click(function () {      
       importXML(diagramXML);
   });
 

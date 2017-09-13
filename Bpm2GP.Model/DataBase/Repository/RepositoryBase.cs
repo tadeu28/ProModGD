@@ -77,6 +77,26 @@ namespace Bpm2GP.Model.DataBase.Repository
             }
         }
 
+        public virtual T Update(T entity)
+        {
+            try
+            {
+                this.Session.Clear();
+
+                var transacao = this.Session.BeginTransaction();
+
+                this.Session.Update(entity);
+
+                transacao.Commit();
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível editar " + typeof(T) + "\nErro:" + ex.Message);
+            }
+        }
+
         public void Delete(T entity)
         {
             try
