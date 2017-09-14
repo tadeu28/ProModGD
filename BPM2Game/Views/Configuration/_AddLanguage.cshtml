@@ -20,7 +20,8 @@
         UpdateTargetId = "tblLanguages",
         HttpMethod = "post",
         InsertionMode = InsertionMode.Replace,
-        OnSuccess = "postLanguageDone"
+        OnSuccess = "postLanguageDone",
+        LoadingElementId = "divCarregando"
     }))
     {
         @Html.AntiForgeryToken()

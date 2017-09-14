@@ -14,12 +14,14 @@
 </script>
 
 <div id="dlgProject" class="modal fade" role="dialog">
+
     @using (Ajax.BeginForm("SaveNewProject", "Project", new AjaxOptions()
     {
         UpdateTargetId = "tblPrjs",
         HttpMethod = "post",
         InsertionMode = InsertionMode.Replace,
-        OnSuccess = "postDone"
+        OnSuccess = "postDone",
+        LoadingElementId = "divCarregando"
     }))
     {
         @Html.AntiForgeryToken()
@@ -34,22 +36,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                         @Html.HiddenFor(model => model.Id)
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new {@class = "control-label col-md-2"})
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                @Html.EditorFor(model => model.Title, new {htmlAttributes = new {@class = "form-control"}})
+                                @Html.ValidationMessageFor(model => model.Title, "", new {@class = "text-danger"})
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new {@class = "control-label col-md-2"})
                             <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.Description, new Dictionary<string, object>() { { "class", "form-control" },{"rows", 8} })
-                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                @Html.TextAreaFor(model => model.Description, new Dictionary<string, object>() {{"class", "form-control"}, {"rows", 8}})
+                                @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
                             </div>
                         </div>
                     </div>

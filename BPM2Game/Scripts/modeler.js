@@ -17,7 +17,11 @@
 
     //Habilita o uso do teclado e atalhos no modelo
   bpmnModeler.get("keyboard").bind(document);
-    
+   
+  $(document).ajaxStart(function () {
+      $('#divCarregando').show();
+  });
+
   $("#fileSelected").submit(function (event) {
 
       var file = $('#edtBpmnInput').prop('files')[0];
@@ -84,13 +88,11 @@
         if (err) {
             console.error('Did not possible to save the model.', err);
         } else {
-            console.log("Passou");
-
             var formData = new FormData();
             formData.append("file", blob, $("#projectId").val() + ".txt");
             $.ajax({
                 type: "POST",
-                 url: "/Project/SalvarXML?id=" + $("#projectId").val(),
+                url: "/Project/SalvarXML?id=" + $("#projectId").val(),
                 data: formData,
                 dataType: 'json',
                 contentType: false,
@@ -105,6 +107,11 @@
                             }
                         );
                     }
+
+                    $('#divCarregando').hide();
+                },
+                error: function(err) {
+                    $('#divCarregando').hide();
                 }
             });
         }

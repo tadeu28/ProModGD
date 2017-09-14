@@ -388,7 +388,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\site\ajax-loader.gif" />
     <Content Include="images\site\bpm2game.png" />
+    <Content Include="images\site\lading_please.gif" />
+    <Content Include="images\site\loading.gif" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />

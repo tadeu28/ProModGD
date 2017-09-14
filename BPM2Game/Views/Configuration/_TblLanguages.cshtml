@@ -43,11 +43,12 @@
             </td>
             <td>
                 <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblLanguages"
-                   data-toggle="tooltip" data-placement="bottom" title="Remove Language"
+                   data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Language"
                    href="@Url.Action("RemoveLanguage", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
                     <i class="glyphicon glyphicon-trash"></i></a>
                 <a id="btnShowElement" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblElements"
-                   data-ajax-success="OpenElementTab" data-toggle="tooltip" data-placement="bottom" title="Show Elements"
+                   data-ajax-loading="#divCarregando" data-ajax-success="OpenElementTab" data-toggle="tooltip" 
+                   data-placement="bottom" title="Show Elements"
                    href="@Url.Action("LanguageElements", "Configuration", new {id = item.Id})" class="btn btn-sm btn-default">
                     <i class="glyphicon glyphicon-arrow-right"></i>
                 </a>
@@ -60,7 +61,8 @@
 
 <hr />
 <div class="text-right">
-    <a id="btnReloadLanguages" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblLanguages"
+    <a id="btnReloadLanguages" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" 
+       data-ajax-update="#tblLanguages" data-ajax-loading="#divCarregando"
        href="@Url.Action("RealoadAllLanguages", "Configuration")" class="btn btn-warning">
         <i class="glyphicon glyphicon-refresh"></i> Reaload Languages
     </a>
