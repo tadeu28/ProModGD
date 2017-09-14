@@ -25,7 +25,12 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual byte[] BpmnModel { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual Designer Owner { get; set; }
-        public virtual DesignTeam DesignTeam { get; set; }
+        public virtual IList<Designer> Designers { get; set; }
+
+        public Project()
+        {
+            this.Designers = new List<Designer>();
+        }
     }
 
     public class ProjectMap : ClassMapping<Project>
@@ -55,11 +60,13 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Lazy(LazyRelation.NoLazy);
             });
 
-            OneToOne(x => x.DesignTeam, map =>
+            Bag(x => x.Designers, map =>
             {
-                map.PropertyReference(typeof(DesignTeam).GetProperty("Project"));
-                map.Lazy(LazyRelation.NoLazy);
-            });
+                map.Cascade(Cascade.None);
+                map.Lazy(CollectionLazy.Lazy);
+                map.Key(k => k.Column("idProject"));
+            }, 
+            o => o.ManyToMany(p => p.Column("idDesigner")));
         }   
     }
 }

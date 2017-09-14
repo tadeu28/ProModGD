@@ -1,5 +1,5 @@
-﻿<h2>Process Modelling</h2>
-<hr />
+﻿@model Bpm2GP.Model.DataBase.Models.Project
+
 <script type="text/javascript">
     var edit = "@ViewBag.Edit";
     var modelFile = "@ViewBag.BpmnFilePath";
@@ -8,6 +8,18 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+
+<h3>Process Modelling</h3>
+<h5 style="color: silver">Project: @Model.Title [#@Model.Id]</h5>
+<div class="col-md-12">
+    <ol class="breadcrumb">
+        <li class=""><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class=""><a href="@Url.Action("Projects", "Project")">Projects</a></li>
+        <li class=""><a href="@Url.Action("Project", "Project", new {id = Model.Id})">@Model.Title</a></li>
+        <li class="active">Process Modelling</li>
+    </ol>
+</div>
+<div class="row"></div>
 <div class="alert alert-success row">
     <form class="form-inline" id="fileSelected">
         <div class="form-group col-md-5">
@@ -27,6 +39,12 @@
             <a href="#" class="btn btn-warning" id="save-download" data-toggle="tooltip" data-placement="bottom" title="Download Process Model">
                 <i class="glyphicon glyphicon-cloud-download"></i>
             </a>
+            <a href="#" class="btn btn-info" id="img-download" data-toggle="tooltip" data-placement="bottom" title="Download as Image">
+                <i class="glyphicon glyphicon-picture"></i>
+            </a>
+            <a href="#" class="btn btn-info" id="img-svg" data-toggle="tooltip" data-placement="bottom" title="Download as SVG">
+                <i class="glyphicon glyphicon-compressed"></i>
+            </a>
         </div>
     </form>
 </div>
@@ -35,6 +53,9 @@
     <div class="well" style="height: 600px" id="canvas"></div>
     <div id="js-properties-panel"></div>
 </div>
+
+<canvas id="canvas1" style="display: none;" width="3000" height="800"></canvas>
+
 <!-- scripts -->
 <!-- bpmn-js modeler -->
 <script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>

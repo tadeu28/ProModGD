@@ -24,8 +24,23 @@
         });
     });
 
+    $('#showProcess').click(function () {
+
+        if ($("#viwerBpmn").hasClass("hide")) {
+            $("#viwerBpmn").removeClass("hide");
+            $('#showProcess').html("<i class='glyphicon glyphicon-eye-close'></i> Hide Process Model");
+            $('#showProcess').attr("title", "Hide Process Model");
+            $('#showProcess').attr("data-original-title", "Hide Process Model");
+        } else {
+            $("#viwerBpmn").addClass("hide");
+            $('#showProcess').html("<i class='glyphicon glyphicon-eye-open'></i> Show Process Model");
+            $('#showProcess').attr("title", "Show Process Model");
+            $('#showProcess').attr("data-original-title", "Show Process Model");
+        }
+    });
+
   // import function
-  function importXML() {
+    function importXML() {
       var url = "http://" + modelFile;
       $.ajax({
           type: 'GET',
@@ -38,11 +53,10 @@
                 if (err) {
                  alert('Could not import BPMN 2.0 diagram', err);
                 }
-
                 var canvas = bpmnViewer.get('canvas');
-
                 // zoom to fit full viewport
                 canvas.zoom('fit-viewport');
+                $("#viwerBpmn").addClass("hide");
               });
           }
       });

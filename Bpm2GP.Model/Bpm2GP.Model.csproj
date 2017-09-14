@@ -110,7 +110,6 @@
   <ItemGroup>
     <Compile Include="DataBase\DbFactory.cs" />
     <Compile Include="DataBase\Models\Designer.cs" />
-    <Compile Include="DataBase\Models\DesignTeam.cs" />
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
     <Compile Include="DataBase\Models\ModelingLanguageElement.cs" />
     <Compile Include="DataBase\Models\Project.cs" />

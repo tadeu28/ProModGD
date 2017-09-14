@@ -57,6 +57,47 @@
         });
     });
   
+    var imgSvg = document.querySelector('#img-svg');
+    imgSvg.addEventListener("click", function (e) {
+        bpmnModeler.saveSVG({ format: true }, function (err, svg) {
+            var encodedData = encodeURIComponent(svg);
+            $('#img-svg').addClass('active').attr({
+                'href': 'data:image/svg+xml;utf8,' + encodedData,
+                'download': $("#projectId").val() + ".svg"
+            });
+        });
+    });
+
+    var imgBtn = document.querySelector('#img-download');
+    imgBtn.addEventListener("click", function (e) {
+        bpmnModeler.saveSVG({ format: true }, function (err, svg) {
+            
+            var canvas = document.getElementById("canvas1");
+            var ctx = canvas.getContext("2d");
+            var DOMURL = self.URL || self.webkitURL || self;
+            var img = new Image();
+            var svgObj = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+            var url = DOMURL.createObjectURL(svgObj);
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+                var png = canvas.toDataURL("image/png");
+                var a = document.createElement('a');
+                a.setAttribute("download", "X.png");
+                a.setAttribute("href", png);
+                a.appendChild(img);
+
+                var w = open();
+                w.document.title = 'Export Image';
+                w.document.body.innerHTML = "*To Save, click above the image...";
+                w.document.body.innerHTML = w.document.body.innerHTML + "<hr/>";
+                w.document.body.innerHTML = w.document.body.innerHTML + ('<a  download="' + $("#projectId").val() + '.png" href="' + png + '"><img src="' + png + '"/></a>');
+                
+                DOMURL.revokeObjectURL(png);
+            };
+            img.src = url;
+        });
+    });
+
   // import function
   function importXML(xml) {
 

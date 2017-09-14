@@ -178,6 +178,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -390,7 +394,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\site\ajax-loader.gif" />
     <Content Include="images\site\bpm2game.png" />
-    <Content Include="images\site\lading_please.gif" />
     <Content Include="images\site\loading.gif" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
@@ -431,6 +434,7 @@
     <Content Include="fonts\Flaticon.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bower_components\bpmn-js\.gitignore" />
+    <Content Include="Scripts\canvg.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -507,6 +511,7 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\rgbcolor.js" />
     <Content Include="Scripts\viwer-bpmn.js" />
     <Content Include="Scripts\fileinput.js" />
     <Content Include="Scripts\fileinput.min.js" />
@@ -584,6 +589,9 @@
     <Content Include="Views\Configuration\_AddLanguage.cshtml" />
     <Content Include="Views\Configuration\_TblElements.cshtml" />
     <Content Include="Views\Configuration\_AddElement.cshtml" />
+    <Content Include="Views\Project\_ProjectInformation.cshtml" />
+    <Content Include="Views\Project\_ProcessInformation.cshtml" />
+    <Content Include="Views\Project\_ViewProcessModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

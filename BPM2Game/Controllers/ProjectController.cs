@@ -30,11 +30,6 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public ActionResult Project(int id)
-        {
-            return View();
-        }
-
         [HttpPost]
         public PartialViewResult SaveNewProject(Project project)
         {
@@ -43,11 +38,7 @@ namespace BPM2Game.Controllers
                 project.Owner = LoginUtils.User.Designer;
                 project.StartDate = DateTime.Now;
                 project.LastUpdate = DateTime.Now;
-                project.DesignTeam = new DesignTeam()
-                {
-                   Designer = project.Owner,
-                   Project = project
-                };
+                project.Designers.Add(project.Owner);
 
                 DbFactory.Instance.ProjectRepository.Save(project);
 
@@ -101,13 +92,13 @@ namespace BPM2Game.Controllers
                 }
                 ViewBag.ProjectId = id;
                 ViewBag.BpmnFilePath = Request.Url.Authority + "/files/bpmn/" + project.Id + ".txt";
-                return View();
+
+                return View(project);
             }
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProcessModelling"));
             }
-            
         }
 
         public ActionResult ViewModelling(Guid id)
@@ -149,6 +140,48 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [Authorize]
+        public ActionResult Project(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                return View(project);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Project", "Project"));
+            }
+        }
+        
+        public PartialViewResult ProjectInformation(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                return PartialView("_ProjectInformation", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProjectInformation"));
+            }
+        }
+
+        public PartialViewResult ProcessInformation(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                ViewData["BpmnModelPath"] = Request.Url.Authority + "/files/bpmn/" + project.Id + ".txt";
+
+                return PartialView("_ProcessInformation", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProcessInformation"));
             }
         }
     }

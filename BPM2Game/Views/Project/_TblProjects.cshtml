@@ -1,7 +1,6 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
 @model IEnumerable<Bpm2GP.Model.DataBase.Models.Project>
 
-
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tblProjects').DataTable({
@@ -52,9 +51,6 @@
         <th>
             @Html.DisplayName("Process Owner")
         </th>
-        <th>
-            @Html.DisplayName("Process Model")
-        </th>
         <th></th>
     </tr>
     </thead>
@@ -81,22 +77,10 @@
                 @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td class="text-center">
-                @if (!string.IsNullOrEmpty(item.BpmnModelPath))
-                {
-                    <a href="@Url.Action("ProcessModelling", "Project", new {id = item.Id})" class="btn btn-default"
-                       data-toggle="tooltip" data-placement="top" title="Edit Process Model"><i class="glyphicon glyphicon-edit"></i></a>
-                    <a href="@Url.Action("ViewModelling", "Project", new {id = item.Id})" class="btn btn-default"
-                       data-toggle="tooltip" data-placement="top" title="View Process Model"><i class="glyphicon glyphicon-eye-open"></i></a>
-                }
-                else
-                {
-                    <a href="@Url.Action("ProcessModelling", "Project", new {id = item.Id})" class="btn btn-default"
-                       data-toggle="tooltip" data-placement="top" title="Create Process Model"><i class="glyphicon glyphicon-plus"></i></a>
-                }
-            </td>
-            <td class="text-center">
-                <a href="" class="btn btn-default"
-                       data-toggle="tooltip" data-placement="top" title="Edit Project"><i class="glyphicon glyphicon-list-alt"></i> </a>
+                <a href="@Url.Action("Project", "Project", new {id = item.Id})" class="btn btn-info"
+                   data-toggle="tooltip" data-placement="top" title="Open Project">
+                    <i class="glyphicon glyphicon-folder-open"> </i> Open Project
+                </a>
             </td>
         </tr>
     }
