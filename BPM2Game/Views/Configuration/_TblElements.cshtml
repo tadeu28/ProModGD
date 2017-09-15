@@ -1,13 +1,6 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
 @model IEnumerable<Bpm2GP.Model.DataBase.Models.ModelingLanguageElement>
 
-@{
-    var language = new ModelingLanguage()
-    {
-        Id = (Guid)ViewBag.IdLanguage
-    };
-}
-
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tblModelElements').DataTable({
@@ -55,9 +48,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Metamodel)
             </td>
-        </tr>
-
-        @(language = item.Language)
+        </tr>        
     }
     </tbody>
     <tfoot></tfoot>
@@ -68,4 +59,4 @@
     <button class="btn btn-primary" data-toggle="modal" data-target="#dlgElements"><i class="glyphicon glyphicon-plus-sign"></i> Add Element</button>
 </div>
 
-@Html.Partial("_AddElement", new ModelingLanguageElement() { Language = language})
+@Html.Partial("_AddElement", new ModelingLanguageElement() { Language = ViewBag.Language }, new ViewDataDictionary() { { "Elements", Model} })

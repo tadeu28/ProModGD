@@ -84,12 +84,33 @@ namespace BPM2Game.Controllers
             {
                 var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(id);
 
-                ViewBag.IdLanguage = id;
+                ViewBag.Language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(id); ;
                 return PartialView("_TblElements", elements);
             }
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "LanguageElements"));
+            }
+        }
+
+        public PartialViewResult SaveElement(ModelingLanguageElement element, Guid IdLanguage)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(IdLanguage);
+
+                element.Language = language;
+                DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
+
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(IdLanguage);
+                                
+                ViewBag.Language = language;
+                return PartialView("_TblElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveElement"));
             }
         }
     }
