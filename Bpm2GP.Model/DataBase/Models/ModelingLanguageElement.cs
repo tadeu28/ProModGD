@@ -41,7 +41,7 @@ namespace Bpm2GP.Model.DataBase.Models
             {
                 m.Column("idLanguage");
                 m.Lazy(LazyRelation.Proxy);
-                m.Cascade(Cascade.All);
+                m.Cascade(Cascade.DeleteOrphans);
             });
 
             ManyToOne(x => x.ParentElement, m =>
