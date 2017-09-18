@@ -3,8 +3,10 @@
 
 @{ 
     var elements = (List<ModelingLanguageElement>)ViewData["Elements"];
-    elements.Insert(0, new ModelingLanguageElement() { Name = ""});
-    var elementsSelected = new SelectList(elements, "Id", "Name");
+    elements = elements.OrderBy(o => o.Name).ToList();
+
+    elements.Insert(0, new ModelingLanguageElement() { Name = "", Metamodel = ""});
+    var elementsSelected = new SelectList(elements, "Id", "NameAndMetamodel");
 }
 
 <script>
@@ -55,7 +57,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.TextAreaFor(model => model.Description, new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 3 } })
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -66,14 +68,17 @@
                                 @Html.EditorFor(model => model.Metamodel, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Metamodel, "", new { @class = "text-danger" })
                             </div>
-                        </div>        
+                        </div>
                         
-                        <div class="form-group">
-                            @Html.Label("Parent Element", htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.ParentElement, elementsSelected, new { htmlAttributes = new { @class = "form-control" } })
+                        @if (elements.Count > 1)
+                        {
+                            <div class="form-group">
+                                @Html.Label("Base Element", htmlAttributes: new {@class = "control-label col-md-2"})
+                                <div class="col-md-10">
+                                    @Html.DropDownList("IdBaseElement", elementsSelected, new Dictionary<string, object>() {{"class", "form-control"}})
+                                </div>
                             </div>
-                        </div>                
+                        }
                     </div>
                 </div>
                 <div class="modal-footer form-horizontal">

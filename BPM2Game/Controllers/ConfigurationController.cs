@@ -82,9 +82,10 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(id);
-
-                ViewBag.Language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(id); ;
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(id)
+                    .OrderBy(o => o.Name).ToList();
+                
+                ViewBag.Language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(id);
                 return PartialView("_TblElements", elements);
             }
             catch (Exception ex)
@@ -93,17 +94,25 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public PartialViewResult SaveElement(ModelingLanguageElement element, Guid IdLanguage)
+        public PartialViewResult SaveElement(ModelingLanguageElement element, Guid IdLanguage, Guid IdBaseElement)
         {
             try
             {
                 var designer = LoginUtils.User.Designer;
                 var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(IdLanguage);
 
+                var baseElement = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(IdBaseElement);
+                
                 element.Language = language;
+                if (baseElement != null)
+                {
+                    element.ParentElement = baseElement;
+                }
+
                 DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
 
-                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(IdLanguage);
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(IdLanguage)
+                    .OrderBy(o => o.Name).ToList();
                                 
                 ViewBag.Language = language;
                 return PartialView("_TblElements", elements);
@@ -111,6 +120,28 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveElement"));
+            }
+        }
+
+        public PartialViewResult RemoveElement(Guid id)
+        {
+            try
+            {
+                var element = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(id);
+                var idLanguage = Guid.Parse(element.Language.Id.ToString());
+
+                DbFactory.Instance.ModelingLanguageElementRepository.Delete(element);
+
+                var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(idLanguage);
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(idLanguage)
+                    .OrderBy(o => o.Name).ToList();
+
+                ViewBag.Language = language;
+                return PartialView("_TblElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveElement"));
             }
         }
     }

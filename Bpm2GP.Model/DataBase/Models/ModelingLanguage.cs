@@ -51,7 +51,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Bag(x => x.Elements, m =>
             {
-                m.Cascade(Cascade.All);
+                m.Cascade(Cascade.DeleteOrphans);
                 m.Inverse(true);
                 m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idLanguage"));

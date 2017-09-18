@@ -24,6 +24,7 @@
 <table id="tblModelElements" class="table table-responsive table-striped table-bordered">
     <thead>
     <tr>
+        <th></th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -40,6 +41,12 @@
     {
         <tr>
             <td>
+                <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-sm"
+                   data-ajax-update="#tblElements" href="@Url.Action("RemoveElement", "Configuration", new {id = item.Id})">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
@@ -47,6 +54,10 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Metamodel)
+                @if (item.ParentElement != null)
+                {
+                    <br/><small style="color: silver">base type: [@(item.ParentElement.Metamodel)]</small>
+                }
             </td>
         </tr>        
     }
