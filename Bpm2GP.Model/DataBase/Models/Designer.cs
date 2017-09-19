@@ -16,11 +16,13 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual User User { get; set; }
         public virtual IList<Project>  Projects { get; set; }
         public virtual IList<ModelingLanguage> Languages { get; set; }
+        public virtual IList<GameGenre> GameGenres { get; set; }
 
         public Designer()
         {
             this.Projects = new List<Project>();
             this.Languages = new List<ModelingLanguage>();
+            this.GameGenres = new List<GameGenre>();
         }
     }
 
@@ -51,6 +53,14 @@ namespace Bpm2GP.Model.DataBase.Models
             o => o.ManyToMany(p => p.Column("idProject")));
 
             Bag<ModelingLanguage>(x => x.Languages, m =>
+            {
+                m.Key(k => k.Column("idDesigner"));
+                m.Inverse(true);
+                m.Cascade(Cascade.DeleteOrphans);
+                m.Lazy(CollectionLazy.Lazy);
+            }, o => o.OneToMany());
+
+            Bag<GameGenre>(x => x.GameGenres, m =>
             {
                 m.Key(k => k.Column("idDesigner"));
                 m.Inverse(true);

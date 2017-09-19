@@ -592,6 +592,11 @@
     <Content Include="Views\Project\_ProjectInformation.cshtml" />
     <Content Include="Views\Project\_ProcessInformation.cshtml" />
     <Content Include="Views\Project\_ViewProcessModel.cshtml" />
+    <Content Include="Views\Configuration\GameGenreConfiguration.cshtml" />
+    <Content Include="Views\Configuration\_TblGenres.cshtml" />
+    <Content Include="Views\Configuration\_AddGenreElement.cshtml" />
+    <Content Include="Views\Configuration\_AddGenre.cshtml" />
+    <Content Include="Views\Configuration\_TblGenreElements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

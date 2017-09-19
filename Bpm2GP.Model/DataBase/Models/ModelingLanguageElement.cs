@@ -19,6 +19,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Metamodel { get; set; }
         public virtual ModelingLanguageElement ParentElement { get; set; }
         public virtual IList<ModelingLanguageElement> ChildElements { get; set; }
+        public virtual IList<GameGenreElement> GameGenreElements { get; set; }
         public virtual ModelingLanguage Language { get; set; }
 
         public ModelingLanguageElement()
@@ -74,6 +75,14 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Lazy(CollectionLazy.Lazy);
                 m.Key(k => k.Column("idElement"));
             }, o => o.OneToMany());
+
+            Bag(x => x.GameGenreElements, map =>
+            {
+                map.Cascade(Cascade.None);
+                map.Lazy(CollectionLazy.Lazy);
+                map.Key(k => k.Column("idProcessElement"));
+            },
+            o => o.ManyToMany(p => p.Column("idGenreElement")));
         }
     }
 }

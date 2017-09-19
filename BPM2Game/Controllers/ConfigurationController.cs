@@ -144,5 +144,128 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveElement"));
             }
         }
+
+        public ActionResult GameGenreConfiguration()
+        {
+            var designer = LoginUtils.User.Designer;
+            var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+
+            return View(genres);
+        }
+
+        public PartialViewResult ReloadAllGenres()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+
+                return PartialView("_TblGenres", genres);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ReloadAllGenres"));
+            }
+        }
+
+        public PartialViewResult SaveGenre(GameGenre genre)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                
+                genre.IsConstant = false;
+                genre.Designer = designer;
+                genre.RegisterDate = DateTime.Now;
+                DbFactory.Instance.GameGenreRepository.Save(genre);
+
+                var genres = new List<GameGenre> { genre };
+
+                return PartialView("_TblGenres", genres);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveGenre"));
+            }
+        }
+
+        public PartialViewResult RemoveGameGenre(Guid id)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+
+                var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(id);
+
+                DbFactory.Instance.GameGenreRepository.Delete(genre);
+
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+
+                return PartialView("_TblGenres", genres);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveGameGenre"));
+            }
+        }
+
+        public PartialViewResult GenreElements(Guid id)
+        {
+            try
+            {
+                var elements = DbFactory.Instance.GameGenreElementRepository.FindAllElementsByGenreId(id)
+                    .OrderBy(o => o.Name).ToList();
+
+                ViewBag.Genre = DbFactory.Instance.GameGenreRepository.FindFirstById(id);
+                return PartialView("_TblGenreElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "GenreElements"));
+            }
+        }
+
+        public PartialViewResult SaveGameGenreElement(GameGenreElement element, Guid IdGenre)
+        {
+            try
+            {
+                var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(IdGenre);
+                
+                element.GameGenre = genre;
+                DbFactory.Instance.GameGenreElementRepository.Save(element);
+
+                var elements = DbFactory.Instance.GameGenreElementRepository.FindAllElementsByGenreId(IdGenre)
+                    .OrderBy(o => o.Name).ToList();
+
+                ViewBag.Genre = genre;
+                return PartialView("_TblGenreElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveGameGenreElement"));
+            }
+        }
+
+        public PartialViewResult RemoveGenreElement(Guid id)
+        {
+            try
+            {
+                var element = DbFactory.Instance.GameGenreElementRepository.FindFirstById(id);
+                var IdGenre = Guid.Parse(element.GameGenre.Id.ToString());
+
+                DbFactory.Instance.GameGenreElementRepository.Delete(element);
+
+                var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(IdGenre);
+                var elements = DbFactory.Instance.GameGenreElementRepository.FindAllElementsByGenreId(IdGenre)
+                    .OrderBy(o => o.Name).ToList();
+
+                ViewBag.Genre = genre;
+                return PartialView("_TblGenreElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveGenreElement"));
+            }
+        }
     }
 }

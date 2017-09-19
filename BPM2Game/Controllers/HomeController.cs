@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Bpm2GP.Model.DataBase;
+using Bpm2GP.Model.Utils;
 
 namespace BPM2Game.Controllers
 {
@@ -14,7 +15,14 @@ namespace BPM2Game.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View();
+            if (LoginUtils.User == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Projects", "Project");
+            }
         }
         
         

@@ -1,0 +1,59 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model Bpm2GP.Model.DataBase.Models.GameGenreElement
+<script>
+    $.validator.unobtrusive.parse(document);
+
+    function postElementDone() {
+        $("#dlgGenreElements").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+
+        $("form").find('input[type=text], input[type=password], input[type=number], input[type=email], textarea').val('');
+    }
+</script>
+<div id="dlgGenreElements" class="modal fade" role="dialog">
+    @using (Ajax.BeginForm("SaveGameGenreElement", "Configuration", new AjaxOptions()
+    {
+        UpdateTargetId = "tblGenreElements",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postElementDone"
+    }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Game Element</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.Hidden("IdGenre", Model.GameGenre.Id)
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 3 } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer form-horizontal">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-remove-circle"></i> Cancel</button>
+                    <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

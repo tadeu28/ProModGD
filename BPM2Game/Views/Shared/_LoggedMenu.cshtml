@@ -24,7 +24,17 @@ $(document).ready(function(){
                     <li><a href="@Url.Action("ProcessModelConfiguration", "Configuration")">
                         <i class="glyphicon glyphicon-option-horizontal"></i> Process Modeling Languages
                     </a></li>
-                    <li><a href="#"><i class="@WebIcons.Glyphicons.Qrcode"></i> Game Genres Elements</a></li>
+                    <li>
+                        <a href="@Url.Action("GameGenreConfiguration", "Configuration")">
+                            <i class="glyphicon glyphicon-qrcode"></i> Game Genres Elements
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="@Url.Action("ElementsAssociation", "Configuration")">
+                            <i class="glyphicon glyphicon glyphicon-retweet"></i> Elements Association (Process Model X Genre Elements)
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
