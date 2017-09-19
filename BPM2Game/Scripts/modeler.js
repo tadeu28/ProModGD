@@ -23,17 +23,16 @@
   });
 
   $("#fileSelected").submit(function (event) {
-
       var file = $('#edtBpmnInput').prop('files')[0];
       if (file.name.indexOf(".bpmn") > 0) {
-
+          
           var read = new FileReader();
-
-          read.readAsBinaryString(file);
-
+          read.readAsText(file);
+          
           read.onloadend = function () {
-
               var xml = read.result;
+
+              console.log(xml);
               importXML(xml);
           }
           
@@ -123,8 +122,7 @@
       // get the diagram contents
       bpmnModeler.saveXML({ format: false }, function(err, xml) {
           
-        var blob = new Blob([xml], { type: 'text/xml' });
-        console.log(blob);
+        var blob = new Blob([xml], { encoding: "UTF-8", type: "text/xml;charset=UTF-8" });
           
         if (err) {
             console.error('Did not possible to save the model.', err);
