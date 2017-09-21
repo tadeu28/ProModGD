@@ -14,11 +14,11 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Name { get; set; }
         public virtual String Description { get; set; }
         public virtual GameGenre GameGenre { get; set; }
-        public virtual IList<ModelingLanguageElement> ProcessElements { get; set; }
+        public virtual IList<AssociationConfElements> AssociationConfElements { get; set; }
 
         public GameGenreElement()
         {
-            this.ProcessElements = new List<ModelingLanguageElement>();
+            this.AssociationConfElements = new List<AssociationConfElements>();
         }
     }
 
@@ -33,13 +33,13 @@ namespace Bpm2GP.Model.DataBase.Models
 
             ManyToOne(x => x.GameGenre, m => m.Column("idGenre"));
 
-            Bag(x => x.ProcessElements, map =>
+            Bag(x => x.AssociationConfElements, map =>
             {
-                map.Cascade(Cascade.None);
+                map.Cascade(Cascade.DeleteOrphans);
                 map.Lazy(CollectionLazy.Lazy);
                 map.Key(k => k.Column("idGenreElement"));
             },
-            o => o.ManyToMany(p => p.Column("idProcessElement")));
+            o => o.OneToMany());
         }
     }
 }

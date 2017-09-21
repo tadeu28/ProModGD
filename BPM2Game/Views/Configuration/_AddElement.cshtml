@@ -29,7 +29,8 @@
         UpdateTargetId = "tblElements",
         HttpMethod = "post",
         InsertionMode = InsertionMode.Replace,
-        OnSuccess = "postElementDone"
+        OnSuccess = "postElementDone",
+        LoadingElementId = "divCarregando"
     }))
     {
         @Html.AntiForgeryToken()

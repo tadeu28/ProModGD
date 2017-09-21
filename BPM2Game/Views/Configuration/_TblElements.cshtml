@@ -1,6 +1,10 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
 @model IEnumerable<Bpm2GP.Model.DataBase.Models.ModelingLanguageElement>
 
+@{
+    var isConstante = false;
+}
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tblModelElements').DataTable({
@@ -41,10 +45,17 @@
     {
         <tr>
             <td>
-                <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-sm"
-                   data-ajax-update="#tblElements" href="@Url.Action("RemoveElement", "Configuration", new {id = item.Id})">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
+                @if (!item.Language.IsConstant)
+                {
+                    <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-sm"
+                       data-ajax-update="#tblElements" href="@Url.Action("RemoveElement", "Configuration", new {id = item.Id})">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                }
+                else
+                {
+                    isConstante = item.Language.IsConstant;
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -67,7 +78,10 @@
 <hr/>
 <div class="text-right">
     <button class="btn btn-default" id="btnFechar"><i class="glyphicon glyphicon-arrow-left"></i> Hide Elements</button>
-    <button class="btn btn-primary" data-toggle="modal" data-target="#dlgElements"><i class="glyphicon glyphicon-plus-sign"></i> Add Element</button>
+    @if (!isConstante)
+    {
+        <button class="btn btn-primary" data-toggle="modal" data-target="#dlgElements"><i class="glyphicon glyphicon-plus-sign"></i> Add Element</button>
+    }
 </div>
 
 @Html.Partial("_AddElement", new ModelingLanguageElement() { Language = ViewBag.Language }, new ViewDataDictionary() { { "Elements", Model} })

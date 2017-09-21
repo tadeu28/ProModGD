@@ -12,7 +12,8 @@ namespace BPM2Game
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/notify.js",
                         "~/Scripts/DataTables/jquery.dataTables*",
-                        "~/Scripts/DataTables/dataTables.bootstrap*"));
+                        "~/Scripts/DataTables/dataTables.bootstrap*",
+                        "~/Scripts/checkListBox_bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",

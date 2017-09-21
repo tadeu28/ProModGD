@@ -18,5 +18,15 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             return this.Session.Query<GameGenreElement>().Where(w => w.GameGenre.Id == genreId).ToList();
         }
+
+        public List<GameGenreElement> FindAllElementsByListId(Guid[] ids)
+        {
+            return this.Session.Query<GameGenreElement>().Where(w => ids.Contains(w.Id)).ToList();
+        }
+
+        public List<GameGenreElement> FindAllElementsByGenreNotInListId(Guid idGenre, Guid[] ids)
+        {
+            return this.Session.Query<GameGenreElement>().Where(w =>  w.GameGenre.Id == idGenre && !ids.Contains(w.Id)).ToList();
+        }
     }
 }

@@ -34,6 +34,8 @@ namespace Bpm2GP.Model.DataBase
         public ModelingLanguageElementRepository ModelingLanguageElementRepository { get; set; }
         public GameGenreRepository GameGenreRepository { get; set; }
         public GameGenreElementRepository GameGenreElementRepository { get; set; }
+        public AssociationConfRepository AssociationConfRepository { get; set; }
+        public AssociationConfElementRepository AssociationConfElementRepository { get; set; }
 
         private DbFactory()
         {
@@ -46,6 +48,8 @@ namespace Bpm2GP.Model.DataBase
             this.ModelingLanguageElementRepository = new ModelingLanguageElementRepository(this.Session);
             this.GameGenreRepository = new GameGenreRepository(this.Session);
             this.GameGenreElementRepository = new GameGenreElementRepository(this.Session);
+            this.AssociationConfRepository = new AssociationConfRepository(this.Session);
+            this.AssociationConfElementRepository = new AssociationConfElementRepository(this.Session);
         }
 
         public void Initialize(object obj)

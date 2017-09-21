@@ -435,6 +435,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bower_components\bpmn-js\.gitignore" />
     <Content Include="Scripts\canvg.js" />
+    <Content Include="Scripts\checkListBox_bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -597,6 +598,10 @@
     <Content Include="Views\Configuration\_AddGenreElement.cshtml" />
     <Content Include="Views\Configuration\_AddGenre.cshtml" />
     <Content Include="Views\Configuration\_TblGenreElements.cshtml" />
+    <Content Include="Views\Configuration\ElementsAssociation.cshtml" />
+    <Content Include="Views\Configuration\_ElementsAssociationTables.cshtml" />
+    <Content Include="Views\Configuration\_ViewAssociations.cshtml" />
+    <Content Include="Views\Configuration\_SaveElementAssociation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -101,6 +101,8 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             try
             {
+                this.Session.Clear();
+
                 var transacao = this.Session.BeginTransaction();
 
                 this.Session.Delete(entity);

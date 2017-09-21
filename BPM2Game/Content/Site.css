@@ -140,3 +140,22 @@ textarea {
         height: 50px;
         width: 80px;
     }
+
+
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+}
+
+/* DEMO ONLY - REMOVES UNWANTED MARGIN */
+.well .list-group {
+    margin-bottom: 0px;
+}
+
+.table-overflow {
+    max-height:400px;
+    overflow-x:auto;
+}

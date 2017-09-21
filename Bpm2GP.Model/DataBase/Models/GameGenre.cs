@@ -18,10 +18,12 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual Boolean IsConstant { get; set; }
         public virtual Designer Designer { get; set; }
         public virtual IList<GameGenreElement>  Elements { get; set; }
+        public virtual IList<AssociationConf> Associations { get; set; }
 
         public GameGenre()
         {
             this.Elements = new List<GameGenreElement>();
+            this.Associations = new List<AssociationConf>();
         }
     }
 
@@ -46,8 +48,16 @@ namespace Bpm2GP.Model.DataBase.Models
             {
                 m.Cascade(Cascade.DeleteOrphans);
                 m.Inverse(true);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("IdGenre"));
+            }, o => o.OneToMany());
+
+            Bag(x => x.Associations, m =>
+            {
+                m.Key(k => k.Column("idLanguage"));
+                m.Inverse(true);
+                m.Cascade(Cascade.DeleteOrphans);
+                m.Lazy(CollectionLazy.Lazy);
             }, o => o.OneToMany());
         }
     }

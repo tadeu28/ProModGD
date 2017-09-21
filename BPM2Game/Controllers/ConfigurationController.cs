@@ -267,5 +267,192 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveGenreElement"));
             }
         }
+
+        public ActionResult ElementsAssociation()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var processLanguages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer);
+                var gameGenres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+                
+                ViewBag.Languages = processLanguages;
+                ViewBag.Genres = gameGenres;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Configuration", "ElementsAssociation"));
+            }
+        }
+
+        public PartialViewResult ElementsSelect(Guid idAssociation)
+        {
+            try
+            {
+                var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssociation);
+
+                return PartialView("_ElementsAssociationTables", assoc);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ElementsSelect"));
+            }
+        }
+
+        public PartialViewResult SaveElementAssociation(Guid idAssociation, Guid idProcElement, Guid[] cklGenreElements)
+        {
+            try
+            {
+                var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssociation);
+
+                if (cklGenreElements != null)
+                {
+                    var procElement = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(idProcElement);
+                    var elements =
+                        DbFactory.Instance.GameGenreElementRepository.FindAllElementsByListId(cklGenreElements);
+
+
+                    foreach (var element in elements)
+                    {
+                        var assocElement = new AssociationConfElements()
+                        {
+                            Association = assoc,
+                            GameGenreElement = element,
+                            ProcessElement = procElement
+                        };
+
+                        DbFactory.Instance.AssociationConfElementRepository.Save(assocElement);
+                    }
+                }
+
+                assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssociation);
+                return PartialView("_ElementsAssociationTables", assoc);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveElementAssociation"));
+            }
+        }
+
+        public PartialViewResult LoadAssociations(Guid idLanguage, Guid idGenre)
+        {
+            try
+            {
+                var associations =
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage);
+
+                ViewBag.IdGenre = idGenre;
+                ViewBag.IdLanguage = idLanguage;
+                return PartialView("_ViewAssociations", associations);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "LoadAssociations"));
+            }
+        }
+
+        public PartialViewResult UnAssociateElement(Guid Id)
+        {
+            try
+            {
+                var assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(Id);
+                var idAssoc = assocElement.Association.Id;
+                
+                DbFactory.Instance.AssociationConfElementRepository.Delete(assocElement);
+
+                var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssoc);
+                return PartialView("_ElementsAssociationTables", assoc);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "UnAssociateElement"));
+            }
+        }
+
+        public PartialViewResult SaveAssociation(Guid idGenre, Guid idLanguage, string edtAssociationName)
+        {
+            try
+            {
+                var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(idGenre);
+                var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(idLanguage);
+                
+                var assoc = new AssociationConf()
+                {
+                    Name = edtAssociationName,
+                    DtCreation = DateTime.Now,
+                    Genre = genre,
+                    Language = language
+                };
+
+                DbFactory.Instance.AssociationConfRepository.Save(assoc);
+
+                var associations =
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage);
+
+                ViewBag.IdGenre = idGenre;
+                ViewBag.IdLanguage = idLanguage;
+                return PartialView("_ViewAssociations", associations);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveAssociation"));
+            }
+        }
+
+        public PartialViewResult DeleteAssociation(Guid id)
+        {
+            try
+            {
+                var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(id);
+                ViewBag.IdGenre = assoc.Genre.Id;
+                ViewBag.IdLanguage = assoc.Language.Id;
+
+                if (!assoc.IsConstant)
+                {
+                    DbFactory.Instance.AssociationConfRepository.Delete(assoc);
+                }
+
+                var associations =
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(ViewBag.IdGenre, ViewBag.IdLanguage);
+
+                
+                return PartialView("_ViewAssociations", associations);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "DeleteAssociation"));
+            }
+        }
+
+        public PartialViewResult ShowElementsAssociationDialog(Guid id, Guid idLanguageElement)
+        {
+            try
+            {
+                var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(id);
+                var languageElement = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(idLanguageElement);
+
+                var idGameElements = new List<Guid>();
+                var assocElements = DbFactory.Instance.AssociationConfElementRepository.FindAllElementsByAssociantionAndLanguageElementId(idLanguageElement, id);
+                foreach (var ae in assocElements)
+                {
+                    idGameElements.Add(ae.GameGenreElement.Id); 
+                }
+
+                var elementsInassociated =
+                    DbFactory.Instance.GameGenreElementRepository.FindAllElementsByGenreNotInListId(assoc.Genre.Id, idGameElements.ToArray())
+                    .OrderBy(o => o.Name).ToList();
+                
+                ViewBag.Association = assoc;
+                ViewBag.LanguageElement = languageElement;
+
+                return PartialView("_SaveElementAssociation", elementsInassociated);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ShowElementsAssociationDialog"));
+            }
+        }
     }
+
 }

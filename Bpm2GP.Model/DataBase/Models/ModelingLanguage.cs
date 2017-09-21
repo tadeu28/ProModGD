@@ -19,11 +19,13 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual Boolean IsConstant { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual IList<ModelingLanguageElement> Elements { get; set; }
+        public virtual IList<AssociationConf> Associations { get; set; }
         public virtual Designer Designer { get; set; }
 
         public ModelingLanguage()
         {
             this.Elements = new List<ModelingLanguageElement>();
+            this.Associations = new List<AssociationConf>();
         }
     }
 
@@ -55,6 +57,14 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Inverse(true);
                 m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idLanguage"));
+            }, o => o.OneToMany());
+
+            Bag(x => x.Associations, m =>
+            {
+                m.Key(k => k.Column("idLanguage"));
+                m.Inverse(true);
+                m.Cascade(Cascade.DeleteOrphans);
+                m.Lazy(CollectionLazy.Lazy);
             }, o => o.OneToMany());
         }
     }

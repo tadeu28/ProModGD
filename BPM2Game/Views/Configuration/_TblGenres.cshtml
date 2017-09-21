@@ -36,11 +36,14 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenres"
-                       data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Genre"
-                       href="@Url.Action("RemoveGameGenre", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
-                        <i class="glyphicon glyphicon-trash"></i>
-                    </a>
+                    @if (!item.IsConstant)
+                    {
+                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenres"
+                           data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Genre"
+                           href="@Url.Action("RemoveGameGenre", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    }
                     <a id="btnShowElement" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenreElements"
                        data-ajax-loading="#divCarregando" data-ajax-success="OpenElementTab" data-toggle="tooltip"
                        data-placement="bottom" title="Show Elements" 

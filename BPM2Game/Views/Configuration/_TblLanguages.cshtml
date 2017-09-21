@@ -42,10 +42,14 @@
                 @Html.DisplayFor(modelItem => item.Version)
             </td>
             <td>
-                <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblLanguages"
-                   data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Language"
-                   href="@Url.Action("RemoveLanguage", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
-                    <i class="glyphicon glyphicon-trash"></i></a>
+                @if (!item.IsConstant)
+                {
+                    <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblLanguages"
+                       data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Language"
+                       href="@Url.Action("RemoveLanguage", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                }
                 <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblElements"
                    data-ajax-loading="#divCarregando" data-ajax-success="OpenElementTab" data-toggle="tooltip" 
                    data-placement="bottom" title="Show Elements"
