@@ -19,5 +19,10 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Language.Id == languageId).ToList();
         }
+
+        public List<AssociationConf> FindAllElementsByGenre(Guid genreId)
+        {
+            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId).ToList();
+        }
     }
 }

@@ -22,5 +22,15 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             return this.Session.Query<AssociationConfElements>().Where(w => w.GameGenreElement.Id == gameElementId && w.Association.Id == idAssociation).ToList();
         }
+
+        public List<AssociationConfElements> FindAllElementsByAssociantion(Guid idAssociation)
+        {
+            return this.Session.Query<AssociationConfElements>().Where(w => w.Association.Id == idAssociation).ToList();
+        }
+
+        public List<AssociationConfElements> FindAllElementsByElementeMetamodel(String metamodel)
+        {
+            return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Metamodel == metamodel).ToList();
+        }
     }
 }

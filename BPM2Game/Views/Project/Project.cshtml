@@ -43,7 +43,13 @@
             <i class="glyphicon glyphicon-inbox"></i> Process Model Configuration
         </a>
     </li>
-    <li class="" id="tbsGameConfig"><a tabindex="tabGameConfig" href="#" data-toggle="tab">Game Configuration</a></li>
+    <li class="" id="tbsGameConfig">
+        <a tabindex="tabProcessModel" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("GameConfiguration", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-tower"></i> Game Configuration
+        </a>
+    </li>
 </ul>
 
 <ul class="tab-content" id="tbContent">

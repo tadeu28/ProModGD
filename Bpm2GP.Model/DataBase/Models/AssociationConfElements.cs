@@ -14,6 +14,12 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual ModelingLanguageElement ProcessElement { get; set; }
         public virtual GameGenreElement GameGenreElement { get; set; }
         public virtual AssociationConf Association { get; set; }
+        public virtual IList<AssociationRules> Ruleses { get; set; }
+
+        public AssociationConfElements()
+        {
+            this.Ruleses = new List<AssociationRules>();
+        }
     }
 
     public class AssociationConfElementsMap : ClassMapping<AssociationConfElements>
@@ -25,6 +31,14 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.ProcessElement, m => m.Column("idLanguageElement"));
             ManyToOne(x => x.GameGenreElement, m => m.Column("idGenreElement"));
             ManyToOne(x => x.Association, m => m.Column("idAssociation"));
+
+            Bag(x => x.Ruleses, m =>
+            {
+                m.Key(k => k.Column("idAssocElement"));
+                m.Cascade(Cascade.All);
+                m.Lazy(CollectionLazy.Lazy);
+                m.Inverse(true);
+            }, o => o.OneToMany());
         }
     }
 }

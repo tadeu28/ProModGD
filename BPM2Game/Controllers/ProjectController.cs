@@ -7,8 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Bpm2GP.Model.DataBase;
+using Bpm2GP.Model.DataBase.Adapter;
 using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
+using BPM2Game.Mapping.BpmnToAdventure;
+using Newtonsoft.Json;
 
 namespace BPM2Game.Controllers
 {
@@ -170,6 +173,22 @@ namespace BPM2Game.Controllers
             }
         }
 
+        public PartialViewResult GameConfiguration(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer);
+
+                ViewData["Genres"] = genres;
+                return PartialView("_GameConfiguration", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "GameConfiguration"));
+            }
+        }
+
         public PartialViewResult ProcessInformation(Guid id)
         {
             try
@@ -182,6 +201,79 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProcessInformation"));
+            }
+        }
+
+        public JsonResult AllMappings(Guid id)
+        {
+            try
+            {
+                var maps = DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenre(id);
+
+                var adapters = new List<GenericAdapter>();
+                adapters.Add(new GenericAdapter());
+                maps.ForEach(f =>
+                {
+                    adapters.Add(new GenericAdapter()
+                    {
+                        Id = f.Id,
+                        Name = f.Name
+                    });
+                });
+
+                var jsonStr = JsonConvert.SerializeObject(adapters);
+
+                return Json(jsonStr, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("error : " + ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirMapeamento(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                var map = project.DesignMappings.FirstOrDefault();
+                DbFactory.Instance.DesignMappingRepository.Delete(map);
+                project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+
+                return View("Project", project);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Project", "ExcluirMapeamento"));
+            }
+        }
+
+        public JsonResult CreateMapping(Guid IdProject, Guid idAssociations)
+        {
+            try
+            {
+                var association = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssociations);
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(IdProject);
+
+                var designMapping = new DesignMapping()
+                {
+                    AssociationConf = association,
+                    CreationDate = DateTime.Now,
+                    Project = project,
+                    Language = association.Language,
+                    Genre = association.Genre
+                };
+
+                //DbFactory.Instance.DesignMappingRepository.Save(designMapping);
+
+                var mappingCore = new MappingClass();
+                mappingCore.StartMapping(designMapping);
+
+                return Json("ok", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("error : " + ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
     }

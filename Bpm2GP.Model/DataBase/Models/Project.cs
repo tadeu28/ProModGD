@@ -25,11 +25,13 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual byte[] BpmnModel { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual Designer Owner { get; set; }
+        public virtual IList<DesignMapping> DesignMappings { get; set; }
         public virtual IList<Designer> Designers { get; set; }
 
         public Project()
         {
             this.Designers = new List<Designer>();
+            DesignMappings = new List<DesignMapping>();
         }
     }
 
@@ -53,6 +55,14 @@ namespace Bpm2GP.Model.DataBase.Models
             Property(x => x.Inactive);
             Property(x => x.BpmnModelPath);
             Property(x => x.BpmnModel);
+
+            Bag(x => x.DesignMappings, map =>
+            {
+                map.Cascade(Cascade.DeleteOrphans);
+                map.Lazy(CollectionLazy.Lazy);
+                map.Key(k => k.Column("IdProject"));
+            },
+            o => o.OneToMany());
 
             ManyToOne(x => x.Owner, m =>
             {

@@ -36,6 +36,10 @@ namespace Bpm2GP.Model.DataBase
         public GameGenreElementRepository GameGenreElementRepository { get; set; }
         public AssociationConfRepository AssociationConfRepository { get; set; }
         public AssociationConfElementRepository AssociationConfElementRepository { get; set; }
+        public DesignMappingRepository DesignMappingRepository { get; set; }
+        public GameDesignMappingElementsRepository GameDesignMappingElementsRepository { get; set; }
+        public AssociationTypeRepository AssociationTypeRepository { get; set; }
+        public AssociationRulesRepository AssociationRulesRepository { get; set; }
 
         private DbFactory()
         {
@@ -50,6 +54,10 @@ namespace Bpm2GP.Model.DataBase
             this.GameGenreElementRepository = new GameGenreElementRepository(this.Session);
             this.AssociationConfRepository = new AssociationConfRepository(this.Session);
             this.AssociationConfElementRepository = new AssociationConfElementRepository(this.Session);
+            this.DesignMappingRepository = new DesignMappingRepository(this.Session);
+            this.GameDesignMappingElementsRepository = new GameDesignMappingElementsRepository(this.Session);
+            this.AssociationTypeRepository = new AssociationTypeRepository(this.Session);
+            this.AssociationRulesRepository = new AssociationRulesRepository(this.Session);
         }
 
         public void Initialize(object obj)

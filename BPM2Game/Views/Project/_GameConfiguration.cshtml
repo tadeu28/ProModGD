@@ -1,0 +1,104 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model Bpm2GP.Model.DataBase.Models.Project
+
+@{
+    var genres = (List<GameGenre>)ViewData["Genres"];
+    genres.Insert(0, new GameGenre(){});
+    var selectGenres = new SelectList(genres, "Id", "Name");
+
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var modelFile = "@Model.BpmnModelPath";
+        var qtdeMap = "@Model.DesignMappings.Count";
+
+        $("#btnMapear").hide();
+        $("#btnDeletarMapear").hide();
+        $("#mapFields").show();
+        if (qtdeMap > 0) {
+            $("#btnDeletarMapear").show();
+            $("#mapFields").hide();
+        }
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#IdGenre").change(function() {
+            $.ajax({
+                type: "GET",
+                url: "/Project/AllMappings/" + $("#IdGenre").val(),
+                success: function (r) {
+                    $("#idAssociations").html("");
+                    var data = jQuery.parseJSON(r);
+
+                    $.each(data, function (key, entry) {
+                        console.log(key + " - " + entry.Name);
+                        $("#idAssociations").append($('<option></option>').val(entry.Id).html(entry.Name));
+                    });
+                }
+            });
+        });
+
+        $("#idAssociations").change(function () {
+            if (($("#idAssociations").val() !== "00000000-0000-0000-0000-000000000000") && (modelFile != "") && (qtdeMap <= 0)) {
+                $("#btnMapear").show();
+            } else {
+                $("#btnMapear").hide();
+            }
+        });
+    });
+
+    function postDone(r) {
+        if (r === "ok") {
+            $("#btnMapear").hide();
+        }
+    }
+</script>
+
+<br />
+
+<div class="col-md-4">
+    @using (Ajax.BeginForm("CreateMapping", "Project", new AjaxOptions()
+    {
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postDone",
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">Game Map</div>
+            <div class="panel-body" id="mapFields">
+                <div class="form-group">
+                    @Html.Label("Genre", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        @Html.DropDownList("IdGenre", selectGenres, new Dictionary<string, object>() {{"class", "form-control"}})
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Associations", htmlAttributes: new {@class = "control-label col-md-4"})
+                    <div class="col-md-8">
+                        <select id="idAssociations" name="idAssociations" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                @Html.Hidden("IdProject", Model.Id)
+                <button type="submit" class="btn btn-success" id="btnMapear">Create Element Map</button>
+                <a href="@Url.Action("ExcluirMapeamento", "Project", new { id = Model.Id })" class="btn btn-danger" id="btnDeletarMapear">Delete Element Map</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="col-md-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Game Map</div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+</div>
+
+<div class="container"></div>

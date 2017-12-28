@@ -602,6 +602,9 @@
     <Content Include="Views\Configuration\_ElementsAssociationTables.cshtml" />
     <Content Include="Views\Configuration\_ViewAssociations.cshtml" />
     <Content Include="Views\Configuration\_SaveElementAssociation.cshtml" />
+    <Content Include="Views\Project\_GameConfiguration.cshtml" />
+    <Content Include="Views\Configuration\_RuleDialog.cshtml" />
+    <Content Include="Views\Configuration\_AddAssociationRule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -617,6 +620,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPM2Game.Mapping\BPM2Game.Mapping.csproj">
+      <Project>{78f497bc-cf2d-403a-ae3d-055873379993}</Project>
+      <Name>BPM2Game.Mapping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bpm2GP.Model\Bpm2GP.Model.csproj">
       <Project>{ca3df693-b19e-4028-a1c8-7c7adcc48cc7}</Project>
       <Name>Bpm2GP.Model</Name>

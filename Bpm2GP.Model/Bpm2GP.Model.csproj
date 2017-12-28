@@ -108,10 +108,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\Adapter\GenericAdapter.cs" />
+    <Compile Include="DataBase\Models\AssociationType.cs" />
     <Compile Include="DataBase\DbFactory.cs" />
     <Compile Include="DataBase\Models\AssociationConf.cs" />
     <Compile Include="DataBase\Models\AssociationConfElements.cs" />
+    <Compile Include="DataBase\Models\AssociationRules.cs" />
     <Compile Include="DataBase\Models\Designer.cs" />
+    <Compile Include="DataBase\Models\DesignMapping.cs" />
+    <Compile Include="DataBase\Models\GameDesignMappingElements.cs" />
     <Compile Include="DataBase\Models\GameGenre.cs" />
     <Compile Include="DataBase\Models\GameGenreElement.cs" />
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
@@ -120,7 +125,11 @@
     <Compile Include="DataBase\Models\User.cs" />
     <Compile Include="DataBase\Repository\AssociationConfElementRepository.cs" />
     <Compile Include="DataBase\Repository\AssociationConfRepository.cs" />
+    <Compile Include="DataBase\Repository\AssociationRulesRepository.cs" />
+    <Compile Include="DataBase\Repository\AssociationTypeRepository.cs" />
     <Compile Include="DataBase\Repository\DesignerRepository.cs" />
+    <Compile Include="DataBase\Repository\DesignMappingRepository.cs" />
+    <Compile Include="DataBase\Repository\GameDesignMappingElementsRepository.cs" />
     <Compile Include="DataBase\Repository\GameGenreElementRepository.cs" />
     <Compile Include="DataBase\Repository\GameGenreRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />

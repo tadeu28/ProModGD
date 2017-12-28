@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Bpm2GP.Model.DataBase;
 using Bpm2GP.Model.DataBase.Models;
@@ -98,7 +99,6 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                var designer = LoginUtils.User.Designer;
                 var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(IdLanguage);
 
                 var baseElement = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(IdBaseElement);
@@ -415,13 +415,78 @@ namespace BPM2Game.Controllers
 
                 var associations =
                     DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(ViewBag.IdGenre, ViewBag.IdLanguage);
-
                 
                 return PartialView("_ViewAssociations", associations);
             }
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "DeleteAssociation"));
+            }
+        }
+
+        public PartialViewResult ShowRuleDialog(Guid id)
+        {
+            try
+            {
+                var assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(id);
+                var ruleType = DbFactory.Instance.AssociationTypeRepository.FindAll();
+
+                ViewBag.RuleTypes = new SelectList(ruleType, "Id", "Description");
+                return PartialView("_RuleDialog", assocElement);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ShowRuleDialog"));
+            }
+        }
+
+        public PartialViewResult DeleteRule(Guid id)
+        {
+            try
+            {
+                var ruleObj = DbFactory.Instance.AssociationRulesRepository.FindFirstById(id);
+                var idAssoc = ruleObj.AssociationElement.Id;
+
+                DbFactory.Instance.AssociationRulesRepository.Delete(ruleObj);
+
+                var ruleTypes = DbFactory.Instance.AssociationTypeRepository.FindAll();
+                var assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(idAssoc);
+
+                ViewData["RuleType"] = new SelectList(ruleTypes, "Id", "Description");
+                return PartialView("_AddAssociationRule", assocElement);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "DeleteRule"));
+            }
+        }
+
+        public PartialViewResult SaveRule(Guid idAssociation, Int32 idType, String rule, String field, AssociationRuleOperator op)
+        {
+            try
+            {
+                var ruleTypes = DbFactory.Instance.AssociationTypeRepository.FindAll();
+                var assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(idAssociation);
+                var ruleType = ruleTypes.FirstOrDefault(f => f.Id == idType);
+
+                var ruleObj = new AssociationRules()
+                {
+                    AssociationElement = assocElement,
+                    Rule = rule,
+                    Field = field,
+                    Operator = op,
+                    Type = ruleType
+                };
+
+                DbFactory.Instance.AssociationRulesRepository.Save(ruleObj);
+
+                assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(idAssociation);
+                ViewData["RuleType"] = new SelectList(ruleTypes, "Id", "Description");
+                return PartialView("_AddAssociationRule", assocElement);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ShowRuleDialog"));
             }
         }
 

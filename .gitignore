@@ -5,3 +5,6 @@
 /BPM2Game/bin
 /Bpm2GP.Model/bin/Debug
 /Bpm2GP.Model/obj/Debug
+/BPM2Game.Mapping/bin/Debug
+/BPM2Game.Mapping/obj/Debug
+/packages/BPMN.Sharp.1.0.5

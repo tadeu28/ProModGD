@@ -23,9 +23,19 @@
             type: "GET",
             url: "/Configuration/ShowElementsAssociationDialog/" + idAssociation + "?idLanguageElement=" + idLanguageElement,
             success: function (r) {
-                console.log(r);
                 $("#modalSaveElementsAssociation").html(r);
                 $("#dlgAssociation").modal("show");
+            }
+        });
+    }
+
+    function showRuleDialog(idAssocElement) {
+        $.ajax({
+            type: "GET",
+            url: "/Configuration/ShowRuleDialog/" + idAssocElement,
+            success: function (r) {
+                $("#modalRulesAssociation").html(r);
+                $("#dlgRules").modal("show");
             }
         });
     }
@@ -54,12 +64,12 @@
                     <td class="text-center">
                         @if (!Model.IsConstant)
                         {
-                            <a href="#" class="btn btn-default btn-xs btn-assoc" onclick=" showModalDialog('@(pe.Id)', '@(Model.Id)') ">
+                            <a href="#" class="btn btn-default btn-assoc" onclick=" showModalDialog('@(pe.Id)', '@(Model.Id)') ">
                                 <i class="glyphicon glyphicon glyphicon-retweet"></i> Associate Element
                             </a>
                         }
                     </td>
-                    <td class="btn-group-xs">
+                    <td class="btn-group-sm">
                         @{
                             var assocElements = DbFactory.Instance.AssociationConfElementRepository.FindAllElementsByAssociantionAndLanguageElementId(pe.Id, Model.Id);
                         }
@@ -70,16 +80,21 @@
                             {
                                 if (assElem.Association.IsConstant)
                                 {
-                                    <div class="btn btn-default btn-xs">
-                                        @assElem.GameGenreElement.Name
+                                    <div class="btn btn-default">
+                                        <i class="glyphicon glyphicon-knight"></i> @assElem.GameGenreElement.Name
                                     </div>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-default btn-xs" data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post"
-                                       data-ajax-mode="replace" data-ajax-update="#tblElements" href="@Url.Action("UnAssociateElement", "Configuration", new {id = assElem.Id})">
-                                        @assElem.GameGenreElement.Name <i class="glyphicon glyphicon-trash"></i>
-                                    </a>
+                                    <div class="btn btn-default"><i class="glyphicon glyphicon-knight"></i> @assElem.GameGenreElement.Name
+                                        <a class="btn btn-primary btn-xs btn-rules" data-toggle="tooltip" data-placement="top" title="Add Mapping Rules" onclick="showRuleDialog('@(assElem.Id)')">
+                                            <i class="glyphicon glyphicon-link"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-xs btn-remove" data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-toggle="tooltip" data-placement="top" title="Remove"
+                                           data-ajax-mode="replace" data-ajax-update="#tblElements" href="@Url.Action("UnAssociateElement", "Configuration", new {id = assElem.Id})">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </a>
+                                    </div>
                                 }
                             }
                         }
@@ -98,4 +113,7 @@
 </div>
 
 <div id="modalSaveElementsAssociation">
+</div>
+
+<div id="modalRulesAssociation">
 </div>

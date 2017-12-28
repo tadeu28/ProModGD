@@ -49,7 +49,11 @@ namespace Bpm2GP.Model.DataBase.Models
             Property(x => x.DtCreation);
             Property(x => x.IsConstant);
 
-            ManyToOne(x => x.Language, m => m.Column("idLanguage"));
+            ManyToOne(x => x.Language, m =>
+            {
+                m.Column("idLanguage");
+                m.Lazy(LazyRelation.NoProxy);
+            });
             ManyToOne(x => x.Genre, m => m.Column("idGenre"));
 
             Bag(x => x.ElementsAssociated, m =>
@@ -57,7 +61,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idAssociation"));
                 m.Inverse(true);
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }
