@@ -1,10 +1,13 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.Project
 
+<link href="/Scripts/process_modeler/css/app.css" rel="stylesheet" />
+<link href="/Scripts/process_modeler/css/diagram-js.css" rel="stylesheet" />
+
 <script type="text/javascript">
     var edit = "@ViewBag.Edit";
     var modelFile = "@ViewBag.BpmnFilePath";
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
@@ -23,7 +26,7 @@
 <div class="alert alert-success row">
     <form class="form-inline" id="fileSelected">
         <div class="form-group col-md-5">
-            <input id="projectId" type="hidden" value="@ViewBag.ProjectId"/>
+            <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
             <input class="form-control" id="edtBpmnInput" type="file">
         </div>
         <div class="col-md-7">
@@ -50,14 +53,20 @@
 </div>
 <!-- element to draw bpmn diagram in -->
 <div id="modelArea">
-    <div class="well" style="height: 600px" id="canvas"></div>
-    <div id="js-properties-panel"></div>
+    <div class="content" id="js-drop-zone">
+        <div class="well" style="height: 720px" id="js-canvas"></div>
+        <div id="js-properties-panel"></div>
+    </div>
+
+    <!--<div class="well" style="height: 600px" id="canvas"></div>
+    <div id="js-properties-panel"></div> -->
 </div>
 
 <canvas id="canvas1" style="display: none;" width="3000" height="800"></canvas>
 
+<script src="../../Scripts/process_modeler/process_modeler.js"></script>
 <!-- scripts -->
 <!-- bpmn-js modeler -->
-<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
+<!--<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
 <!-- application -->
-<script src="../../Scripts/modeler.js"></script>
+<!--<script src="../../Scripts/modeler.js"></script>-->

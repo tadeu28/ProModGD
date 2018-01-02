@@ -384,6 +384,8 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\process_modeler\app.css" />
+    <Content Include="Content\process_modeler\diagram-js.css" />
     <Content Include="Content\styles\alert-bangtidy.css" />
     <Content Include="Content\styles\alert-blackgloss.css" />
     <Content Include="Content\flaticon.css" />
@@ -512,6 +514,9 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\process_modeler\css\app.css" />
+    <Content Include="Scripts\process_modeler\css\diagram-js.css" />
+    <Content Include="Scripts\process_modeler\process_modeler.js" />
     <Content Include="Scripts\rgbcolor.js" />
     <Content Include="Scripts\viwer-bpmn.js" />
     <Content Include="Scripts\fileinput.js" />
@@ -610,6 +615,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="files\bpmn\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\process_modeler\vendor\bpmn-font\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

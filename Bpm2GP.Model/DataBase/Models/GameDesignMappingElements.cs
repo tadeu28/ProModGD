@@ -15,6 +15,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual DesignMapping DesignMapping { get; set; }
         public virtual AssociationConfElements AssociateElement { get; set; }
         public virtual GameGenreElement GameGenreElement { get; set; }
+        public virtual String ModelElementId { get; set; }
         public virtual bool IsManual { get; set; }
     }
 
@@ -26,6 +27,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Property(x => x.Descricao);
             Property(x => x.IsManual);
+            Property(x => x.ModelElementId);
 
             ManyToOne(x => x.GameGenreElement, m =>
             {

@@ -32,5 +32,15 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Metamodel == metamodel).ToList();
         }
+
+        public List<AssociationConfElements> FindAllElementsByElements(List<ModelingLanguageElement> elements)
+        {
+            return this.Session.Query<AssociationConfElements>().Where(w => elements.Contains(w.ProcessElement)).ToList();
+        }
+
+        public AssociationConfElements FindByElementMetamodel(String metamodel)
+        {
+            return this.Session.Query<AssociationConfElements>().FirstOrDefault(w => w.ProcessElement.Metamodel == metamodel);
+        }
     }
 }

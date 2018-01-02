@@ -30,8 +30,7 @@ namespace BPM2Game
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bpmn-js").Include(
-                      "~/Scripts/modeler.js",
-                      "~/Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"));
+                      "~/Scripts/process_modeler/process_modeler.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
