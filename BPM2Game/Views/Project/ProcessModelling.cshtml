@@ -28,7 +28,7 @@
             <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
             <input class="form-control" id="edtBpmnInput" type="file">
         </div>
-        <div class="col-md-7">
+        <div class="col-md-5">
             <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Open Process Model">
                 <i class="glyphicon glyphicon-cloud-upload "></i>
             </button>
@@ -48,17 +48,22 @@
                 <i class="glyphicon glyphicon-compressed"></i>
             </a>
         </div>
+        <div class="col-md-2 text-right">
+            
+        </div>
     </form>
 </div>
 <!-- element to draw bpmn diagram in -->
-<div id="modelArea">
+<div id="modelArea" class="text-right">
+    <div class="btn-group-xs">
+        <a class="btn btn-default btn-xs" data-toggle="collapse" href="#js-properties-panel" data-placement="bottom" title="Property Panel" id="btnPropertyPanel">
+            <i class="glyphicon glyphicon-collapse-down"></i> Show Properties
+        </a>
+    </div>
     <div class="content" id="js-drop-zone">
         <div class="well" style="height: 720px" id="js-canvas"></div>
-        <div id="js-properties-panel"></div>
+        <div id="js-properties-panel" class="panel-collapse collapse"></div>
     </div>
-
-    <!--<div class="well" style="height: 600px" id="canvas"></div>
-    <div id="js-properties-panel"></div> -->
 </div>
 
 <canvas id="canvas1" style="display: none;" width="3000" height="800"></canvas>
