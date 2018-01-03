@@ -10,6 +10,7 @@ using Bpm2GP.Model.Utils;
 
 namespace BPM2Game.Controllers
 {
+    [OutputCache(NoStore = true, Duration = 0)]
     [Authorize]
     public class ConfigurationController : Controller
     {

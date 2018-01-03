@@ -41,10 +41,13 @@
 
   // import function
     function importXML() {
+        console.log(modelFile);
+
       var url = "http://" + modelFile;
       $.ajax({
           type: 'GET',
           url: url,
+          cache: false,
           processData: false,
           success: function (data) {
               // import diagram

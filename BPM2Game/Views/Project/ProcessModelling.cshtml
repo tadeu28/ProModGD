@@ -1,7 +1,6 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.Project
 
 <link href="/Scripts/process_modeler/css/app.css" rel="stylesheet" />
-<link href="/Scripts/process_modeler/css/diagram-js.css" rel="stylesheet" />
 
 <script type="text/javascript">
     var edit = "@ViewBag.Edit";
@@ -64,9 +63,4 @@
 
 <canvas id="canvas1" style="display: none;" width="3000" height="800"></canvas>
 
-<script src="../../Scripts/process_modeler/process_modeler.js"></script>
-<!-- scripts -->
-<!-- bpmn-js modeler -->
-<!--<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
-<!-- application -->
-<!--<script src="../../Scripts/modeler.js"></script>-->
+@Scripts.Render("~/bundles/bpmn-js")

@@ -13,7 +13,8 @@ namespace BPM2Game
                         "~/Scripts/notify.js",
                         "~/Scripts/DataTables/jquery.dataTables*",
                         "~/Scripts/DataTables/dataTables.bootstrap*",
-                        "~/Scripts/checkListBox_bootstrap.js"));
+                        "~/Scripts/checkListBox_bootstrap.js",
+                        "~/Scripts/toastr.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
@@ -38,8 +39,9 @@ namespace BPM2Game
                       "~/Content/bootstrap-fileinput/css/fileinput*",
                       "~/Content/DataTables/css/dataTables.bootstrap*",
                       "~/Content/site.css",
-                      "~/Scripts/bpmn-js/assets/diagram-js.css",
-                      "~/Scripts/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css",
+                      //"~/Scripts/bpmn-js/assets/diagram-js.css",
+                      //"~/Scripts/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css",
+                      "~/Content/toastr.css",
                       "~/Content/flaticon.css"));
         }
     }
