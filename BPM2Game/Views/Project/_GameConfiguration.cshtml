@@ -33,7 +33,6 @@
                     var data = jQuery.parseJSON(r);
 
                     $.each(data, function (key, entry) {
-                        console.log(key + " - " + entry.Name);
                         $("#idAssociations").append($('<option></option>').val(entry.Id).html(entry.Name));
                     });
                 }

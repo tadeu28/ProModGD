@@ -266,7 +266,7 @@ namespace BPM2Game.Controllers
 
                 //DbFactory.Instance.DesignMappingRepository.Save(designMapping);
 
-                var mappingCore = new MappingClass();
+                var mappingCore = new BpmnMapEngineClass();
                 mappingCore.StartMapping(designMapping);
 
                 return Json("ok", JsonRequestBehavior.AllowGet);

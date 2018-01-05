@@ -1,9 +1,13 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
 @model Bpm2GP.Model.DataBase.Models.AssociationConfElements
 
+<script>
+    $.validator.unobtrusive.parse(document);
+</script>
+
 @{
     var ruleTypes = (SelectList) ViewData["RuleType"];
-    
+
     var lstEnum = Enum.GetValues(typeof(AssociationRuleOperator))
         .Cast<AssociationRuleOperator>()
         .Select(v => v.ToString());
@@ -31,7 +35,7 @@
         <div class="form-group">
             @Html.Label("Field", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.Editor("Field", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.Editor("Field", new { htmlAttributes = new { @class = "form-control", @required = "true" } })
             </div>
         </div>
         <div class="form-group">
@@ -53,11 +57,11 @@
 }
 
 <hr/>
-
+<h5><strong><i class="glyphicon glyphicon-link"></i> <ins>Created Rules</ins></strong></h5>
 <table class="table table-striped table-responsive table-bordered">
     <tr>
         <th>Rule Type</th>
-        <th>Rule</th>
+        <th>Rule Definition</th>
         <th></th>
     </tr>
 
@@ -68,7 +72,7 @@
         <td class="btn-group-xs text-center">
             <a class="btn btn-warning"
                data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#formRules"
-               href="@Url.Action("DeleteRule", "Configuration", new { id = rule.Id })"> <i class="glyphicon glyphicon-remove"></i> Remove</a>
+               href="@Url.Action("DeleteRule", "Configuration", new { id = rule.Id })"> <i class="glyphicon glyphicon-remove"></i> Remove Rule</a>
         </td>
     </tr>
 }

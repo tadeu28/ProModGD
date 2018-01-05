@@ -23,7 +23,8 @@ namespace Bpm2GP.Model.DataBase.Models
         MoreThan,
         LessThan,
         Prior,
-        Next
+        Next,
+        NotExists
     }
 
     public class AssociationRules
