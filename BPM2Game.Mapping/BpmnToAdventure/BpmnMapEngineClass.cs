@@ -80,11 +80,37 @@ namespace BPM2Game.Mapping.BpmnToAdventure
                 if (element.ProcessElement.Metamodel.ToLower().Contains("association"))
                 {
                     ProcessMessageAssociations(rules, element, bpmnElement);
-                    return;
-                }else if (element.ProcessElement.Metamodel.ToLower().Contains("process"))
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("messageflow"))
+                {
+                    ProcessBpmnProcessMessageFlow(element, bpmnElement);
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("process"))
                 {
                     ProcessBpmnProcessElement(rules, element, bpmnElement);
-                    return;
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("textannotation"))
+                {
+                    ProcessBpmnProcessTextAnnotation(rules, element, bpmnElement);
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("gateway"))
+                {
+                    ProcessBpmnProcessGateways(rules, element, bpmnElement);
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("intermediate"))
+                {
+                    ProcessBpmnProcessIntermidiateEvents(rules, element, bpmnElement);
+                    continue;
+                }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("sequenceflow"))
+                {
+                    ProcessBpmnProcessSequenceFlow(element, bpmnElement);
+                    continue;
                 }
 
                 if (rules != null && rules.Any(a => a.Type.Id == 6))
@@ -441,6 +467,235 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
         }
 
+        private void ProcessBpmnProcessGateways(List<AssociationRules> rules, AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                if (bpmnElement.TypeName.ToLower() == "exclusivegateway")
+                {
+                    ProcessBpmnProcessExclusiveGateways(rules, element, bpmnElement);
+                }else if (bpmnElement.TypeName.ToLower() == "inclusivegateway")
+                {
+                    
+                }else if (bpmnElement.TypeName.ToLower() == "inclusivegateway")
+                {
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
+        private void ProcessBpmnProcessIntermidiateEvents(List<AssociationRules> rules, AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                if (bpmnElement.TypeName.ToLower().Contains("throw"))
+                {
+                    foreach (var seqIncomming in bpmnElement.Elements["incoming"])
+                    {
+                        var outgoingSeqFlow =
+                            FindBpmnElementById(
+                                seqIncomming.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value, "id");
+
+                        var incomingTask = FindBpmnElementById(outgoingSeqFlow.Attributes["sourceRef"], "id");
+                        if (incomingTask != null)
+                        {
+                            const string ruleFormat = "<{0}> creates event <{1}>";
+
+                            var ge = new GameDesignMappingElements()
+                            {
+                                AssociateElement = element,
+                                Descricao = String.Format(ruleFormat,
+                                                            incomingTask.Attributes.ContainsKey("name") ? incomingTask.Attributes["name"] : incomingTask.Attributes["id"],
+                                                            bpmnElement.Attributes.ContainsKey("name") ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]),
+                                DesignMapping = DesignMapping,
+                                GameGenreElement = element.GameGenreElement,
+                                ModelElementId = bpmnElement.Attributes["id"],
+                                IsManual = false
+                            };
+
+                            MappingList.Add(ge);
+                        }
+                    }
+                }
+                else if (bpmnElement.TypeName.ToLower().Contains("catch"))
+                {
+                    foreach (var seqOutgoing in bpmnElement.Elements["outgoing"])
+                    {
+                        var outgoingSeqFlow =
+                            FindBpmnElementById(
+                                seqOutgoing.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value, "id");
+
+                        var outgoingTask = FindBpmnElementById(outgoingSeqFlow.Attributes["targetRef"], "id");
+                        if (outgoingTask != null)
+                        {
+                            const string ruleFormat = "<{0}> needs of event <{1}>";
+
+                            var ge = new GameDesignMappingElements()
+                            {
+                                AssociateElement = element,
+                                Descricao = String.Format(ruleFormat,
+                                                            outgoingTask.Attributes.ContainsKey("name") ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"],
+                                                            bpmnElement.Attributes.ContainsKey("name") ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]),
+                                DesignMapping = DesignMapping,
+                                GameGenreElement = element.GameGenreElement,
+                                ModelElementId = bpmnElement.Attributes["id"],
+                                IsManual = false
+                            };
+
+                            MappingList.Add(ge);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
+        private void ProcessBpmnProcessSequenceFlow(AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                var sourceElement = FindBpmnElementById(bpmnElement.Attributes["sourceRef"], "id");
+
+                if (
+                    (!sourceElement.TypeName.ToLower().Contains("task")) && 
+                    (!sourceElement.TypeName.ToLower().Contains("subprocess")) &&
+                    (!sourceElement.TypeName.ToLower().Contains("start")))
+                    return;
+
+                var targetElements = FindElementIgnoringNonActivities(sourceElement, bpmnElement);
+                foreach (var targetElement in targetElements)
+                {
+                    var sourceParent = FindOwnerElementByFlowNode(bpmnElement.Attributes["sourceRef"]);
+                    var targetParent = FindOwnerElementByFlowNode(targetElement.Attributes["id"]);
+
+                    if ((targetParent != null) && (sourceParent != null))
+                    {
+                        const string ruleFormat = "<{0}> <---> <{1}> (<{2}>)";
+
+                        var rule = String.Format(ruleFormat,
+                            sourceParent.Attributes["name"].Trim() == ""
+                                ? sourceParent.Attributes["id"]
+                                : sourceParent.Attributes["name"],
+                            targetParent.Attributes["name"].Trim() == ""
+                                ? targetParent.Attributes["id"]
+                                : targetParent.Attributes["name"],
+                            targetElement.Attributes["id"].Trim() == ""
+                                ? targetElement.Attributes["id"]
+                                : targetElement.Attributes["name"]);
+
+                        var ge = new GameDesignMappingElements()
+                        {
+                            AssociateElement = element,
+                            Descricao = rule,
+                            DesignMapping = DesignMapping,
+                            GameGenreElement = element.GameGenreElement,
+                            ModelElementId = bpmnElement.Attributes["id"],
+                            IsManual = false
+                        };
+
+                        if (MappingList.All(a => a.Descricao != ge.Descricao))
+                        {
+                            MappingList.Add(ge);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
+        private void ProcessBpmnProcessMessageFlow(AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                var sourceElement = FindOwnerElementByFlowNode(bpmnElement.Attributes["sourceRef"]);
+                var targetElement = FindOwnerElementByFlowNode(bpmnElement.Attributes["targetRef"]);
+
+                if ((targetElement != null) && (sourceElement != null))
+                {
+                    var ge = new GameDesignMappingElements()
+                    {
+                        AssociateElement = element,
+                        Descricao = (sourceElement.Attributes["name"].Trim() == "" ? sourceElement.Attributes["id"] : sourceElement.Attributes["name"]) + " <---> "
+                                + (targetElement.Attributes["name"].Trim() == "" ? targetElement.Attributes["id"] : targetElement.Attributes["name"]),
+                        DesignMapping = DesignMapping,
+                        GameGenreElement = element.GameGenreElement,
+                        ModelElementId = bpmnElement.Attributes["id"],
+                        IsManual = false
+                    };
+
+                    MappingList.Add(ge);
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
+        private void ProcessBpmnProcessExclusiveGateways(List<AssociationRules> rules, AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                //Check if is a Split Gateway. I know that if there is more than one outgoing element
+                if (bpmnElement.Elements.ContainsKey("outgoing") && bpmnElement.Elements["outgoing"].Count > 1)
+                {
+                    var incoming = bpmnElement.Elements["incoming"].FirstOrDefault();
+                    if (incoming != null)
+                    {
+                        var incomeSeqFlow =
+                            FindBpmnElementById(
+                                incoming.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value, "id");
+
+                        var incomeTask = FindBpmnElementById(incomeSeqFlow.Attributes["sourceRef"], "id");
+
+                        foreach (var outgoing in bpmnElement.Elements["outgoing"])
+                        {
+                            var value = outgoing.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value;
+                            var seqFlowElement = FindBpmnElementById(value, "id");
+                            if (seqFlowElement != null)
+                            {
+                                var outgoingTask = FindBpmnElementById(seqFlowElement.Attributes["targetRef"], "id");
+
+                                const string ruleFormat = "If <{0}> == <{1}> them <{2}>";
+
+                                if (incomeTask != null && outgoingTask != null)
+                                {
+                                    var ge = new GameDesignMappingElements()
+                                    {
+                                        AssociateElement = element,
+                                        Descricao = String.Format(ruleFormat,
+                                                                    incomeTask.Attributes.ContainsKey("name") ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"],
+                                                                    seqFlowElement.Attributes.ContainsKey("name") ? seqFlowElement.Attributes["name"] : seqFlowElement.Attributes["id"],
+                                                                    outgoingTask.Attributes.ContainsKey("name") ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"]),
+                                        DesignMapping = DesignMapping,
+                                        GameGenreElement = element.GameGenreElement,
+                                        ModelElementId = bpmnElement.Attributes["id"],
+                                        IsManual = false
+                                    };
+
+                                    MappingList.Add(ge);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
         private void ProcessBpmnProcessElement(List<AssociationRules> rules, AssociationConfElements element, Element bpmnElement)
         {
             try
@@ -472,17 +727,67 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
         }
 
-        private void ProcessDefaultRelation(AssociationConfElements element, Element bpmnElement)
+        private void ProcessBpmnProcessTextAnnotation(List<AssociationRules> rules, AssociationConfElements element, Element bpmnElement)
         {
             try
             {
+                var textAnnotation = bpmnElement.Elements.FirstOrDefault(f => f.Key.Trim().ToLower() == "text").Value;
+                if (textAnnotation != null)
+                {
+                    foreach (var text in textAnnotation)
+                    {
+                        if (rules.Any(a => a.Type.Id == 6))
+                        {
+                            //GetProcessFlows
+                        }
+                        else if (rules != null && rules.Any())
+                        {
+                            var qtdAcceptedRules = ProcessRules(rules, element, text);
+
+                            if (qtdAcceptedRules == rules.Count)
+                            {
+                                ProcessDefaultRelation(element, text, "value");
+                            }
+                        }
+                        else
+                        {
+                            ProcessDefaultRelation(element, text, "value");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new Exception("Can't possible to process the bpmn:TextAnnotation." + " [" + bpmnElement.Attributes["id"] + "]", ex));
+            }
+        }
+
+        private void ProcessDefaultRelation(AssociationConfElements element, Element bpmnElement, String field = "")
+        {
+            try
+            {
+                var description = "";
+                if (field.Trim() == "")
+                {
+                    description = bpmnElement.Attributes["name"] == ""
+                        ? bpmnElement.Attributes["id"]
+                        : bpmnElement.Attributes["name"];
+                }
+                else
+                {
+                    if (bpmnElement.Attributes.Any(a => a.Key.ToLower() == field.Trim().ToLower()))
+                    {
+                        description = bpmnElement.Attributes.FirstOrDefault(f => f.Key.ToLower() == field.Trim().ToLower()).Value;    
+                    }
+                }
+
                 var ge = new GameDesignMappingElements()
                 {
                     AssociateElement = element,
-                    Descricao = (bpmnElement.Attributes["name"] == "" ? bpmnElement.Attributes["id"] : bpmnElement.Attributes["name"]),
+                    Descricao = description,
                     DesignMapping = DesignMapping,
                     GameGenreElement = element.GameGenreElement,
-                    ModelElementId = bpmnElement.Attributes["id"],
+                    ModelElementId = (bpmnElement.Attributes.ContainsKey("id") ? bpmnElement.Attributes["id"] : ""),
                     IsManual = false
                 };
 
@@ -499,6 +804,128 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             try
             {
                 return Model.Elements.FirstOrDefault(w => w.Attributes.ContainsKey(idName) && w.Attributes[idName] == id);
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(ex);
+                return null;
+            }
+        }
+
+        private Element FindOwnerElementByFlowNode(String node)
+        {
+            try
+            {
+                var elements = Model.Elements.Where(w => w.TypeName.ToLower() == "lane").ToList();
+                foreach (var lane in elements)
+                {
+                    var flownoderefs = lane.Elements.Where(w => w.Key.ToLower() == "flownoderef");
+                    if (flownoderefs.Select(flownoderef => flownoderef.Value.FirstOrDefault(
+                        f => f.Attributes.FirstOrDefault(a => a.Key.ToLower() == "value").Value == node)).Any(element => element != null))
+                    {
+                        return lane;
+                    }
+                }
+
+                return Model.Elements.FirstOrDefault(f => f.Attributes["id"] == node);
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(ex);
+                return null;
+            }
+        }
+
+        private List<Element> FindElementIgnoringNonActivities(Element source, Element bpmnElement)
+        {
+            try
+            {
+                var lstElements = new List<Element>();
+
+                if (source.Elements.Any(a => a.Key.ToLower() == "outgoing"))
+                {
+                    if (source.Elements["outgoing"] != null && source.Elements["outgoing"].Count > 0)
+                    {
+                        foreach (var outgoing in source.Elements["outgoing"])
+                        {
+                            var value = outgoing.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value;
+                            var seqFlowElement = FindBpmnElementById(value, "id");
+                            if (seqFlowElement != null)
+                            {
+                                var elementId =
+                                    seqFlowElement.Attributes.FirstOrDefault(f => f.Key.ToLower() == "targetref").Value;
+                                var element = FindBpmnElementById(elementId, "id");
+                                if (element != null)
+                                {
+                                    if (element.TypeName.ToLower().Contains("intermediate"))
+                                    {
+                                        lstElements.AddRange(FindElementIgnoringNonActivities(element, bpmnElement));
+                                    }
+                                    else if (element.TypeName.ToLower().Contains("end"))
+                                    {
+                                        continue;
+                                    }
+                                    else if (element.TypeName.ToLower().Contains("gateway"))
+                                    {
+                                        lstElements.AddRange(FindElementIgnoringNonActivities(element, bpmnElement));
+                                    }
+                                    else
+                                    {
+                                        lstElements.Add(element);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    lstElements.Add(FindBpmnElementById(bpmnElement.Attributes["targetRef"], "id"));
+                }
+
+                return lstElements;
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(ex);
+                return null;
+            }
+        }
+
+        private Element FindElementIgnoringIntermidiateEvents(Element source)
+        {
+            try
+            {
+                if (source.Elements.Any(a => a.Key.ToLower() == "outgoing"))
+                {
+                    var element = source.Elements.FirstOrDefault(f => f.Key.ToLower() == "outgoing").Value.FirstOrDefault();
+                    if (element != null)
+                    {
+                        var elementId = element.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value;
+                        element = FindBpmnElementById(elementId, "id");
+                        if (element != null)
+                        {
+                            if (element.Attributes.Any(a => a.Key.ToLower() == "targetref"))
+                            {
+                                elementId = element.Attributes.FirstOrDefault(f => f.Key.ToLower() == "targetref").Value;
+                                element = FindBpmnElementById(elementId, "id");
+                                if (element != null)
+                                {
+                                    if (element.TypeName.ToLower().Contains("intermediate"))
+                                    {
+                                        return FindElementIgnoringIntermidiateEvents(element);
+                                    }
+                                    else
+                                    {
+                                        return element;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return null;
             }
             catch (Exception ex)
             {

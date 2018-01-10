@@ -22,8 +22,8 @@ namespace Bpm2GP.Model.DataBase.Models
         HaveSomeContent,
         MoreThan,
         LessThan,
-        Prior,
-        Next,
+        Before,
+        After,
         NotExists
     }
 
