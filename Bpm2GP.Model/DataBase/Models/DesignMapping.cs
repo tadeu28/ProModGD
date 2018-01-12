@@ -18,10 +18,12 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual GameGenre Genre { get; set; }
         public virtual DateTime CreationDate { get; set; }
         public virtual IList<GameDesignMappingElements> GameDesignMappingElements { get; set; }
+        public virtual IList<DesignMappingScores>  GameMappingScores { get; set; }
 
         public DesignMapping()
         {
             this.GameDesignMappingElements = new List<GameDesignMappingElements>();
+            this.GameMappingScores = new List<DesignMappingScores>();
         }
     }
 
@@ -42,6 +44,14 @@ namespace Bpm2GP.Model.DataBase.Models
             });
 
             Bag(x => x.GameDesignMappingElements, m =>
+            {
+                m.Cascade(Cascade.All);
+                m.Lazy(CollectionLazy.Lazy);
+                m.Inverse(true);
+                m.Key(k => k.Column("idDesignMapping"));
+            }, o => o.OneToMany());
+
+            Bag(x => x.GameMappingScores, m =>
             {
                 m.Cascade(Cascade.All);
                 m.Lazy(CollectionLazy.Lazy);

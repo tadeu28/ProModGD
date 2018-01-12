@@ -17,6 +17,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Name { get; set; }
         public virtual String Description { get; set; }
         public virtual String Metamodel { get; set; }
+        public virtual bool RuleAbbled { get; set; }
         public virtual ModelingLanguageElement ParentElement { get; set; }
         public virtual IList<ModelingLanguageElement> ChildElements { get; set; }
         public virtual IList<AssociationConfElements> AssociationConfElements { get; set; }
@@ -50,6 +51,8 @@ namespace Bpm2GP.Model.DataBase.Models
             });
 
             Property(x => x.Name);
+            Property(x => x.RuleAbbled);
+
             Property(x => x.Description, m =>
             {
                 m.Type(NHibernateUtil.StringClob);
