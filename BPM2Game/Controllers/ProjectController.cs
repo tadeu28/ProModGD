@@ -231,29 +231,47 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public ActionResult ExcluirMapeamento(Guid id)
+        public JsonResult ExcluirMapeamento(Guid id)
         {
             try
             {
-                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
-                var map = project.DesignMappings.FirstOrDefault();
-                DbFactory.Instance.DesignMappingRepository.Delete(map);
-                project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                var map = DbFactory.Instance.DesignMappingRepository.FindFirstByProjectId(id);
 
-                return View("Project", project);
+                DbFactory.Instance.DesignMappingRepository.Delete(map);
+
+                return Json("ok", JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return View("Error", new HandleErrorInfo(ex, "Project", "ExcluirMapeamento"));
+                return Json("error:" + ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public JsonResult CreateMapping(Guid IdProject, Guid idAssociations)
+        public PartialViewResult UpdateProject(Project project)
+        {
+            try
+            {
+                var proj = DbFactory.Instance.ProjectRepository.FindFirstById(project.Id);
+                proj.Title = project.Title;
+                proj.Description = project.Description;
+                proj.LastUpdate = DateTime.Now;
+
+                proj = DbFactory.Instance.ProjectRepository.Update(proj);
+
+                return PartialView("_ProjectInformationPanel", proj);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "UpdateProject"));
+            }
+        }
+
+        public PartialViewResult CreateMapping(Guid idProject, Guid idAssociations)
         {
             try
             {
                 var association = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssociations);
-                var project = DbFactory.Instance.ProjectRepository.FindFirstById(IdProject);
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
 
                 var designMapping = new DesignMapping()
                 {
@@ -263,18 +281,38 @@ namespace BPM2Game.Controllers
                     Language = association.Language,
                     Genre = association.Genre
                 };
-
-                //DbFactory.Instance.DesignMappingRepository.Save(designMapping);
-
+                
                 var mappingCore = new BpmnMapEngineClass();
                 mappingCore.StartMapping(designMapping);
 
-                return Json("ok", JsonRequestBehavior.AllowGet);
+                designMapping.ModelScore = mappingCore.ModelMappedScore;
+                designMapping.GameDesignMappingElements = mappingCore.MappingList;
+                designMapping.GameMappingScores = mappingCore.MappingScores;
+                designMapping.DesignMappingErrors = mappingCore.Errors;
+
+                designMapping = DbFactory.Instance.DesignMappingRepository.Save(designMapping);
+                
+                return PartialView("_TblMappingElements", new List<DesignMapping>() { designMapping });
             }
             catch (Exception ex)
             {
-                return Json("error : " + ex.Message, JsonRequestBehavior.AllowGet);
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "CreateMapping"));
             }
+        }
+
+        public PartialViewResult ShowElementInfo(String id)
+        {
+            try
+            {
+                var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelId(id);
+                
+                return PartialView("_ElementInfomationPane", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ShowElementInfo"));
+            }
+
         }
     }
 }

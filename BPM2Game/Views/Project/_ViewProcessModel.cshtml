@@ -16,11 +16,19 @@
 <!-- element to draw bpmn diagram in -->
 <div id="viwerBpmn">
     <div class="well" style="height: 600px" id="canvas"></div>
+
+    <hr/>
+
+    <details id="elementDetails">
+        <summary class="alert alert-info"><strong><i class="glyphicon glyphicon-info-sign"></i> Selected Element Details</strong></summary>
+        <div id="selElementView">
+
+        </div>
+    </details>
 </div>
 
 <hr />
-<label>Selected BPMN Element</label>
-<p id="selElementView"></p>
+
 <!-- scripts -->
 <!-- bpmn-js modeler -->
 <script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-navigated-viewer.js"></script>

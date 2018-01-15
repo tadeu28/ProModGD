@@ -616,6 +616,9 @@
     <Content Include="Views\Project\_GameConfiguration.cshtml" />
     <Content Include="Views\Configuration\_RuleDialog.cshtml" />
     <Content Include="Views\Configuration\_AddAssociationRule.cshtml" />
+    <Content Include="Views\Project\_ProjectInformationPanel.cshtml" />
+    <Content Include="Views\Project\_TblMappingElements.cshtml" />
+    <Content Include="Views\Project\_ElementInfomationPane.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -116,6 +116,7 @@
     <Compile Include="DataBase\Models\AssociationRules.cs" />
     <Compile Include="DataBase\Models\Designer.cs" />
     <Compile Include="DataBase\Models\DesignMapping.cs" />
+    <Compile Include="DataBase\Models\DesignMappingErrors.cs" />
     <Compile Include="DataBase\Models\DesignMappingScores.cs" />
     <Compile Include="DataBase\Models\GameDesignMappingElements.cs" />
     <Compile Include="DataBase\Models\GameGenre.cs" />

@@ -1,54 +1,51 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.Project
 
-<div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+<script type="text/javascript">
+    
+    function editInformation() {
+        $("input").removeAttr("disabled");
+        $("textarea").removeAttr("disabled");
+        $("#btnSaveInfo").removeClass("hide");
+        $("#btnCancel").removeClass("hide");
+        $("#btnEdit").addClass("hide");
+        $("#Title").focus();
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+</script>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+<br/>
+<div class="row">
+@using (Ajax.BeginForm("UpdateProject", "Project", new AjaxOptions()
+{
+    UpdateTargetId = "tblInfos",
+    HttpMethod = "post",
+    InsertionMode = InsertionMode.Replace,
+    LoadingElementId = "divCarregando"
+}))
+{
+    <div class="col-md-7" id="tblInfos">
+        @Html.Partial("_ProjectInformationPanel", Model)
+    </div>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+<div class="col-md-5">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h4>Project Team</h4>
+            <small>Owner: @Model.Owner.Name</small>
+        </div>
+        <div class="panel-body">
+            @foreach (var design in Model.Designers)
+            {
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input type="text" class="form-control" aria-describedby="basic-addon3" rows="5" readonly value='@(design.Name + " ("+ @design.User.Email +")")'/>
+                </div>
+            }
+        </div>
+        <div class="panel-footer">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastUpdate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LastUpdate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.BpmnModelPath)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BpmnModelPath)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Inactive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Inactive)
-        </dd>
-
-    </dl>
+        </div>
+    </div>
+</div>
 </div>

@@ -51,17 +51,20 @@ namespace Bpm2GP.Model.DataBase.Models
 
             ManyToOne(x => x.Language, m =>
             {
+                m.Lazy(LazyRelation.NoLazy);
                 m.Column("idLanguage");
-                m.Lazy(LazyRelation.NoProxy);
             });
-            ManyToOne(x => x.Genre, m => m.Column("idGenre"));
+            ManyToOne(x => x.Genre, m => {
+                m.Lazy(LazyRelation.NoLazy);
+                m.Column("idGenre");
+            });
 
             Bag(x => x.ElementsAssociated, m =>
             {
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idAssociation"));
                 m.Inverse(true);
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }

@@ -24,7 +24,7 @@ namespace BPM2Game.Mapping.BpmnToAdventure
         public Decimal ModelElmentPrediction { get; set; }
         public List<GameDesignMappingElements> MappingList { get; set; }
         public List<DesignMappingScores> MappingScores { get; set; }
-        public List<Exception> Errors { get; set; }
+        public List<DesignMappingErrors> Errors { get; set; }
 
         private Decimal _elementMappingPrediction;
 
@@ -33,7 +33,7 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             ModelElmentPrediction = 0;
             _elementMappingPrediction = 0;
 
-            Errors = new List<Exception>();
+            Errors = new List<DesignMappingErrors>();
             MappingList = new List<GameDesignMappingElements>();
             MappingScores = new List<DesignMappingScores>();
         }
@@ -155,6 +155,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
                     ProcessBpmnProcessSequenceFlow(element, bpmnElement);
                     continue;
                 }
+                else if (element.ProcessElement.Metamodel.ToLower().Contains("boundaryevent"))
+                {
+                    ProcessBpmnProcessBoundaryEvent(element, bpmnElement);
+                    continue;
+                }
 
                 if (rules != null && rules.Any(a => a.Type.Id == 6))
                 {
@@ -200,6 +205,10 @@ namespace BPM2Game.Mapping.BpmnToAdventure
                 {
                     qtdAcceptedRules += ProcessContains(rule, element, bpmnElement);
                 }
+                else if (rule.Operator == AssociationRuleOperator.NotExists)
+                {
+                    qtdAcceptedRules += ProcessNotExists(rule, element, bpmnElement);
+                }
             }
 
             return qtdAcceptedRules;
@@ -233,7 +242,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessRuleHaveSomeContent: " + element.ProcessElement.Name + " ["+ bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessRuleHaveSomeContent: " + element.ProcessElement.Name + " ["+ bpmnElement.Attributes["id"] + "]", ex)
+                });
                 return 0;
             }
         }
@@ -279,7 +292,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
                 return 0;
             }
         }
@@ -325,7 +342,69 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
+                return 0;
+            }
+        }
+
+        private int ProcessNotExists(AssociationRules rule, AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                switch (rule.Type.Id)
+                {
+                    case 1:
+                        {
+                            if (bpmnElement.Attributes.Where(
+                                attr => attr.Key.ToLower().Trim() == rule.Field.ToLower().Trim())
+                                .Any(attr => !attr.Value.ToLower().Trim().Contains(rule.Rule.ToLower().Trim())))
+                            {
+                                return 1;
+                            }
+                            return 1;
+                        }
+                    case 3:
+                        {
+                            if (bpmnElement.Elements.Where(e => e.Key.ToLower().Trim() == rule.Field.ToLower().Trim())
+                                .Any(a => a.Value != null && a.Value.Count > 0))
+                            {
+                                var el =
+                                    bpmnElement.Elements.FirstOrDefault(
+                                        f => f.Key.ToLower().Trim() == rule.Field.ToLower().Trim());
+                                foreach (var valObj in el.Value)
+                                {
+                                    if (
+                                        valObj.Attributes.Any(
+                                            f =>
+                                                f.Key.Trim().ToLower() == "value" &&
+                                                !f.Value.Trim().ToLower().Contains(rule.Rule.Trim().ToLower())))
+                                    {
+                                        return 1;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return 1;
+                            }
+
+                            return 0;
+                        }
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessNotExists: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
                 return 0;
             }
         }
@@ -371,7 +450,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessNotEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessNotEquals: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
                 return 0;
             }
         }
@@ -404,7 +487,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessExists: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessExists: " + element.ProcessElement.Name + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
                 return 0;
             }
         }
@@ -506,7 +593,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the ProcessMessageAssociations. " + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the ProcessMessageAssociations. " + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -528,7 +619,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -603,7 +698,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -671,7 +770,146 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
+            }
+        }
+
+        private void ProcessBpmnProcessBoundaryEvent(AssociationConfElements element, Element bpmnElement)
+        {
+            try
+            {
+                var incomeTask = FindBpmnElementById(bpmnElement.Attributes["attachedToRef"], "id");
+
+                var targetElementNodes = FindElementIgnoringNonActivities(incomeTask, bpmnElement, new[] { "outgoing", "targetref" });
+                var alternativeTaskNodes = FindElementIgnoringNonActivities(bpmnElement, bpmnElement, new[] { "outgoing", "targetref" });
+
+                var description = "";
+                var ruleFormat = "If [{0}] in [{1}] them ({2})";
+
+                //Boundary that stop action
+                if (bpmnElement.Attributes.ContainsKey("cancelActivity") &&
+                    bpmnElement.Attributes["cancelActivity"] != "")
+                {
+                    var themStr = "";
+                    foreach (var alternativeNode in targetElementNodes)
+                    {
+                        var el = alternativeNode.Element;
+                        var elStr = el.Attributes.ContainsKey("name") ? el.Attributes["name"] : el.Attributes["id"];
+
+                        themStr += "|" + "[" + elStr + "]";
+                    }
+
+                    foreach (var alternativeNode in alternativeTaskNodes)
+                    {
+                        var el = alternativeNode.Element;
+                        var elStr = el.Attributes.ContainsKey("name") ? el.Attributes["name"] : el.Attributes["id"];
+
+                        themStr += "|" + "[" + elStr + "]";
+                    }
+
+                    if (themStr.Trim() != "")
+                    {
+                        themStr = themStr.Remove(0, 1).Trim();
+                        themStr = themStr.Replace("|", " and ");
+                    }
+
+                    description = String.Format(ruleFormat,
+                        bpmnElement.Attributes.ContainsKey("name")
+                            ? bpmnElement.Attributes["name"]
+                            : bpmnElement.Attributes["id"],
+                        incomeTask.Attributes.ContainsKey("name")
+                                ? incomeTask.Attributes["name"]
+                                : incomeTask.Attributes["id"],
+                        themStr);
+
+                    var ge = new GameDesignMappingElements()
+                    {
+                        AssociateElement = element,
+                        Descricao = description,
+                        DesignMapping = DesignMapping,
+                        GameGenreElement = element.GameGenreElement,
+                        ModelElementId = bpmnElement.Attributes["id"],
+                        IsManual = false
+                    };
+
+                    MappingList.Add(ge);
+                }
+                else
+                {
+                    ruleFormat = "If [{0}] in [{1}] them [{2}]";
+                    foreach (var alternativeNode in alternativeTaskNodes)
+                    {
+                        var el = alternativeNode.Element;
+
+                        description = String.Format(ruleFormat,
+                        bpmnElement.Attributes.ContainsKey("name")
+                            ? bpmnElement.Attributes["name"]
+                            : bpmnElement.Attributes["id"],
+                        incomeTask.Attributes.ContainsKey("name")
+                                ? incomeTask.Attributes["name"]
+                                : incomeTask.Attributes["id"],
+                        el.Attributes.ContainsKey("name")
+                                ? el.Attributes["name"]
+                                : el.Attributes["id"]);
+
+                        var ge = new GameDesignMappingElements()
+                        {
+                            AssociateElement = element,
+                            Descricao = description,
+                            DesignMapping = DesignMapping,
+                            GameGenreElement = element.GameGenreElement,
+                            ModelElementId = bpmnElement.Attributes["id"],
+                            IsManual = false
+                        };
+
+                        MappingList.Add(ge);
+                    }
+
+                    foreach (var normalFlowNode in targetElementNodes)
+                    {
+                        ruleFormat = "If [{0}] not in [{1}] them [{2}]";
+                        var el = normalFlowNode.Element;
+
+                        description = String.Format(ruleFormat,
+                        bpmnElement.Attributes.ContainsKey("name")
+                            ? bpmnElement.Attributes["name"]
+                            : bpmnElement.Attributes["id"],
+                        incomeTask.Attributes.ContainsKey("name")
+                                ? incomeTask.Attributes["name"]
+                                : incomeTask.Attributes["id"],
+                        el.Attributes.ContainsKey("name")
+                                ? el.Attributes["name"]
+                                : el.Attributes["id"]);
+
+                        var ge = new GameDesignMappingElements()
+                        {
+                            AssociateElement = element,
+                            Descricao = description,
+                            DesignMapping = DesignMapping,
+                            GameGenreElement = element.GameGenreElement,
+                            ModelElementId = bpmnElement.Attributes["id"],
+                            IsManual = false
+                        };
+
+                        MappingList.Add(ge);
+                    }
+                }
+            }
+            catch
+                (Exception ex)
+            {
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error =
+                    new Exception(
+                        "Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" +
+                        bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -700,7 +938,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -729,6 +971,10 @@ namespace BPM2Game.Mapping.BpmnToAdventure
                             if (incomeTask != null && outgoingTask != null)
                             {
                                 var seqFlowElement = FindConnectionElement(bpmnElement, targetElementNode);
+                                if (seqFlowElement == null)
+                                {
+                                    seqFlowElement = targetElementNode.SeqIncomingElement;
+                                }
 
                                 var ruleFormat = "If [{0}] == [{1}] them [{2}]";
                                 var description = String.Format(ruleFormat,
@@ -797,7 +1043,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -863,7 +1113,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:" + bpmnElement.TypeName + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -894,7 +1148,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:Process." + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:Process." + " [" + bpmnElement.Attributes["id"] + "]", ex)}
+                );
             }
         }
 
@@ -929,7 +1187,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to process the bpmn:TextAnnotation." + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to process the bpmn:TextAnnotation." + " [" + bpmnElement.Attributes["id"] + "]", ex)
+                });
             }
         }
 
@@ -966,7 +1228,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(new Exception("Can't possible to Process the Relation " + element.ProcessElement.Name + "." + " [" + bpmnElement.Attributes["id"] + "]", ex));
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = new Exception("Can't possible to Process the Relation " + element.ProcessElement.Name + "." + " [" + bpmnElement.Attributes["id"] + "]", ex)}
+                );
             }
         }
 
@@ -978,7 +1244,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }
@@ -991,30 +1261,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
-                return null;
-            }
-        }
-
-        private Element FindBpmnElementByRespectivelyFields(String[] fields, String[] contents)
-        {
-            try
-            {
-                Element element = null;
-                var elementList = Model.Elements;
-
-                for (var i = 0; i < fields.Count(); i++)
+                Errors.Add(new DesignMappingErrors()
                 {
-                    elementList = elementList.Where(w => w.Attributes.ContainsKey(fields[i]) && w.Attributes[fields[i]] == contents[i]).ToList();
-                }
-
-                element = elementList.FirstOrDefault();
-
-                return element;
-            }
-            catch (Exception ex)
-            {
-                Errors.Add(ex);
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }
@@ -1041,7 +1292,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }
@@ -1065,7 +1320,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }
@@ -1095,10 +1354,10 @@ namespace BPM2Game.Mapping.BpmnToAdventure
                                     {
                                         lstElements.AddRange(FindElementIgnoringNonActivities(element, bpmnElement, attributes));
                                     }
-                                    else if (element.TypeName.ToLower().Contains("end"))
-                                    {
-                                        continue;
-                                    }
+                                    //else if (element.TypeName.ToLower().Contains("end"))
+                                    //{
+                                    //    continue;
+                                    //}
                                     else if (element.TypeName.ToLower().Contains("gateway"))
                                     {
                                         lstElements.AddRange(FindElementIgnoringNonActivities(element, bpmnElement, attributes));
@@ -1163,7 +1422,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }
@@ -1176,7 +1439,11 @@ namespace BPM2Game.Mapping.BpmnToAdventure
             }
             catch (Exception ex)
             {
-                Errors.Add(ex);
+                Errors.Add(new DesignMappingErrors()
+                {
+                    DesignMapping = DesignMapping,
+                    Error = ex
+                });
                 return null;
             }
         }

@@ -18,7 +18,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual Decimal ExpectedElements { get; set; }
         public virtual Decimal MappedElements { get; set; }
         public virtual DesignMapping DesignMapping { get; set; }
-        public virtual Decimal Score => (ExpectedElements > 0 ? (MappedElements / ExpectedElements) : 0);
+        public virtual Decimal Score => (ExpectedElements > 0 ? (MappedElements / ExpectedElements) : 1);
     }
 
     public class DesignMappingScoresMap : ClassMapping<DesignMappingScores>
@@ -28,7 +28,9 @@ namespace Bpm2GP.Model.DataBase.Models
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.GameGenreElement);
+            Property(x => x.GameGenreElementId);
             Property(x => x.ModelElement);
+            Property(x => x.ModelElementId);
             Property(x => x.ExpectedElements);
             Property(x => x.MappedElements);
 

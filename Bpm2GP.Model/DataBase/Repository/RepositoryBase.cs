@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Linq;
+using NHibernate.Proxy;
 
 namespace Bpm2GP.Model.DataBase.Repository
 {
@@ -133,6 +134,18 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             if(this.Session != null)
                 this.Session.Clear();
+        }
+
+        public virtual T UnProxy(T entity)
+        {
+            try
+            {
+                return (T) this.Session.GetSessionImplementation().PersistenceContext.Unproxy(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível salvar " + typeof(T) + "\nErro:" + ex.Message);
+            }
         }
 
     }

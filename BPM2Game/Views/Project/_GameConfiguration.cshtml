@@ -40,7 +40,7 @@
         });
 
         $("#idAssociations").change(function () {
-            if (($("#idAssociations").val() !== "00000000-0000-0000-0000-000000000000") && (modelFile != "") && (qtdeMap <= 0)) {
+            if (($("#idAssociations").val() !== "00000000-0000-0000-0000-000000000000") && (modelFile != "")) {
                 $("#btnMapear").show();
             } else {
                 $("#btnMapear").hide();
@@ -48,56 +48,96 @@
         });
     });
 
-    function postDone(r) {
+    function postDoneDelete(r) {
         if (r === "ok") {
-            $("#btnMapear").hide();
+            $("#mapFields").show();
+            $("#btnMapear").show();
+            $("#btnDeletarMapear").hide();
+
+            toastr.success('The game design mapping has been deleted!', null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
+            
+            $("#tblMapElements").html("");
+        } else {
+            console.log(r);
+
+            toastr.error("Can't possible to delete the game design mapping.<br/><br/>" + r, null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
         }
+    }
+
+    function postDone(r) {
+        $("#mapFields").hide();
+        $("#btnMapear").hide();
+        $("#btnDeletarMapear").show();
+        
+        $("#tblMapElements").html(r);
+        
+        toastr.success('The game design mapping has been created with success!', null, {
+            timeOut: 3000,
+            closeButton: true,
+            preventDuplicates: false,
+            positionClass: "toast-bottom-right",
+            newestOnTop: true
+        });
     }
 </script>
 
 <br />
+<div class="row">
+    <div class="col-md-3">
+        @using (Ajax.BeginForm("CreateMapping", "Project", new AjaxOptions()
+        {
+            HttpMethod = "post",
+            InsertionMode = InsertionMode.Replace,
+            OnSuccess = "postDone",
+            LoadingElementId = "divCarregando"
+        }))
+        {
+            <div class="panel panel-info">
+                <div class="panel-heading">Game Map Actions</div>
+                <div class="panel-body" id="mapFields">
 
-<div class="col-md-4">
-    @using (Ajax.BeginForm("CreateMapping", "Project", new AjaxOptions()
-    {
-        HttpMethod = "post",
-        InsertionMode = InsertionMode.Replace,
-        OnSuccess = "postDone",
-        LoadingElementId = "divCarregando"
-    }))
-    {
-        <div class="panel panel-info">
-            <div class="panel-heading">Game Map</div>
-            <div class="panel-body" id="mapFields">
-                <div class="form-group">
-                    @Html.Label("Genre", htmlAttributes: new {@class = "control-label col-md-4"})
-                    <div class="col-md-8">
-                        @Html.DropDownList("IdGenre", selectGenres, new Dictionary<string, object>() {{"class", "form-control"}})
+                    <div class="form-group">
+                        @Html.Label("Genre", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IdGenre", selectGenres, new Dictionary<string, object>() {{"class", "form-control"}})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Associations", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            <select id="idAssociations" name="idAssociations" class="form-control"></select>
+                        </div>
+
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.Label("Associations", htmlAttributes: new {@class = "control-label col-md-4"})
-                    <div class="col-md-8">
-                        <select id="idAssociations" name="idAssociations" class="form-control"></select>
-                    </div>
+                <div class="panel-footer">
+                    @Html.Hidden("IdProject", Model.Id)
+                    <button type="submit" class="btn btn-success" id="btnMapear">Create Element Map</button>
+                    <a data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-success="postDoneDelete"
+                       href="@Url.Action("ExcluirMapeamento", "Project", new { id = Model.Id })" class="btn btn-danger" id="btnDeletarMapear">Delete Element Map</a>
                 </div>
             </div>
-            <div class="panel-footer">
-                @Html.Hidden("IdProject", Model.Id)
-                <button type="submit" class="btn btn-success" id="btnMapear">Create Element Map</button>
-                <a href="@Url.Action("ExcluirMapeamento", "Project", new { id = Model.Id })" class="btn btn-danger" id="btnDeletarMapear">Delete Element Map</a>
+        }
+    </div>
+
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Game Design Map</div>
+            <div class="panel-body" id="tblMapElements">
+                @Html.Partial("_TblMappingElements", Model.DesignMappings)
             </div>
-        </div>
-    }
-</div>
-
-<div class="col-md-8">
-    <div class="panel panel-primary">
-        <div class="panel-heading">Game Map</div>
-        <div class="panel-body">
-
         </div>
     </div>
 </div>
-
-<div class="container"></div>

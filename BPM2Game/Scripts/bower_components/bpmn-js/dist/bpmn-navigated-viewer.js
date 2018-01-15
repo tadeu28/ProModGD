@@ -11698,9 +11698,16 @@ function SelectionBehavior(eventBus, selection, canvas, elementRegistry) {
 
     var element = event.element;
 
-    //Tadeu: Click de elemento
-    $("#selElementView").text("Id:" + element.id + " | Type: " + element.type + " | Name:" + element.businessObject.name);
-
+    //TADEU: Informações do Elemento
+    $.ajax({
+        type: "GET",
+        url: "/Project/ShowElementInfo/" + element.id,
+        success: function (r) {
+            $("#elementDetails").prop("open", true);
+            $("#selElementView").html(r);
+        }
+    });
+      
     // do not select the root element
     // or connections
     if (element === canvas.getRootElement()) {

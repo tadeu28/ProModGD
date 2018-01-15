@@ -17,13 +17,16 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual ModelingLanguage Language { get; set; }
         public virtual GameGenre Genre { get; set; }
         public virtual DateTime CreationDate { get; set; }
+        public virtual Decimal ModelScore { get; set; }
         public virtual IList<GameDesignMappingElements> GameDesignMappingElements { get; set; }
         public virtual IList<DesignMappingScores>  GameMappingScores { get; set; }
+        public virtual IList<DesignMappingErrors> DesignMappingErrors { get; set; }
 
         public DesignMapping()
         {
             this.GameDesignMappingElements = new List<GameDesignMappingElements>();
             this.GameMappingScores = new List<DesignMappingScores>();
+            this.DesignMappingErrors = new List<DesignMappingErrors>();
         }
     }
 
@@ -33,6 +36,9 @@ namespace Bpm2GP.Model.DataBase.Models
         {
             Id(x=> x.Id, map => map.Generator(Generators.Guid));
 
+            Property(x => x.CreationDate);
+            Property(x => x.ModelScore);
+
             ManyToOne(x => x.Project, m =>
             {
                 m.Column("IdProject");
@@ -40,6 +46,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             ManyToOne(x => x.AssociationConf, m =>
             {
+                m.Lazy(LazyRelation.NoLazy);
                 m.Column("IdAssociationConf");
             });
 
@@ -59,7 +66,14 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idDesignMapping"));
             }, o => o.OneToMany());
 
-            Property(x => x.CreationDate);
+            Bag(x => x.DesignMappingErrors, m =>
+            {
+                m.Cascade(Cascade.All);
+                m.Lazy(CollectionLazy.Lazy);
+                m.Inverse(true);
+                m.Key(k => k.Column("idDesignMapping"));
+            }, o => o.OneToMany());
+
         }
     }
 }

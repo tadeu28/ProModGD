@@ -241,6 +241,11 @@ namespace Bpm2GP.Model.DataBase
             }
         }
 
+        public void ClearSession()
+        {
+            this.Session.Clear();
+        }
+
         public static void ConfigureLog4Net()
         {
             log4net.Config.XmlConfigurator.Configure();
