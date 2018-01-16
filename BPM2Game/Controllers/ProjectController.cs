@@ -12,6 +12,8 @@ using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
 using BPM2Game.Mapping.Bpmn;
 using Newtonsoft.Json;
+using Rotativa.Core;
+using Rotativa.MVC;
 
 namespace BPM2Game.Controllers
 {
@@ -244,6 +246,31 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return Json("error:" + ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult PrintMappping(Guid id)
+        {
+            try
+            {
+                var map = DbFactory.Instance.DesignMappingRepository.FindFirstByProjectId(id);
+                
+                var pdf = new ViewAsPdf()
+                {
+                    ViewName = "_TblMappingElements",
+                    Model = new List<DesignMapping>() { map },
+                    RotativaOptions = new DriverOptions()
+                    {
+                        PageSize = Rotativa.Core.Options.Size.A4,
+                        PageOrientation = Rotativa.Core.Options.Orientation.Portrait
+                    }
+                };
+
+                return pdf;
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Project", "ProcessInformation"));
             }
         }
 
