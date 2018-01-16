@@ -34,9 +34,9 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Bag(x => x.Ruleses, m =>
             {
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idAssocElement"));
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.Lazy);
                 m.Inverse(true);
             }, o => o.OneToMany());
         }

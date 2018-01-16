@@ -50,11 +50,10 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.Type, m =>
             {
                 m.Column("idType");
-                //m.Class(typeof(AssociationType));
-                //m.Fetch(FetchKind.Join);
             });
             ManyToOne(x => x.AssociationElement, m =>
             {
+                m.Lazy(LazyRelation.NoLazy);
                 m.Column("idAssocElement");
             });
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NHibernate;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 
@@ -25,7 +26,11 @@ namespace Bpm2GP.Model.DataBase.Models
         {
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
-            Property(x => x.Descricao);
+            Property(x => x.Descricao, m =>
+            {
+                m.Type(NHibernateUtil.StringClob);
+                m.Column(c => c.SqlType("LONGTEXT"));
+            });
             Property(x => x.IsManual);
             Property(x => x.ModelElementId);
 

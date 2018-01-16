@@ -10,7 +10,7 @@ using Bpm2GP.Model.DataBase;
 using Bpm2GP.Model.DataBase.Adapter;
 using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
-using BPM2Game.Mapping.BpmnToAdventure;
+using BPM2Game.Mapping.Bpmn;
 using Newtonsoft.Json;
 
 namespace BPM2Game.Controllers

@@ -8,7 +8,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tblMapping').DataTable({
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -42,7 +42,7 @@
             <th>
                 @Html.DisplayName("Game Genre Element")
             </th>
-            <th>
+            <th style="width: 80%">
                 @Html.DisplayName("Mapped Element")
             </th>
         </tr>
@@ -55,39 +55,74 @@
 
             <tr>
                 <td style="vertical-align: middle;">
-                    @element.ProcessElement.Name
+                    <div data-toggle="tooltip" data-placement="top" title='@element.ProcessElement.Description'>
+                        @element.ProcessElement.Name
+                    </div>
                 </td>
 
                 <td style="vertical-align: middle;">
-                    @element.GameGenreElement.Name
-                    <br/>
-                    <small style="color: silver">
-                        Mapped: @(point != null ? (point.MappedElements + "/" + point.ExpectedElements) : "0/0")
-                    </small>
+                    @if (element.Ruleses.Any(a => a.Type.Id == 4) || element.ProcessElement == null)
+                    {
+                        <i class="glyphicon glyphicon-book" data-toggle="tooltip" data-placement="top" title='Information could exist in the "Process Model Documentation"'> - </i>
+                    }
+                    <div data-toggle="tooltip" data-placement="top" title='@element.GameGenreElement.Description'>
+                        @element.GameGenreElement.Name
+                        <br/>
+                        <small style="color: silver">
+                            Mapped: @(point != null ? (Math.Round(point.MappedElements, 0) + "/" + Math.Round(point.ExpectedElements, 0)) : "0/0")
+                        </small>
+                    </div>
+                    <div class="btn-group-xs" data-toggle="tooltip" data-placement="top" title='Include New Element'>
+                        <a href="#" class="btn btn-default btn-xs">
+                            <i class="glyphicon glyphicon-pawn"></i> Add New Element
+                        </a>
+                    </div>
                 </td>
                 <td style="vertical-align: middle;">
                     @{
                         var mappedElements = map.GameDesignMappingElements.Where(w => w.AssociateElement.Id == element.Id);
                     }
+                    <ul class="list-group">
 
-                    <div class="btn-group-sm horizontal">
                         @foreach (var mappedElement in mappedElements)
                         {
-                            <div class="btn btn-default btn-sm">
-                                <i class="glyphicon glyphicon-knight "></i> @mappedElement.Descricao
+                            <li class="list-group-item">
+                                <i class="glyphicon glyphicon-knight" data-toggle="tooltip" data-placement="top" title="Game Element"></i> 
                                 @if (!mappedElement.IsManual)
                                 {
-                                    <div class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="Auto-Generated"><i class="glyphicon glyphicon-wrench"></i>
-                                    </div>
+                                    <i class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="top" title="Information auto-generated"></i>
                                 }
-                            </div><br/>
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-hand-up" data-toggle="tooltip" data-placement="top" title="Information generated manually"></i>
+                                }
+                                <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title='Remove Element'>
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                                <br/>
+                                <small>@mappedElement.Descricao</small>
+                            </li>
                         }
-                    </div>
+                    </ul>
                 </td>
             </tr>
         }
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+            <tr style="vertical-align: middle;">
+                <th>
+                    Legend:
+                </th>
+                <td colspan="2">
+                    <i class="glyphicon glyphicon-knight" data-toggle="tooltip" data-placement="top" title="Game Element"></i> = Game element<br/>
+                    <i class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="top" title="Information auto-generated"></i> = Information created by process mapping<br />
+                    <i class="glyphicon glyphicon-hand-up" data-toggle="tooltip" data-placement="top" title="Information auto-generated"></i> = Information created manually<br/>
+                    <i class="glyphicon glyphicon-book" data-toggle="tooltip" data-placement="top" title='Information could exist in the "Process Model Documentation"'></i> = Information could exist in the "Process Model Documentation"<br/>
+                    <i class="glyphicon glyphicon-pawn" data-toggle="tooltip" data-placement="top" title='Remove Element'></i> = Inclusion of a new element<br />
+                    <i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title='Remove Element'></i> = Remove selected element<br />
+                </td>
+            </tr>
+        </tfoot>
     </table>
 
     if (map.DesignMappingErrors.Count > 0)

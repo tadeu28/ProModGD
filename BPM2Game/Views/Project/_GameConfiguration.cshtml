@@ -16,9 +16,12 @@
 
         $("#btnMapear").hide();
         $("#btnDeletarMapear").hide();
+        $("#btnPrintMap").hide();
+        
         $("#mapFields").show();
         if (qtdeMap > 0) {
             $("#btnDeletarMapear").show();
+            $("#btnPrintMap").show();
             $("#mapFields").hide();
         }
 
@@ -53,6 +56,7 @@
             $("#mapFields").show();
             $("#btnMapear").show();
             $("#btnDeletarMapear").hide();
+            $("#btnPrintMap").hide();
 
             toastr.success('The game design mapping has been deleted!', null, {
                 timeOut: 3000,
@@ -80,6 +84,7 @@
         $("#mapFields").hide();
         $("#btnMapear").hide();
         $("#btnDeletarMapear").show();
+        $("#btnPrintMap").show();
         
         $("#tblMapElements").html(r);
         
@@ -124,9 +129,14 @@
                 </div>
                 <div class="panel-footer">
                     @Html.Hidden("IdProject", Model.Id)
-                    <button type="submit" class="btn btn-success" id="btnMapear">Create Element Map</button>
+                    <button type="submit" class="btn btn-success" id="btnMapear"><i class="glyphicon glyphicon-search"></i> Create Element Map</button>
                     <a data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-success="postDoneDelete"
-                       href="@Url.Action("ExcluirMapeamento", "Project", new { id = Model.Id })" class="btn btn-danger" id="btnDeletarMapear">Delete Element Map</a>
+                       href="@Url.Action("ExcluirMapeamento", "Project", new {id = Model.Id})" class="btn btn-danger" id="btnDeletarMapear">
+                        <i class="glyphicon glyphicon-erase"></i> Delete Element Map
+                    </a>
+                    <a href="@Url.Action("PrintMappping", "Project", new {id = Model.Id})" class="btn btn-primary" id="btnPrintMap">
+                        <i class="glyphicon glyphicon-print"></i> Print Element Map
+                    </a>
                 </div>
             </div>
         }

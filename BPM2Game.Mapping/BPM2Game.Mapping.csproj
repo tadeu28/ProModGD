@@ -44,7 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BpmnToAdventure\BpmnMapEngineClass.cs" />
+    <Compile Include="Bpmn\BpmnMapEngineClass.cs" />
+    <Compile Include="Bpmn\BpmnElementNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
