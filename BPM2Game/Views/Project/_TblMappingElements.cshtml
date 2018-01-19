@@ -14,6 +14,9 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 
+    function postNewItem() {
+        $("#dlgNewMapElement").modal("show");
+    }
 </script>
 
 @if (map != null)
@@ -73,8 +76,9 @@
                         </small>
                     </div>
                     <div class="btn-group-xs" data-toggle="tooltip" data-placement="top" title='Include New Element'>
-                        <a href="#" class="btn btn-default btn-xs">
-                            <i class="glyphicon glyphicon-pawn"></i> Add New Element
+                        <a data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#dlgContent" data-ajax-success="postNewItem" 
+                           href="@Url.Action("AddMappingElement", "Project", new {id = element.Id, idDesignMap = map.Id})" class="btn btn-default btn-xs">
+                                <i class="glyphicon glyphicon-pawn"></i> Add New Element
                         </a>
                     </div>
                 </td>
@@ -84,7 +88,7 @@
                     }
                     <ul class="list-group">
 
-                        @foreach (var mappedElement in mappedElements)
+                        @foreach (var mappedElement in mappedElements.OrderBy(o => o.IsManual).ToList())
                         {
                             <li class="list-group-item">
                                 <i class="glyphicon glyphicon-knight" data-toggle="tooltip" data-placement="top" title="Game Element"></i> 
@@ -95,12 +99,14 @@
                                 else
                                 {
                                     <i class="glyphicon glyphicon-hand-up" data-toggle="tooltip" data-placement="top" title="Information generated manually"></i>
+                                    <a data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tblMapElements" class="btn btn-default btn-xs"
+                                       data-toggle="tooltip" data-placement="top" title='Remove Element'
+                                       href="@Url.Action("RemoveMappingElement", "Project", new {id = mappedElement.Id })">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
                                 }
-                                <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title='Remove Element'>
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
-                                <br/>
-                                <small>@mappedElement.Descricao</small>
+
+                                <br/><small>@mappedElement.Descricao</small>
                             </li>
                         }
                     </ul>
@@ -141,3 +147,7 @@
         </div>
     }
 }
+
+<div id="dlgContent">
+    
+</div>

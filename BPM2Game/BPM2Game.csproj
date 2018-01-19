@@ -640,6 +640,7 @@
     <Content Include="Views\Project\_ProjectInformationPanel.cshtml" />
     <Content Include="Views\Project\_TblMappingElements.cshtml" />
     <Content Include="Views\Project\_ElementInfomationPane.cshtml" />
+    <Content Include="Views\Project\_AddMappingElement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

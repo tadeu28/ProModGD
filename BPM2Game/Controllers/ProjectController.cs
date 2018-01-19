@@ -327,6 +327,71 @@ namespace BPM2Game.Controllers
             }
         }
 
+        public PartialViewResult AddMappingElement(Guid id, Guid idDesignMap)
+        {
+            try
+            {
+                var associatedElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(id);
+                var designMap = DbFactory.Instance.DesignMappingRepository.FindFirstById(idDesignMap);
+
+                var mapElement = new GameDesignMappingElements()
+                {
+                    AssociateElement = associatedElement,
+                    DesignMapping = designMap,
+                    GameGenreElement = associatedElement.GameGenreElement
+                };
+
+                return PartialView("_AddMappingElement", mapElement);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "AddMappingElement"));
+            }
+        }
+
+        public PartialViewResult SaveMapElement(GameDesignMappingElements mapElement, Guid idAssociationElement, Guid idDesignMap)
+        {
+            try
+            {
+                var associatedElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(idAssociationElement);
+                var designMap = DbFactory.Instance.DesignMappingRepository.FindFirstById(idDesignMap);
+                
+                mapElement.AssociateElement = associatedElement;
+                mapElement.DesignMapping = designMap;
+                mapElement.GameGenreElement = associatedElement.GameGenreElement;
+                mapElement.IsManual = true;
+
+                mapElement = DbFactory.Instance.GameDesignMappingElementsRepository.Save(mapElement);
+
+                designMap = DbFactory.Instance.DesignMappingRepository.FindFirstById(idDesignMap);
+
+                return PartialView("_TblMappingElements", new List<DesignMapping>() { designMap });
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "SaveMapElement"));
+            }
+        }
+
+        public PartialViewResult RemoveMappingElement(Guid id)
+        {
+            try
+            {
+                var mapElement = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstById(id);
+                var idDesignMap = mapElement.DesignMapping.Id;
+
+                DbFactory.Instance.GameDesignMappingElementsRepository.Delete(mapElement);
+
+                var designMap = DbFactory.Instance.DesignMappingRepository.FindFirstById(idDesignMap);
+
+                return PartialView("_TblMappingElements", new List<DesignMapping>() { designMap });
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "SaveMapElement"));
+            }
+        }
+
         public PartialViewResult ShowElementInfo(String id)
         {
             try
