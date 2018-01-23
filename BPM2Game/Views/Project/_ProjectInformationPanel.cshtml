@@ -5,14 +5,17 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 
-    function copyToClipboard(element) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(element).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-
-        console.log($(element).text());
+    function copyToClipboard() {
+        var copyText = document.getElementById("projectUrl");
+        copyText.select();
+        document.execCommand("Copy");
+        toastr.info('Url copied to clipboard.', null, {
+            timeOut: 3000,
+            closeButton: true,
+            preventDuplicates: false,
+            positionClass: "toast-bottom-right",
+            newestOnTop: true
+        });
     }
 </script>
 

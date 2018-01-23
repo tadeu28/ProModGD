@@ -641,6 +641,11 @@
     <Content Include="Views\Project\_TblMappingElements.cshtml" />
     <Content Include="Views\Project\_ElementInfomationPane.cshtml" />
     <Content Include="Views\Project\_AddMappingElement.cshtml" />
+    <Content Include="Views\Project\_ProjectDesigners.cshtml" />
+    <Content Include="Views\Project\_GameDesignDocument.cshtml" />
+    <Content Include="Views\Project\_ProjectSolicitation.cshtml" />
+    <Content Include="Views\User\_MySolicitations.cshtml" />
+    <Content Include="Views\Project\ProcjectAccessSolicitation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

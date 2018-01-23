@@ -148,12 +148,21 @@ namespace BPM2Game.Controllers
             }
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public ActionResult Project(Guid id)
         {
             try
             {
                 var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+
+                if (LoginUtils.User == null)
+                {
+                    return View("ProcjectAccessSolicitation", project);
+                }else if (project.Designers.All(a => a.Id != LoginUtils.User.Designer.Id))
+                {
+                    return View("ProcjectAccessSolicitation", project);
+                }
+
                 return View(project);
             }
             catch (Exception ex)
