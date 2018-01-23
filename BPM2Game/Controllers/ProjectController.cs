@@ -293,6 +293,22 @@ namespace BPM2Game.Controllers
             }
         }
 
+        public ActionResult RemoveSolicitation(Guid id)
+        {
+            try
+            {
+                var sol = DbFactory.Instance.ProjectSolicitationRepository.FindFirstById(id);
+
+                DbFactory.Instance.ProjectSolicitationRepository.Delete(sol);
+
+                return RedirectToAction("UserProfile", "User");
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveSolicitation"));
+            }
+        }
+
         public PartialViewResult CreateMapping(Guid idProject, Guid idAssociations)
         {
             try
@@ -346,6 +362,30 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "AddMappingElement"));
+            }
+        }
+
+        public JsonResult AskParticipation(Guid id, Guid idProject)
+        {
+            try
+            {
+                var designer = DbFactory.Instance.DesignerRepository.FindFirstById(id);
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+
+                var solicitation = new ProjectSolicitation()
+                {
+                    Date = DateTime.Now,
+                    Designer = designer,
+                    Project = project
+                };
+
+                DbFactory.Instance.ProjectSolicitationRepository.Save(solicitation);
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -404,7 +444,87 @@ namespace BPM2Game.Controllers
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "ShowElementInfo"));
             }
+        }
 
+        public PartialViewResult RemoveSolicitationAjax(Guid id)
+        {
+            try
+            {
+                var sol = DbFactory.Instance.ProjectSolicitationRepository.FindFirstById(id);
+                var idProject = sol.Project.Id;
+                
+                DbFactory.Instance.ProjectSolicitationRepository.Delete(sol);
+
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+
+                return PartialView("_ProjectDesigners", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveSolicitationAjax"));
+            }
+        }
+
+        public PartialViewResult AcceptSolicitation(Guid id)
+        {
+            try
+            {
+                var sol = DbFactory.Instance.ProjectSolicitationRepository.FindFirstById(id);
+                var idProject = sol.Project.Id;
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+                
+                project.Designers.Add(sol.Designer);
+
+                project = DbFactory.Instance.ProjectRepository.Update(project);
+
+                var solicitations = DbFactory.Instance.ProjectSolicitationRepository.FindByProjectAndDesigner(project.Id, sol.Designer.Id);
+
+                foreach (var solicitation in solicitations)
+                {
+                    DbFactory.Instance.ProjectSolicitationRepository.Delete(solicitation);
+                }
+                
+                return PartialView("_ProjectDesigners", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "AcceptSolicitation"));
+            }
+        }
+
+        public PartialViewResult RemoveDesigner(Guid id, Guid idProject)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+
+                var designer = project.Designers.FirstOrDefault(f => f.Id == id);
+                if (designer != null)
+                {
+                    project.Designers.Remove(designer);
+                    project = DbFactory.Instance.ProjectRepository.Update(project);
+                }
+                
+                return PartialView("_ProjectDesigners", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveDesigner"));
+            }
+        }
+
+        public PartialViewResult GameDesignDocument(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+                
+                return PartialView("_GameDesignDocument");
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "GameDesignDocument"));
+            }
         }
     }
 }

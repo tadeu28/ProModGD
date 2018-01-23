@@ -130,6 +130,24 @@ namespace Bpm2GP.Model.DataBase.Repository
             }
         }
 
+        public void DeleteAll(List<T> entity)
+        {
+            try
+            {
+                this.Session.Clear();
+
+                var transacao = this.Session.BeginTransaction();
+
+                this.Session.Delete(entity);
+
+                transacao.Commit();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível excluir " + typeof(T) + "\nErro:" + ex.Message);
+            }
+        }
+
         public void Clear()
         {
             if(this.Session != null)

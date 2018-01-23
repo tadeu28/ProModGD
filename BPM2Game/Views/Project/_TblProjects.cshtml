@@ -1,5 +1,10 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
+@using Bpm2GP.Model.Utils
 @model IEnumerable<Bpm2GP.Model.DataBase.Models.Project>
+
+@{
+    var user = LoginUtils.User;
+}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -18,6 +23,18 @@
                 position: "left"
             }
         );
+    }
+
+    function solicitationSuccess(r) {
+        if (r) {
+            toastr.success("Solicitation sended successful! Wait for project ower's answer!", null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
+        }
     }
 </script>
 
@@ -77,10 +94,22 @@
                 @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td class="text-center">
-                <a href="@Url.Action("Project", "Project", new {id = item.Id})" class="btn btn-primary"
-                   data-toggle="tooltip" data-placement="top" title="Open Project">
-                    <i class="glyphicon glyphicon-folder-open"> </i> Open Project
-                </a>
+                @if (item.Designers.All(a => a.Id != user.Designer.Id))
+                {
+                    <a class="btn btn-default"
+                       data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace"  data-ajax-success="solicitationSuccess"
+                       href="@Url.Action("AskParticipation", "Project", new {id = user.Designer.Id, idProject = item.Id})"
+                       data-toggle="tooltip" data-placement="top" title="Participate of this Project">
+                        <i class="glyphicon glyphicon-log-in"> </i> Participate
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Project", "Project", new {id = item.Id})" class="btn btn-primary"
+                       data-toggle="tooltip" data-placement="top" title="Open Project">
+                        <i class="glyphicon glyphicon-folder-open"></i> Open Project
+                    </a>
+                }
             </td>
         </tr>
     }

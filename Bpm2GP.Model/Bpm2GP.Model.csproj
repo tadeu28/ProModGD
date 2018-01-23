@@ -124,6 +124,7 @@
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
     <Compile Include="DataBase\Models\ModelingLanguageElement.cs" />
     <Compile Include="DataBase\Models\Project.cs" />
+    <Compile Include="DataBase\Models\ProjectSolicitation.cs" />
     <Compile Include="DataBase\Models\User.cs" />
     <Compile Include="DataBase\Repository\AssociationConfElementRepository.cs" />
     <Compile Include="DataBase\Repository\AssociationConfRepository.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectSolicitationRepository.cs" />
     <Compile Include="DataBase\Repository\RepositoryBase.cs" />
     <Compile Include="DataBase\Repository\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,0 +1,28 @@
+﻿@model Bpm2GP.Model.DataBase.Models.Project
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h4>Project Team</h4>
+        <small>Owner: @Model.Owner.Name</small>
+    </div>
+    <div class="panel-body">
+        @foreach (var design in Model.Designers)
+            {
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" rows="5" readonly value='@(design.Name + " (" + @design.User.Email + ")")'/>
+                @if (design.Id != Model.Owner.Id)
+                {
+                    <span class="input-group-btn">
+                        <a href="@Url.Action("RemoveDesigner", "Project", new {id = design.Id, idProject = Model.Id})" class="btn btn-danger"
+                           data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#projectDesigners"
+                           data-ajax-loading="#divCarregando">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </span>
+                }
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_ProjectSolicitation", Model)

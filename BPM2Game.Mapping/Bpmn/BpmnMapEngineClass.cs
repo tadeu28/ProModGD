@@ -643,8 +643,10 @@ namespace BPM2Game.Mapping.Bpmn
                             {
                                 AssociateElement = element,
                                 Descricao = String.Format(ruleFormat,
-                                                            incomingTask.Attributes.ContainsKey("name") ? incomingTask.Attributes["name"] : incomingTask.Attributes["id"],
-                                                            bpmnElement.Attributes.ContainsKey("name") ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]),
+                                                            incomingTask.Attributes.ContainsKey("name") ? 
+                                                            (incomingTask.Attributes["name"] != "" ? incomingTask.Attributes["name"] : incomingTask.Attributes["id"]) : incomingTask.Attributes["id"],
+                                                            bpmnElement.Attributes.ContainsKey("name") ? 
+                                                            (bpmnElement.Attributes["name"] != "" ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]) : bpmnElement.Attributes["id"]),
                                 DesignMapping = DesignMapping,
                                 GameGenreElement = element.GameGenreElement,
                                 ModelElementId = bpmnElement.Attributes["id"],
@@ -675,8 +677,10 @@ namespace BPM2Game.Mapping.Bpmn
                             {
                                 AssociateElement = element,
                                 Descricao = String.Format(ruleFormat,
-                                                            outgoingTask.Attributes.ContainsKey("name") ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"],
-                                                            bpmnElement.Attributes.ContainsKey("name") ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]),
+                                                            outgoingTask.Attributes.ContainsKey("name") ? 
+                                                            (outgoingTask.Attributes["name"] != "" ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"]) : outgoingTask.Attributes["id"],
+                                                            bpmnElement.Attributes.ContainsKey("name") ? 
+                                                            (bpmnElement.Attributes["name"] != "" ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"]) : bpmnElement.Attributes["id"]),
                                 DesignMapping = DesignMapping,
                                 GameGenreElement = element.GameGenreElement,
                                 ModelElementId = bpmnElement.Attributes["id"],
@@ -793,7 +797,7 @@ namespace BPM2Game.Mapping.Bpmn
                     foreach (var alternativeNode in targetElementNodes)
                     {
                         var el = alternativeNode.Element;
-                        var elStr = el.Attributes.ContainsKey("name") ? el.Attributes["name"] : el.Attributes["id"];
+                        var elStr = el.Attributes.ContainsKey("name") ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"]) : el.Attributes["id"];
 
                         themStr += "|" + "[" + elStr + "]";
                     }
@@ -801,7 +805,7 @@ namespace BPM2Game.Mapping.Bpmn
                     foreach (var alternativeNode in alternativeTaskNodes)
                     {
                         var el = alternativeNode.Element;
-                        var elStr = el.Attributes.ContainsKey("name") ? el.Attributes["name"] : el.Attributes["id"];
+                        var elStr = el.Attributes.ContainsKey("name") ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"]) : el.Attributes["id"];
 
                         themStr += "|" + "[" + elStr + "]";
                     }
@@ -814,10 +818,10 @@ namespace BPM2Game.Mapping.Bpmn
 
                     description = String.Format(ruleFormat,
                         bpmnElement.Attributes.ContainsKey("name")
-                            ? bpmnElement.Attributes["name"]
+                            ? (bpmnElement.Attributes["name"] != "" ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"])
                             : bpmnElement.Attributes["id"],
                         incomeTask.Attributes.ContainsKey("name")
-                                ? incomeTask.Attributes["name"]
+                                ? (incomeTask.Attributes["name"] != "" ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"])
                                 : incomeTask.Attributes["id"],
                         themStr);
 
@@ -841,14 +845,14 @@ namespace BPM2Game.Mapping.Bpmn
                         var el = alternativeNode.Element;
 
                         description = String.Format(ruleFormat,
-                        bpmnElement.Attributes.ContainsKey("name")
-                            ? bpmnElement.Attributes["name"]
-                            : bpmnElement.Attributes["id"],
+                        alternativeNode.SequenceFlowIncomed.Attributes.ContainsKey("name")
+                            ? (alternativeNode.SequenceFlowIncomed.Attributes["name"] != "" ? alternativeNode.SequenceFlowIncomed.Attributes["name"] : alternativeNode.SequenceFlowIncomed.Attributes["id"])
+                            : alternativeNode.SequenceFlowIncomed.Attributes["id"],
                         incomeTask.Attributes.ContainsKey("name")
-                                ? incomeTask.Attributes["name"]
+                                ? (incomeTask.Attributes["name"] != "" ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"])
                                 : incomeTask.Attributes["id"],
                         el.Attributes.ContainsKey("name")
-                                ? el.Attributes["name"]
+                                ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"])
                                 : el.Attributes["id"]);
 
                         var ge = new GameDesignMappingElements()
@@ -871,13 +875,13 @@ namespace BPM2Game.Mapping.Bpmn
 
                         description = String.Format(ruleFormat,
                         bpmnElement.Attributes.ContainsKey("name")
-                            ? bpmnElement.Attributes["name"]
+                            ? (bpmnElement.Attributes["name"] != "" ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"])
                             : bpmnElement.Attributes["id"],
                         incomeTask.Attributes.ContainsKey("name")
-                                ? incomeTask.Attributes["name"]
+                                ? (incomeTask.Attributes["name"] != "" ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"])
                                 : incomeTask.Attributes["id"],
                         el.Attributes.ContainsKey("name")
-                                ? el.Attributes["name"]
+                                ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"])
                                 : el.Attributes["id"]);
 
                         var ge = new GameDesignMappingElements()
@@ -946,7 +950,8 @@ namespace BPM2Game.Mapping.Bpmn
             try
             {
                 //Check if is a Split Gateway. I know that if there is more than one outgoing element
-                if (bpmnElement.Elements.ContainsKey("outgoing") && bpmnElement.Elements["outgoing"].Count > 1)
+                if (bpmnElement.Elements.ContainsKey("outgoing") && bpmnElement.Elements["outgoing"].Count > 1 &&
+                    bpmnElement.Elements["incoming"].Count <= 1)
                 {
                     var incoming = bpmnElement.Elements["incoming"].FirstOrDefault();
                     if (incoming != null)
@@ -957,7 +962,8 @@ namespace BPM2Game.Mapping.Bpmn
 
                         var incomeTask = FindBpmnElementById(incomeSeqFlow.Attributes["sourceRef"], "id");
 
-                        var targetElementNodes = FindElementIgnoringNonActivities(incomeTask, bpmnElement, new[] { "outgoing", "targetref" });
+                        var targetElementNodes = FindElementIgnoringNonActivities(incomeTask, bpmnElement,
+                            new[] {"outgoing", "targetref"});
 
                         foreach (var targetElementNode in targetElementNodes)
                         {
@@ -973,19 +979,51 @@ namespace BPM2Game.Mapping.Bpmn
 
                                 var ruleFormat = "If [{0}] == [{1}] them [{2}]";
                                 var description = String.Format(ruleFormat,
-                                    incomeTask.Attributes.ContainsKey("name") ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"],
-                                    seqFlowElement != null ? (seqFlowElement.Attributes.ContainsKey("name") ? seqFlowElement.Attributes["name"] : seqFlowElement.Attributes["id"]) : "",
-                                    outgoingTask.Attributes.ContainsKey("name") ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"]);
+                                    incomeTask.Attributes.ContainsKey("name")
+                                        ? (incomeTask.Attributes["name"] != ""
+                                            ? incomeTask.Attributes["name"]
+                                            : incomeTask.Attributes["id"])
+                                        : incomeTask.Attributes["id"],
+                                    seqFlowElement != null
+                                        ? (seqFlowElement.Attributes.ContainsKey("name")
+                                            ? (seqFlowElement.Attributes["name"] != ""
+                                                ? seqFlowElement.Attributes["name"]
+                                                : seqFlowElement.Attributes["id"])
+                                            : seqFlowElement.Attributes["id"])
+                                        : "",
+                                    outgoingTask.Attributes.ContainsKey("name")
+                                        ? (outgoingTask.Attributes["name"] != ""
+                                            ? outgoingTask.Attributes["name"]
+                                            : outgoingTask.Attributes["id"])
+                                        : outgoingTask.Attributes["id"]);
 
                                 if (bpmnElement.Attributes.ContainsKey("name") &&
                                     bpmnElement.Attributes["name"].Trim() != "")
                                 {
                                     ruleFormat = "If [{0}] and [{1}] == [{2}] them [{3}]";
                                     description = String.Format(ruleFormat,
-                                        incomeTask.Attributes.ContainsKey("name") ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"],
-                                        bpmnElement.Attributes.ContainsKey("name") ? bpmnElement.Attributes["name"] : bpmnElement.Attributes["id"],
-                                        seqFlowElement != null ? (seqFlowElement.Attributes.ContainsKey("name") ? seqFlowElement.Attributes["name"] : seqFlowElement.Attributes["id"]) : "",
-                                        outgoingTask.Attributes.ContainsKey("name") ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"]);
+                                        incomeTask.Attributes.ContainsKey("name")
+                                            ? (incomeTask.Attributes["name"] != ""
+                                                ? incomeTask.Attributes["name"]
+                                                : incomeTask.Attributes["id"])
+                                            : incomeTask.Attributes["id"],
+                                        bpmnElement.Attributes.ContainsKey("name")
+                                            ? (bpmnElement.Attributes["name"] != ""
+                                                ? bpmnElement.Attributes["name"]
+                                                : bpmnElement.Attributes["id"])
+                                            : bpmnElement.Attributes["id"],
+                                        seqFlowElement != null
+                                            ? (seqFlowElement.Attributes.ContainsKey("name")
+                                                ? (seqFlowElement.Attributes["name"] != ""
+                                                    ? seqFlowElement.Attributes["name"]
+                                                    : seqFlowElement.Attributes["id"])
+                                                : seqFlowElement.Attributes["id"])
+                                            : "",
+                                        outgoingTask.Attributes.ContainsKey("name")
+                                            ? (outgoingTask.Attributes["name"] != ""
+                                                ? outgoingTask.Attributes["name"]
+                                                : outgoingTask.Attributes["id"])
+                                            : outgoingTask.Attributes["id"]);
                                 }
 
                                 var ge = new GameDesignMappingElements()
@@ -999,6 +1037,98 @@ namespace BPM2Game.Mapping.Bpmn
                                 };
 
                                 MappingList.Add(ge);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var incomingElement in bpmnElement.Elements["incoming"])
+                    {
+                        if (incomingElement != null)
+                        {
+                            var incomeSeqFlow =
+                                FindBpmnElementById(
+                                    incomingElement.Attributes.FirstOrDefault(f => f.Key.ToLower() == "value").Value, "id");
+
+                            var incomeTask = FindBpmnElementById(incomeSeqFlow.Attributes["sourceRef"], "id");
+
+                            var targetElementNodes = FindElementIgnoringNonActivities(incomeTask, bpmnElement,
+                                new[] { "outgoing", "targetref" });
+
+                            foreach (var targetElementNode in targetElementNodes)
+                            {
+                                var outgoingTask = targetElementNode.Element;
+
+                                if (incomeTask != null && outgoingTask != null)
+                                {
+                                    var seqFlowElement = FindConnectionElement(bpmnElement, targetElementNode);
+                                    if (seqFlowElement == null)
+                                    {
+                                        seqFlowElement = targetElementNode.SequenceFlowIncomed;
+                                    }
+
+                                    var ruleFormat = "If [{0}] == [{1}] them [{2}]";
+                                    var description = String.Format(ruleFormat,
+                                        incomeTask.Attributes.ContainsKey("name")
+                                            ? (incomeTask.Attributes["name"] != ""
+                                                ? incomeTask.Attributes["name"]
+                                                : incomeTask.Attributes["id"])
+                                            : incomeTask.Attributes["id"],
+                                        seqFlowElement != null
+                                            ? (seqFlowElement.Attributes.ContainsKey("name")
+                                                ? (seqFlowElement.Attributes["name"] != ""
+                                                    ? seqFlowElement.Attributes["name"]
+                                                    : seqFlowElement.Attributes["id"])
+                                                : seqFlowElement.Attributes["id"])
+                                            : "",
+                                        outgoingTask.Attributes.ContainsKey("name")
+                                            ? (outgoingTask.Attributes["name"] != ""
+                                                ? outgoingTask.Attributes["name"]
+                                                : outgoingTask.Attributes["id"])
+                                            : outgoingTask.Attributes["id"]);
+
+                                    if (bpmnElement.Attributes.ContainsKey("name") &&
+                                        bpmnElement.Attributes["name"].Trim() != "")
+                                    {
+                                        ruleFormat = "If [{0}] and [{1}] == [{2}] them [{3}]";
+                                        description = String.Format(ruleFormat,
+                                            incomeTask.Attributes.ContainsKey("name")
+                                                ? (incomeTask.Attributes["name"] != ""
+                                                    ? incomeTask.Attributes["name"]
+                                                    : incomeTask.Attributes["id"])
+                                                : incomeTask.Attributes["id"],
+                                            bpmnElement.Attributes.ContainsKey("name")
+                                                ? (bpmnElement.Attributes["name"] != ""
+                                                    ? bpmnElement.Attributes["name"]
+                                                    : bpmnElement.Attributes["id"])
+                                                : bpmnElement.Attributes["id"],
+                                            seqFlowElement != null
+                                                ? (seqFlowElement.Attributes.ContainsKey("name")
+                                                    ? (seqFlowElement.Attributes["name"] != ""
+                                                        ? seqFlowElement.Attributes["name"]
+                                                        : seqFlowElement.Attributes["id"])
+                                                    : seqFlowElement.Attributes["id"])
+                                                : "",
+                                            outgoingTask.Attributes.ContainsKey("name")
+                                                ? (outgoingTask.Attributes["name"] != ""
+                                                    ? outgoingTask.Attributes["name"]
+                                                    : outgoingTask.Attributes["id"])
+                                                : outgoingTask.Attributes["id"]);
+                                    }
+
+                                    var ge = new GameDesignMappingElements()
+                                    {
+                                        AssociateElement = element,
+                                        Descricao = description,
+                                        DesignMapping = DesignMapping,
+                                        GameGenreElement = element.GameGenreElement,
+                                        ModelElementId = bpmnElement.Attributes["id"],
+                                        IsManual = false
+                                    };
+
+                                    MappingList.Add(ge);
+                                }
                             }
                         }
                     }
@@ -1036,7 +1166,7 @@ namespace BPM2Game.Mapping.Bpmn
                         var outgoingTask = targetElementNode.Element;
                         parallelTasksStr += "|" + "<" +
                                          (outgoingTask.Attributes.ContainsKey("name")
-                                             ? outgoingTask.Attributes["name"]
+                                             ? (outgoingTask.Attributes["name"] != "" ? outgoingTask.Attributes["name"] : outgoingTask.Attributes["id"])
                                              : outgoingTask.Attributes["id"]) + ">";
                     }
 
@@ -1057,7 +1187,8 @@ namespace BPM2Game.Mapping.Bpmn
 
                         const string ruleString = "Perform [{0}] them perform in parallel [{1}]";
                         var description = String.Format(ruleString,
-                                previousTask.Attributes.ContainsKey("name") ? previousTask.Attributes["name"] : previousTask.Attributes["id"],
+                                previousTask.Attributes.ContainsKey("name") ? 
+                                (previousTask.Attributes["name"] != "" ? previousTask.Attributes["name"] : previousTask.Attributes["id"]) : previousTask.Attributes["id"],
                                 parallelTasksStr);
 
                         var ge = new GameDesignMappingElements()

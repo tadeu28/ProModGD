@@ -1,5 +1,21 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.Project
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+
+        console.log($(element).text());
+    }
+</script>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h4> @Model.Title Information </h4>
@@ -59,7 +75,12 @@
                 <label>Project URL</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
-                    <input type="text" class="form-control" aria-describedby="basic-addon3" readonly="readonly" value="@(Request.Url)"/>
+                    <input id="projectUrl" type="text" class="form-control" aria-describedby="basic-addon3" readonly="readonly" value="@(Request.Url)"/>
+                    <span class="input-group-btn">
+                        <span class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Copy URL" onclick="copyToClipboard('#projectUrl')">
+                            <i class="glyphicon glyphicon-copy"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>

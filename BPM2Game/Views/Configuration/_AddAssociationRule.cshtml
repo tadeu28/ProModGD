@@ -15,48 +15,50 @@
     var operators = new SelectList(lstEnum);
 }
 
-@using (Ajax.BeginForm("SaveRule", "Configuration", new AjaxOptions()
+@if (!Model.Association.IsConstant)
 {
-    UpdateTargetId = "formRules",
-    HttpMethod = "post",
-    InsertionMode = InsertionMode.Replace,
-    LoadingElementId = "divCarregando"
-}))
-{
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.Hidden("IdAssociation", Model.Id)
-        <div class="form-group">
-            @Html.Label("Rule Type", htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.DropDownList("IdType", ruleTypes, new Dictionary<string, object>() {{"class", "form-control"}})
+    using (Ajax.BeginForm("SaveRule", "Configuration", new AjaxOptions()
+    {
+        UpdateTargetId = "formRules",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("IdAssociation", Model.Id)
+            <div class="form-group">
+                @Html.Label("Rule Type", htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.DropDownList("IdType", ruleTypes, new Dictionary<string, object>() {{"class", "form-control"}})
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Field", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.Editor("Field", new { htmlAttributes = new { @class = "form-control", @required = "true" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Operator", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("op", operators, new Dictionary<string, object>() { { "class", "form-control" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Value", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextArea("Rule", new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 3 } })
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            @Html.Label("Field", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.Editor("Field", new { htmlAttributes = new { @class = "form-control", @required = "true" } })
-            </div>
+        <div class="form-horizontal text-right">
+            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Inlcude Rule</button>
         </div>
-        <div class="form-group">
-            @Html.Label("Operator", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("op", operators, new Dictionary<string, object>() { { "class", "form-control" } })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.Label("Value", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextArea("Rule", new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 3 } })
-            </div>
-        </div>
-    </div>
-    <div class="form-horizontal text-right">
-        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Inlcude Rule</button>
-    </div>
-}
-
+    }
 <hr/>
+}
 <h5><strong><i class="glyphicon glyphicon-link"></i> <ins>Created Rules</ins></strong></h5>
 <table class="table table-striped table-responsive table-bordered">
     <tr>
@@ -70,9 +72,12 @@
         <td>@rule.Type.Description</td>
         <td>@(rule.Field + " ["+ rule.Operator + "] " + rule.Rule)</td>
         <td class="btn-group-xs text-center">
-            <a class="btn btn-warning"
-               data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#formRules"
-               href="@Url.Action("DeleteRule", "Configuration", new { id = rule.Id })"> <i class="glyphicon glyphicon-remove"></i> Remove Rule</a>
+            @if (!Model.Association.IsConstant)
+            {
+                <a class="btn btn-warning"
+                   data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#formRules"
+                   href="@Url.Action("DeleteRule", "Configuration", new {id = rule.Id})"> <i class="glyphicon glyphicon-remove"></i> Remove Rule</a>
+            }
         </td>
     </tr>
 }

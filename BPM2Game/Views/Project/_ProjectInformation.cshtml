@@ -15,37 +15,20 @@
 
 <br/>
 <div class="row">
-@using (Ajax.BeginForm("UpdateProject", "Project", new AjaxOptions()
-{
-    UpdateTargetId = "tblInfos",
-    HttpMethod = "post",
-    InsertionMode = InsertionMode.Replace,
-    LoadingElementId = "divCarregando"
-}))
-{
-    <div class="col-md-7" id="tblInfos">
-        @Html.Partial("_ProjectInformationPanel", Model)
-    </div>
-}
+    @using (Ajax.BeginForm("UpdateProject", "Project", new AjaxOptions()
+    {
+        UpdateTargetId = "tblInfos",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <div class="col-md-7" id="tblInfos">
+            @Html.Partial("_ProjectInformationPanel", Model)
+        </div>
+    }
 
-<div class="col-md-5">
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h4>Project Team</h4>
-            <small>Owner: @Model.Owner.Name</small>
-        </div>
-        <div class="panel-body">
-            @foreach (var design in Model.Designers)
-            {
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input type="text" class="form-control" aria-describedby="basic-addon3" rows="5" readonly value='@(design.Name + " ("+ @design.User.Email +")")'/>
-                </div>
-            }
-        </div>
-        <div class="panel-footer">
-
-        </div>
+    <div class="col-md-5" id="projectDesigners">
+        @Html.Partial("_ProjectDesigners", Model)
     </div>
-</div>
 </div>

@@ -40,6 +40,7 @@ namespace Bpm2GP.Model.DataBase
         public GameDesignMappingElementsRepository GameDesignMappingElementsRepository { get; set; }
         public AssociationTypeRepository AssociationTypeRepository { get; set; }
         public AssociationRulesRepository AssociationRulesRepository { get; set; }
+        public ProjectSolicitationRepository ProjectSolicitationRepository { get; set; }
 
         private DbFactory()
         {
@@ -58,6 +59,7 @@ namespace Bpm2GP.Model.DataBase
             this.GameDesignMappingElementsRepository = new GameDesignMappingElementsRepository(this.Session);
             this.AssociationTypeRepository = new AssociationTypeRepository(this.Session);
             this.AssociationRulesRepository = new AssociationRulesRepository(this.Session);
+            this.ProjectSolicitationRepository = new ProjectSolicitationRepository(this.Session);
         }
 
         public void Initialize(object obj)
