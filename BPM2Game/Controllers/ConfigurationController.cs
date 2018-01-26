@@ -45,6 +45,51 @@ namespace BPM2Game.Controllers
             }
         }
 
+        public PartialViewResult CopyLanguage(ModelingLanguage language, Guid idLanguage)
+        {
+            try
+            {
+                var languageToCopy = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(idLanguage);
+
+                var designer = LoginUtils.User.Designer;
+                language.Inactive = false;
+                language.IsConstant = false;
+                language.Designer = designer;
+                language.RegisterDate = DateTime.Now;
+                language.Version = languageToCopy.Version;
+                language.Description += "\n [Copied from: "+ languageToCopy.Name + "]";
+
+                language = DbFactory.Instance.ModelingLanguageRepository.Save(language);
+
+                var tempElements = new List<ModelingLanguageElement>();
+                foreach (var elementToCopy in languageToCopy.Elements.OrderBy(o => o.ParentElement != null))
+                {
+                    var parentElement = tempElements.FirstOrDefault(f => f.Metamodel == elementToCopy.Metamodel);
+
+                    var element = new ModelingLanguageElement()
+                    {
+                        Name = elementToCopy.Name,
+                        Description = elementToCopy.Description,
+                        Metamodel = elementToCopy.Metamodel,
+                        Language = language,
+                        ParentElement = parentElement
+                    };
+
+                    DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
+
+                    tempElements.Add(element);
+                }
+
+                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAll();
+
+                return PartialView("_TblLanguages", languages);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveLanguage"));
+            }
+        }
+
         public PartialViewResult RealoadAllLanguages()
         {
             try

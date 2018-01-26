@@ -1,0 +1,75 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model Bpm2GP.Model.DataBase.Models.ModelingLanguage
+
+@{
+    var languages = new SelectList((List<ModelingLanguage>) ViewData["Languages"], "Id", "Name");
+}
+
+<script>
+    $.validator.unobtrusive.parse(document);
+
+    function postLanguageDone() {
+        $("#dlgCopy").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+
+        $("#Name").val("");
+        $("#Description").val("");
+    }
+</script>
+
+<div id="dlgCopy" class="modal fade" role="dialog">
+    @using (Ajax.BeginForm("CopyLanguage", "Configuration", new AjaxOptions()
+    {
+        UpdateTargetId = "tblLanguages",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postLanguageDone",
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Copy Language</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Language", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("idLanguage", languages, new Dictionary<string, object>() { { "class", "form-control" } })
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 8 } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer form-horizontal">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-remove-circle"></i> Cancel</button>
+                    <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

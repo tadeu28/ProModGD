@@ -46,7 +46,7 @@
                 {
                     <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblLanguages"
                        data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Language"
-                       href="@Url.Action("RemoveLanguage", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
+                       href="@Url.Action("RemoveLanguage", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger btn-remove">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 }
@@ -65,14 +65,18 @@
 
 <hr />
 <div class="text-right">
-    <a id="btnReloadLanguages" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" 
+    <a id="btnReloadLanguages" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace"
        data-ajax-update="#tblLanguages" data-ajax-loading="#divCarregando"
        href="@Url.Action("RealoadAllLanguages", "Configuration")" class="btn btn-warning">
         <i class="glyphicon glyphicon-refresh"></i> Reaload Languages
     </a>
+    <button id="btnCloneLanguage" class="btn btn-success" data-toggle="modal" data-target="#dlgCopy">
+        <i class="glyphicon glyphicon-tags"></i> Copy Language
+    </button>
     <button id="btnAddLanguage"class="btn btn-primary" data-toggle="modal" data-target="#dlgLanguage">
         <i class="glyphicon glyphicon-plus-sign"></i> New Language
     </button>
 </div>
 
 @Html.Partial("_AddLanguage", new ModelingLanguage())
+@Html.Partial("_CopyLanguage", new ModelingLanguage(), new ViewDataDictionary() { { "Languages", Model } })

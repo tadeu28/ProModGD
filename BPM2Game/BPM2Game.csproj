@@ -646,6 +646,7 @@
     <Content Include="Views\Project\_ProjectSolicitation.cshtml" />
     <Content Include="Views\User\_MySolicitations.cshtml" />
     <Content Include="Views\Project\ProcjectAccessSolicitation.cshtml" />
+    <Content Include="Views\Configuration\_CopyLanguage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
