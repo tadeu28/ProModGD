@@ -18,7 +18,7 @@ namespace BPM2Game.Controllers
         public ActionResult ProcessModelConfiguration()
         {
             var designer = LoginUtils.User.Designer;
-            var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer);
+            var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer, false);
 
             return View(languages);
         }
@@ -64,7 +64,9 @@ namespace BPM2Game.Controllers
                 var tempElements = new List<ModelingLanguageElement>();
                 foreach (var elementToCopy in languageToCopy.Elements.OrderBy(o => o.ParentElement != null))
                 {
-                    var parentElement = tempElements.FirstOrDefault(f => f.Metamodel == elementToCopy.Metamodel);
+                    ModelingLanguageElement parentElement = null;
+                    if(elementToCopy.ParentElement != null)
+                        parentElement = tempElements.FirstOrDefault(f => f.Metamodel == elementToCopy.ParentElement.Metamodel);
 
                     var element = new ModelingLanguageElement()
                     {
@@ -75,12 +77,12 @@ namespace BPM2Game.Controllers
                         ParentElement = parentElement
                     };
 
-                    DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
+                    element = DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
 
                     tempElements.Add(element);
                 }
 
-                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAll();
+                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer, false);
 
                 return PartialView("_TblLanguages", languages);
             }
@@ -95,7 +97,7 @@ namespace BPM2Game.Controllers
             try
             {
                 var designer = LoginUtils.User.Designer;
-                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer);
+                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer, false);
 
                 return PartialView("_TblLanguages", languages);
             }
@@ -113,9 +115,11 @@ namespace BPM2Game.Controllers
 
                 var lang = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(id);
 
-                DbFactory.Instance.ModelingLanguageRepository.Delete(lang);
+                lang.Inactive = true;
 
-                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer);
+                DbFactory.Instance.ModelingLanguageRepository.Update(lang);
+
+                var languages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer, false);
 
                 return PartialView("_TblLanguages", languages);
             }
@@ -129,7 +133,7 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(id)
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(id, false)
                     .OrderBy(o => o.Name).ToList();
                 
                 ViewBag.Language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(id);
@@ -157,7 +161,7 @@ namespace BPM2Game.Controllers
 
                 DbFactory.Instance.ModelingLanguageElementRepository.Save(element);
 
-                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(IdLanguage)
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(IdLanguage, false)
                     .OrderBy(o => o.Name).ToList();
                                 
                 ViewBag.Language = language;
@@ -176,10 +180,11 @@ namespace BPM2Game.Controllers
                 var element = DbFactory.Instance.ModelingLanguageElementRepository.FindFirstById(id);
                 var idLanguage = Guid.Parse(element.Language.Id.ToString());
 
-                DbFactory.Instance.ModelingLanguageElementRepository.Delete(element);
+                element.Inactive = true;
+                DbFactory.Instance.ModelingLanguageElementRepository.Update(element);
 
                 var language = DbFactory.Instance.ModelingLanguageRepository.FindFirstById(idLanguage);
-                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(idLanguage)
+                var elements = DbFactory.Instance.ModelingLanguageElementRepository.FindAllElementsByLanguageId(idLanguage, false)
                     .OrderBy(o => o.Name).ToList();
 
                 ViewBag.Language = language;
@@ -194,7 +199,7 @@ namespace BPM2Game.Controllers
         public ActionResult GameGenreConfiguration()
         {
             var designer = LoginUtils.User.Designer;
-            var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+            var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
 
             return View(genres);
         }
@@ -204,7 +209,7 @@ namespace BPM2Game.Controllers
             try
             {
                 var designer = LoginUtils.User.Designer;
-                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
 
                 return PartialView("_TblGenres", genres);
             }
@@ -243,9 +248,9 @@ namespace BPM2Game.Controllers
 
                 var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(id);
 
-                DbFactory.Instance.GameGenreRepository.Delete(genre);
+                DbFactory.Instance.GameGenreRepository.Update(genre);
 
-                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
 
                 return PartialView("_TblGenres", genres);
             }
@@ -299,7 +304,8 @@ namespace BPM2Game.Controllers
                 var element = DbFactory.Instance.GameGenreElementRepository.FindFirstById(id);
                 var IdGenre = Guid.Parse(element.GameGenre.Id.ToString());
 
-                DbFactory.Instance.GameGenreElementRepository.Delete(element);
+                element.Inactive = true;
+                DbFactory.Instance.GameGenreElementRepository.Update(element);
 
                 var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(IdGenre);
                 var elements = DbFactory.Instance.GameGenreElementRepository.FindAllElementsByGenreId(IdGenre)
@@ -319,8 +325,8 @@ namespace BPM2Game.Controllers
             try
             {
                 var designer = LoginUtils.User.Designer;
-                var processLanguages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer);
-                var gameGenres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer);
+                var processLanguages = DbFactory.Instance.ModelingLanguageRepository.FindAllLanguagesByDesigner(designer, false);
+                var gameGenres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
                 
                 ViewBag.Languages = processLanguages;
                 ViewBag.Genres = gameGenres;
@@ -386,7 +392,7 @@ namespace BPM2Game.Controllers
             try
             {
                 var associations =
-                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage);
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage, false);
 
                 ViewBag.IdGenre = idGenre;
                 ViewBag.IdLanguage = idLanguage;
@@ -404,8 +410,10 @@ namespace BPM2Game.Controllers
             {
                 var assocElement = DbFactory.Instance.AssociationConfElementRepository.FindFirstById(Id);
                 var idAssoc = assocElement.Association.Id;
-                
-                DbFactory.Instance.AssociationConfElementRepository.Delete(assocElement);
+
+                assocElement.Inactive = true;
+
+                DbFactory.Instance.AssociationConfElementRepository.Update(assocElement);
 
                 var assoc = DbFactory.Instance.AssociationConfRepository.FindFirstById(idAssoc);
                 return PartialView("_ElementsAssociationTables", assoc);
@@ -434,7 +442,7 @@ namespace BPM2Game.Controllers
                 DbFactory.Instance.AssociationConfRepository.Save(assoc);
 
                 var associations =
-                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage);
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(idGenre, idLanguage, false);
 
                 ViewBag.IdGenre = idGenre;
                 ViewBag.IdLanguage = idLanguage;
@@ -456,11 +464,12 @@ namespace BPM2Game.Controllers
 
                 if (!assoc.IsConstant)
                 {
-                    DbFactory.Instance.AssociationConfRepository.Delete(assoc);
+                    assoc.Inactive = true;
+                    DbFactory.Instance.AssociationConfRepository.Update(assoc);
                 }
 
                 var associations =
-                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(ViewBag.IdGenre, ViewBag.IdLanguage);
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenreAndLanguage(ViewBag.IdGenre, ViewBag.IdLanguage, false);
                 
                 return PartialView("_ViewAssociations", associations);
             }

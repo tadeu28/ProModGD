@@ -37,7 +37,7 @@ namespace BPM2Game.Mapping.Bpmn
             Model = Model.Read(designMapping.Project.BpmnModelPath);
 
             var bpmnStoredElements = DbFactory.Instance.ModelingLanguageElementRepository
-                .FindAllElementsByLanguageId(designMapping.Language.Id).OrderBy(o => o.Metamodel).ToList();
+                .FindAllElementsByLanguageId(designMapping.Language.Id, false).OrderBy(o => o.Metamodel).ToList();
 
             bpmnStoredElements.ForEach(f =>
             {
@@ -46,7 +46,7 @@ namespace BPM2Game.Mapping.Bpmn
                                         .FindAllElementsByElementeMetamodel(f.Metamodel)
                                         .OrderBy(o => o.ProcessElement.Name)
                                         .ToList();
-
+                
                 var word = f.Metamodel?.ToLower().Replace("bpmn:", "");
                 if (word != null)
                 {
@@ -70,6 +70,9 @@ namespace BPM2Game.Mapping.Bpmn
         {
             foreach (var element in elements)
             {
+                if(element.Inactive)
+                    continue;
+
                 var rules = element.Ruleses.ToList();
 
                 if (element.ProcessElement.ParentElement != null)

@@ -13,6 +13,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual Guid Id { get; set; }
         public virtual String Name { get; set; }
         public virtual String Description { get; set; }
+        public virtual bool Inactive { get; set; }
         public virtual GameGenre GameGenre { get; set; }
         public virtual IList<AssociationConfElements> AssociationConfElements { get; set; }
 

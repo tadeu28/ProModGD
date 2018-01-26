@@ -16,6 +16,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Description { get; set; }
         public virtual DateTime RegisterDate { get; set; }
         public virtual Boolean IsConstant { get; set; }
+        public virtual Boolean Inactive { get; set; }
         public virtual Designer Designer { get; set; }
         public virtual IList<GameGenreElement>  Elements { get; set; }
         public virtual IList<AssociationConf> Associations { get; set; }

@@ -13,17 +13,19 @@ namespace Bpm2GP.Model.DataBase.Repository
     {
         public ModelingLanguageRepository(ISession session) : base(session) { }
         
-        public List<ModelingLanguage> FindAllLanguagesByDesigner(Designer designer)
+        public List<ModelingLanguage> FindAllLanguagesByDesigner(Designer designer, bool isInactive)
         {
-            return this.Session.Query<ModelingLanguage>().Where(w => w.IsConstant ||
-                                                                     w.Designer == designer)
+            return this.Session.Query<ModelingLanguage>().Where(w => w.Inactive == isInactive &&
+                                                                     (w.IsConstant ||
+                                                                     w.Designer == designer))
                                                          .ToList();
         }
 
-        public List<ModelingLanguage> FindAllLanguagesByDesignerAndOrderDesc(Designer designer)
+        public List<ModelingLanguage> FindAllLanguagesByDesignerAndOrderDesc(Designer designer, bool isInactive)
         {
-            return this.Session.Query<ModelingLanguage>().Where(w => w.IsConstant ||
-                                                                     w.Designer == designer)
+            return this.Session.Query<ModelingLanguage>().Where(w => w.Inactive == isInactive &&
+                                                                     (w.IsConstant ||
+                                                                     w.Designer == designer))
                                                          .OrderByDescending(o => o.RegisterDate)
                                                          .ToList();
         }

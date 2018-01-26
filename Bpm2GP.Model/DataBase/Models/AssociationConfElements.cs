@@ -14,6 +14,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual ModelingLanguageElement ProcessElement { get; set; }
         public virtual GameGenreElement GameGenreElement { get; set; }
         public virtual AssociationConf Association { get; set; }
+        public virtual Boolean Inactive { get; set; }
         public virtual IList<AssociationRules> Ruleses { get; set; }
 
         public AssociationConfElements()

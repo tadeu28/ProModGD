@@ -15,14 +15,14 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
         }
 
-        public List<AssociationConf> FindAllElementsByGenreAndLanguage(Guid genreId, Guid languageId)
+        public List<AssociationConf> FindAllElementsByGenreAndLanguage(Guid genreId, Guid languageId, bool isInactive)
         {
-            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Language.Id == languageId).ToList();
+            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Language.Id == languageId && w.Inactive == isInactive).ToList();
         }
 
-        public List<AssociationConf> FindAllElementsByGenre(Guid genreId)
+        public List<AssociationConf> FindAllElementsByGenre(Guid genreId, bool isInactive)
         {
-            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId).ToList();
+            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Inactive == isInactive).ToList();
         }
     }
 }

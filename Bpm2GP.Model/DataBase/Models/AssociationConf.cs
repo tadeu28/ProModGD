@@ -16,6 +16,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual ModelingLanguage Language { get; set; }
         public virtual GameGenre Genre { get; set; }
         public virtual bool IsConstant { get; set; }
+        public virtual bool Inactive { get; set; }
 
         public virtual IList<AssociationConfElements> ElementsAssociated { get; set; }
 

@@ -189,7 +189,7 @@ namespace BPM2Game.Controllers
             try
             {
                 var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
-                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer);
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer, false);
 
                 ViewData["Genres"] = genres;
                 return PartialView("_GameConfiguration", project);
@@ -219,7 +219,7 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                var maps = DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenre(id);
+                var maps = DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenre(id, false);
 
                 var adapters = new List<GenericAdapter>();
                 adapters.Add(new GenericAdapter());

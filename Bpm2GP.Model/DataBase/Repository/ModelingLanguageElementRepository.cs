@@ -13,9 +13,9 @@ namespace Bpm2GP.Model.DataBase.Repository
     {
         public ModelingLanguageElementRepository(ISession session) : base(session) { }
 
-        public List<ModelingLanguageElement> FindAllElementsByLanguageId(Guid languageId)
+        public List<ModelingLanguageElement> FindAllElementsByLanguageId(Guid languageId, bool isInactive)
         {
-            return this.Session.Query<ModelingLanguageElement>().Where(w => w.Language.Id == languageId).ToList();
+            return this.Session.Query<ModelingLanguageElement>().Where(w => w.Language.Id == languageId && w.Inactive == isInactive).ToList();
         }
     }
 }

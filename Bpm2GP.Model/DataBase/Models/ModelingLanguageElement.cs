@@ -18,6 +18,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Description { get; set; }
         public virtual String Metamodel { get; set; }
         public virtual bool RuleAbbled { get; set; }
+        public virtual bool Inactive { get; set; }
         public virtual ModelingLanguageElement ParentElement { get; set; }
         public virtual IList<ModelingLanguageElement> ChildElements { get; set; }
         public virtual IList<AssociationConfElements> AssociationConfElements { get; set; }
