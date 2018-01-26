@@ -159,3 +159,16 @@ textarea {
     max-height:400px;
     overflow-x:auto;
 }
+
+.carousel-caption {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: #000;
+    text-align: center;
+    text-shadow: none;
+}

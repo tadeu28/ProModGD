@@ -27,6 +27,7 @@ namespace BPM2Game
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap-carousel.js",
                       "~/Scripts/fileinput*",
                       "~/Scripts/respond.js"));
 

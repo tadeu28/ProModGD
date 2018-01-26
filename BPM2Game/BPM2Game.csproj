@@ -406,6 +406,13 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\site\ajax-loader.gif" />
     <Content Include="images\site\bpm2game.png" />
+    <Content Include="images\site\index\association.PNG" />
+    <Content Include="images\site\index\genres.PNG" />
+    <Content Include="images\site\index\mapping.PNG" />
+    <Content Include="images\site\index\processes.PNG" />
+    <Content Include="images\site\index\process_languages.PNG" />
+    <Content Include="images\site\index\project.PNG" />
+    <Content Include="images\site\index\projects.PNG" />
     <Content Include="images\site\loading.gif" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -421,6 +428,7 @@
     </Content>
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\bootstrap-carousel.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
