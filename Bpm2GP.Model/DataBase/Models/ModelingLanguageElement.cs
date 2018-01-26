@@ -53,6 +53,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Property(x => x.Name);
             Property(x => x.RuleAbbled);
+            Property(x => x.Inactive);
 
             Property(x => x.Description, m =>
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Bpm2GP.Model.DataBase;
 using Bpm2GP.Model.DataBase.Models;
 using BPMN;
@@ -34,7 +35,8 @@ namespace BPM2Game.Mapping.Bpmn
         public void StartMapping(DesignMapping designMapping)
         {
             DesignMapping = designMapping;
-            Model = Model.Read(designMapping.Project.BpmnModelPath);
+            var bpmnPath = HttpContext.Current.Server.MapPath("~/files/bpmn/") + designMapping.Project.Id + ".txt";
+            Model = Model.Read(bpmnPath);
 
             var bpmnStoredElements = DbFactory.Instance.ModelingLanguageElementRepository
                 .FindAllElementsByLanguageId(designMapping.Language.Id, false).OrderBy(o => o.Metamodel).ToList();

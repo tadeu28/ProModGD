@@ -31,6 +31,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Property(x => x.Name);
             Property(x => x.Description);
+            Property(x => x.Inactive);
 
             ManyToOne(x => x.GameGenre, m => m.Column("idGenre"));
 

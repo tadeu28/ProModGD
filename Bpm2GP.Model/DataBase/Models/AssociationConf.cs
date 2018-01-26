@@ -49,6 +49,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Property(x => x.Name);
             Property(x => x.DtCreation);
             Property(x => x.IsConstant);
+            Property(x => x.Inactive);
 
             ManyToOne(x => x.Language, m =>
             {
