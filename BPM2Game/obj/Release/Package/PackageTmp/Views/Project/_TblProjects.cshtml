@@ -1,0 +1,128 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@using Bpm2GP.Model.Utils
+@model IEnumerable<Bpm2GP.Model.DataBase.Models.Project>
+
+@{
+    var user = LoginUtils.User;
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tblProjects').DataTable({
+            "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]]
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function DeletedProjects() {
+        $("#btnDelete").notify(
+            "All selected projects were inactivated!",
+            {
+                className: 'info',
+                position: "left"
+            }
+        );
+    }
+
+    function solicitationSuccess(r) {
+        if (r) {
+            toastr.success("Solicitation sended successful! Wait for project ower's answer!", null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
+        }
+    }
+</script>
+
+@using (Ajax.BeginForm("DeleteProjects", "Project", new AjaxOptions()
+{
+    UpdateTargetId = "tblPrjs",
+    HttpMethod = "post",
+    InsertionMode = InsertionMode.Replace,
+    OnSuccess = "DeletedProjects",
+    LoadingElementId = "divCarregando"
+}))
+{
+<table id="tblProjects" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th class="text-center">
+            [x]
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayName("Start Date")
+        </th>
+        <th>
+            @Html.DisplayName("Last Update")
+        </th>
+        <th>
+            @Html.DisplayName("Process Owner")
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" value="@item.Id" name="prjs[]" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.Name)
+            </td>
+            <td class="text-center">
+                @if (item.Designers.All(a => a.Id != user.Designer.Id))
+                {
+                    <a class="btn btn-default"
+                       data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace"  data-ajax-success="solicitationSuccess"
+                       href="@Url.Action("AskParticipation", "Project", new {id = user.Designer.Id, idProject = item.Id})"
+                       data-toggle="tooltip" data-placement="top" title="Participate of this Project">
+                        <i class="glyphicon glyphicon-log-in"> </i> Participate
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Project", "Project", new {id = item.Id})" class="btn btn-primary"
+                       data-toggle="tooltip" data-placement="top" title="Open Project">
+                        <i class="glyphicon glyphicon-folder-open"></i> Open Project
+                    </a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<hr/>
+<div class="row">
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-danger" id="btnDelete"><i class="glyphicon glyphicon-minus-sign"></i> Remove Projects</button>
+        <div class="btn btn-primary" data-toggle="modal" data-target="#dlgProject"><i class="glyphicon glyphicon-plus-sign"></i> New Project</div>
+    </div>
+</div>
+}
+
+@Html.Partial("_AddProject", new Project())

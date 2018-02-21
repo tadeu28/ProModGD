@@ -1,0 +1,25 @@
+﻿@model Bpm2GP.Model.DataBase.Models.Designer
+
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayName("Designer Name")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+    <dt>
+        @Html.DisplayName("Email")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.User.Email)
+    </dd>
+    <dt>
+        @Html.DisplayName("Short Biography")
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ShortBio)
+    </dd>
+</dl>

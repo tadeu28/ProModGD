@@ -1,0 +1,99 @@
+﻿@model Bpm2GP.Model.DataBase.Models.Project
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function copyToClipboard() {
+        var copyText = document.getElementById("projectUrl");
+        copyText.select();
+        document.execCommand("Copy");
+        toastr.info('Url copied to clipboard.', null, {
+            timeOut: 3000,
+            closeButton: true,
+            preventDuplicates: false,
+            positionClass: "toast-bottom-right",
+            newestOnTop: true
+        });
+    }
+</script>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4> @Model.Title Information </h4>
+        <small style="color: silver">@Model.Id</small>
+    </div>
+
+    <div class="panel-body">
+        @Html.HiddenFor(x => x.Id)
+        <div class="form-group">
+            <label for="basic-url">Title</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-text-size"></i></span>
+                <input id="Title" name="Title" type="text" class="form-control" aria-describedby="basic-addon3" value="@Model.Title" disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="basic-url">Description</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
+                <textarea id="Description" name="Description" type="text" class="form-control" aria-describedby="basic-addon3" rows="5" disabled>@Model.Description</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="basic-url">Features</label>
+            <div class="btn-group-sm">
+                @if (@Model.BpmnModelPath != "")
+                {
+                    <div class="btn btn-success">
+                        <i class="glyphicon glyphicon-ok-circle"></i> Business Process Model
+                    </div>
+                }
+                else
+                {
+                    <div class="btn btn-danger">
+                        <i class="glyphicon glyphicon-remove-circle"></i> Business Process Model
+                    </div>
+                }
+                @if (@Model.DesignMappings.Count > 0)
+                {
+                    <div class="btn btn-success">
+                        <i class="glyphicon glyphicon-ok-circle"></i> Game Design Elements Mapping
+                    </div>
+                }
+                else
+                {
+                    <div class="btn btn-danger">
+                        <i class="glyphicon glyphicon-remove-circle"></i> Game Design Elements Mapping
+                    </div>
+                }
+
+                <div class="btn btn-danger">
+                    <i class="glyphicon glyphicon-remove-circle"></i> Game Design Document
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Project URL</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                    <input id="projectUrl" type="text" class="form-control" aria-describedby="basic-addon3" readonly="readonly" value="@(Request.Url)"/>
+                    <span class="input-group-btn">
+                        <span class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Copy URL" onclick="copyToClipboard('#projectUrl')">
+                            <i class="glyphicon glyphicon-copy"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="panel-footer text-right">
+        <div class="btn btn-warning" id="btnEdit" onclick="editInformation()">
+            <i class="glyphicon glyphicon-edit"></i> Edit
+        </div>
+        <a href="" class="btn btn-default hide" id="btnCancel"><i class="glyphicon glyphicon-remove-circle"></i> Cancel</a>
+        <button type="submit" id="btnSaveInfo" class="btn btn-success hide"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
+    </div>
+</div>

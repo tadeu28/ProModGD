@@ -1,0 +1,95 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model IEnumerable<Bpm2GP.Model.DataBase.Models.AssociationConf>
+
+@{
+    var lstAssoc = new SelectList((List<AssociationConf>) Model, "Id", "ToShow");
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function postDoneSaveAssociation() {
+        $("#dlgNewAssociation").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+
+    function postSaveOrOpenAssociation() {
+        $("#tblAssociations").removeClass("hide");
+        $("#tblElements").removeClass("hide");
+    }
+
+    function removeAssociation() {
+
+        if ($("#idAssociation").val() !== "00000000-0000-0000-0000-000000000000") {
+
+            $.ajax({
+                type: "GET",
+                url: "/Configuration/DeleteAssociation/" + $("#idAssociation").val(),
+                success: function (r) {
+                    $("#tblAssociations").html(r);
+                }
+            });
+        }
+    }
+</script>
+<hr/>
+@using (Ajax.BeginForm("ElementsSelect", "Configuration", new AjaxOptions()
+{
+    UpdateTargetId = "tblElements",
+    HttpMethod = "post",
+    InsertionMode = InsertionMode.Replace,
+    OnSuccess = "postSaveOrOpenAssociation",
+    LoadingElementId = "divCarregando"
+}))
+{
+    @Html.DropDownList("idAssociation", lstAssoc, new Dictionary<string, object>() { { "class", "form-control frmAssociation" } })
+    <button id="btnOpenAssociation" class="btn btn-default form-control frmAssociation" type="submit">
+        <i class="glyphicon glyphicon-folder-open "></i> Open Association
+    </button>
+    <div id="btnDeleteAssociation" class="btn btn-danger form-control frmAssociation" type="submit" onclick="removeAssociation()">
+        <i class="glyphicon glyphicon-folder-open "></i> Delete Association
+    </div>
+    <div id="btnSaveAssociation" class="btn btn-success form-control frmAssociation" type="submit" data-toggle="modal" data-target="#dlgNewAssociation">
+        <i class="glyphicon glyphicon-file "></i> New Association
+    </div>
+    <div id="btnCloseAssociation" class="btn btn-primary form-control frmAssociation" type="submit" onclick=" closeElements() ">
+        <i class="glyphicon glyphicon-remove-circle "></i> Close Association
+    </div>
+}
+
+<div id="dlgNewAssociation" class="modal fade " role="dialog">
+    @using (Ajax.BeginForm("SaveAssociation", "Configuration", new AjaxOptions()
+    {
+        UpdateTargetId = "tblAssociations",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postDoneSaveAssociation",
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Association</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idGenre" name="idGenre" value="@ViewBag.IdGenre"/>
+                    <input type="hidden" id="idLanguage" name="idLanguage" value="@ViewBag.IdLanguage" />
+                    <input type="text" style="width: 100%" id="edtAssociationName" name="edtAssociationName" class="form-control frmAssociation" placeholder="New association name..."/>
+                </div>
+                <div class="modal-footer form-horizontal">
+                    <div class="btn btn-primary" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-remove-circle"></i> Cancel
+                    </div>
+                    <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

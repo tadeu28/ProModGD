@@ -1,0 +1,81 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+
+@{
+    ViewBag.Title = "Elements Association";
+
+    var languages = (List<ModelingLanguage>)ViewBag.Languages;
+    languages = languages.OrderBy(o => o.Name).ToList();
+    languages.Insert(0, new ModelingLanguage() {Name = ""});
+    var languagesSelect= new SelectList(languages, "Id", "Name");
+
+    var genres = (List<GameGenre>)ViewBag.Genres;
+    genres = genres.OrderBy(o => o.Name).ToList();
+    genres.Insert(0, new GameGenre() { Name = "" });
+    var genresSelect = new SelectList(genres, "Id", "Name");
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    
+    function postElementAssociationSuccess() {
+        $("#tblAssociations").removeClass("hide");
+        $(".frmFilter").attr("disabled", "disabled");
+    }
+
+    function activeButtonFilter() {
+        $("#btnFilter").attr("disabled", "disabled");
+        if (($("#idLanguage").val() !== "00000000-0000-0000-0000-000000000000") && ($("#idGenre").val() !== "00000000-0000-0000-0000-000000000000")) {
+            $("#btnFilter").removeAttr("disabled");
+        }
+    }
+
+    function closeElements() {
+        $(".form-control").removeAttr("disabled", "disabled");
+        $("#btnFilter").attr("disabled", "disabled");
+        $("#idLanguage").val("00000000-0000-0000-0000-000000000000");
+        $("#idGenre").val("00000000-0000-0000-0000-000000000000");
+        $('[data-toggle="tooltip"]').hide();
+        $("#tblElements").addClass("hide");
+        $("#tblAssociations").addClass("hide");
+    }
+</script>
+
+<h3>Elements Association</h3>
+<div class="col-md-12">
+    <ol class="breadcrumb">
+        <li class=""><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class="active">Elements Association (Process Model X Game Genre)</li>
+    </ol>
+</div>
+<br/>
+<hr/>
+<div class="alert alert-info form-inline">
+    @using (Ajax.BeginForm("LoadAssociations", "Configuration", new AjaxOptions()
+    {
+        UpdateTargetId = "tblAssociations",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postElementAssociationSuccess",
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <label>Process Language</label>
+        @Html.DropDownList("idLanguage", languagesSelect, new Dictionary<string, object>() { { "class", "form-control frmFilter" }, { "onchange", "activeButtonFilter()" } })
+        <label>Game Genre</label>
+        @Html.DropDownList("idGenre", genresSelect, new Dictionary<string, object>() { { "class", "form-control frmFilter" }, {"onchange", "activeButtonFilter()" } })
+
+        <button id="btnFilter" class="btn btn-default form-control frmFilter" type="submit" disabled="">
+            <i class="glyphicon glyphicon-filter "></i> Load Associations
+        </button>
+    }
+    <div id="tblAssociations">
+        
+    </div>
+</div>
+    
+<hr/>
+<div id="tblElements">
+    
+</div>
