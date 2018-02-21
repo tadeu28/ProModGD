@@ -1,5 +1,5 @@
 ﻿@using Bpm2GP.Model.DataBase.Models
-@model IEnumerable<Bpm2GP.Model.DataBase.Models.GameGenreElement>
+@model IEnumerable<Bpm2GP.Model.DataBase.Models.GddConfigurationElements>
 
 @{
     var isConstant = false;
@@ -7,33 +7,34 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tblGameElements').DataTable({
+        $('#tableGddElements').DataTable({
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
 
         $("#btnFechar").click(function () {
-            $("#tblGenres").addClass("col-md-12");
-            $("#tblGenres").removeClass("col-md-6");
+            $("#tblGdd").addClass("col-md-12");
+            $("#tblGdd").removeClass("col-md-6");
             $(".btnShowElement").removeClass("hide");
-            $("#btnReloadLanguages").removeClass("hide");
-            $("#btnAddLanguage").removeClass("hide");
+            $(".btnDeleteGdd").removeClass("hide");
+            $("#btnReloadGdds").removeClass("hide");
+            $("#btnAddGdd").removeClass("hide");
 
-            $("#tblGenreElements").addClass("hide");
+            $("#tblGddElements").addClass("hide");
         });
     });
 
 </script>
-<h4>Game Genre Elements</h4>
+<h4>GDD Elements</h4>
 <hr />
-<table id="tblGameElements" class="table table-responsive table-striped table-bordered">
+<table id="tableGddElements" class="table table-responsive table-striped table-bordered">
     <thead>
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayName("Game Genre Elements")
             </th>
         </tr>
     </thead>
@@ -42,22 +43,23 @@
         {
             <tr>
                 <td>
-                    @if (!item.GameGenre.IsConstant)
+                    @if (!item.GddConfig.IsConstant)
                     {
                         <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-sm"
-                           data-ajax-update="#tblGenreElements" href="@Url.Action("RemoveGenreElement", "Configuration", new {id = item.Id})">
+                           data-ajax-update="#tblGenreElements" href="@Url.Action("RemoveGddElement", "Configuration", new {id = item.Id})">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
-                    }else
+                    }
+                    else
                     {
-                        isConstant = item.GameGenre.IsConstant;
+                        isConstant = item.GddConfig.IsConstant;
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    
                 </td>
             </tr>
         }
@@ -72,4 +74,3 @@
         <button class="btn btn-primary" data-toggle="modal" data-target="#dlgGenreElements"><i class="glyphicon glyphicon-plus-sign"></i> Add Element</button>
     }
 </div>
-@Html.Partial("_AddGenreElement", new GameGenreElement() { GameGenre = ViewBag.Genre })

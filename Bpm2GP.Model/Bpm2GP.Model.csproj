@@ -57,7 +57,9 @@
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core">
       <Private>True</Private>
     </Reference>
@@ -121,6 +123,8 @@
     <Compile Include="DataBase\Models\GameDesignMappingElements.cs" />
     <Compile Include="DataBase\Models\GameGenre.cs" />
     <Compile Include="DataBase\Models\GameGenreElement.cs" />
+    <Compile Include="DataBase\Models\GddConfiguration.cs" />
+    <Compile Include="DataBase\Models\GddConfigurationElements.cs" />
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
     <Compile Include="DataBase\Models\ModelingLanguageElement.cs" />
     <Compile Include="DataBase\Models\Project.cs" />
@@ -135,6 +139,8 @@
     <Compile Include="DataBase\Repository\GameDesignMappingElementsRepository.cs" />
     <Compile Include="DataBase\Repository\GameGenreElementRepository.cs" />
     <Compile Include="DataBase\Repository\GameGenreRepository.cs" />
+    <Compile Include="DataBase\Repository\GddConfigurationElementsRepository.cs" />
+    <Compile Include="DataBase\Repository\GddConfigurationRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectRepository.cs" />

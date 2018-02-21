@@ -41,6 +41,8 @@ namespace Bpm2GP.Model.DataBase
         public AssociationTypeRepository AssociationTypeRepository { get; set; }
         public AssociationRulesRepository AssociationRulesRepository { get; set; }
         public ProjectSolicitationRepository ProjectSolicitationRepository { get; set; }
+        public GddConfigurationRepository GddConfigurationRepository { get; set; }
+        public GddConfigurationElementsRepository GddConfigurationElementsRepository { get; set; }
 
         private DbFactory()
         {
@@ -60,6 +62,8 @@ namespace Bpm2GP.Model.DataBase
             this.AssociationTypeRepository = new AssociationTypeRepository(this.Session);
             this.AssociationRulesRepository = new AssociationRulesRepository(this.Session);
             this.ProjectSolicitationRepository = new ProjectSolicitationRepository(this.Session);
+            this.GddConfigurationElementsRepository = new GddConfigurationElementsRepository(this.Session);
+            this.GddConfigurationRepository = new GddConfigurationRepository(this.Session);
         }
 
         public void Initialize(object obj)

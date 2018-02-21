@@ -34,6 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -467,6 +470,8 @@
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
     <Content Include="App_Browsers\qt.browser" />
+    <None Include="Properties\PublishProfiles\Localhost PromodGD.pubxml" />
+    <None Include="Properties\PublishProfiles\SmartASP ProModGD.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bower_components\bpmn-js\.gitignore" />
     <Content Include="Scripts\canvg.js" />
@@ -655,6 +660,10 @@
     <Content Include="Views\User\_MySolicitations.cshtml" />
     <Content Include="Views\Project\ProcjectAccessSolicitation.cshtml" />
     <Content Include="Views\Configuration\_CopyLanguage.cshtml" />
+    <Content Include="Views\Configuration\GDDConfiguration.cshtml" />
+    <Content Include="Views\Configuration\_TblGdds.cshtml" />
+    <Content Include="Views\Configuration\_AddGdd.cshtml" />
+    <Content Include="Views\Configuration\_TblGddElements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

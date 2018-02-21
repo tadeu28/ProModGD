@@ -573,6 +573,78 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ShowElementsAssociationDialog"));
             }
         }
+
+        public ActionResult GDDConfiguration()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gddsConfig = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return View(gddsConfig);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Configuration", "GDDConfiguration"));
+            }
+        }
+
+        public PartialViewResult AddNewGdd()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gameGenres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
+
+                ViewData["GameGenre"] = new SelectList(gameGenres, "Id", "Name");
+
+                return PartialView("_AddGdd", new GddConfiguration());
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "AddNewGdd"));
+            }
+        }
+
+        public PartialViewResult SaveGdd(GddConfiguration gdd, Guid idGameGenre)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gameGenre = DbFactory.Instance.GameGenreRepository.FindFirstById(idGameGenre);
+
+                gdd.Designer = designer;
+                gdd.GameGenre = gameGenre;
+                gdd.Inactive = false;
+                gdd.IsConstant = false;
+                gdd.RegistrationDate = DateTime.Now;
+
+                DbFactory.Instance.GddConfigurationRepository.Save(gdd);
+
+                var gdds = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return PartialView("_TblGdds", gdds);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveGdd"));
+            }
+        }
+
+        public PartialViewResult GddElements(Guid id)
+        {
+            try
+            {
+                var elements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(id)
+                    .OrderBy(o => o.Title).ToList();
+                
+                return PartialView("_TblGddElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "GddElements"));
+            }
+        }
     }
 
 }
