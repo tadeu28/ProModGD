@@ -48,7 +48,7 @@
                 <td>
                     @if (!item.IsConstant)
                     {
-                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenres"
+                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGdd"
                            data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove GDD"
                            href="@Url.Action("RemoveGdd", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger btnDeleteGdd">
                             <i class="glyphicon glyphicon-trash"></i>
