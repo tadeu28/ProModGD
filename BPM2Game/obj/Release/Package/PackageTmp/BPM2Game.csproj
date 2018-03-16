@@ -660,6 +660,11 @@
     <Content Include="Views\User\_MySolicitations.cshtml" />
     <Content Include="Views\Project\ProcjectAccessSolicitation.cshtml" />
     <Content Include="Views\Configuration\_CopyLanguage.cshtml" />
+    <Content Include="Views\Configuration\GDDConfiguration.cshtml" />
+    <Content Include="Views\Configuration\_TblGdds.cshtml" />
+    <Content Include="Views\Configuration\_AddGdd.cshtml" />
+    <Content Include="Views\Configuration\_TblGddElements.cshtml" />
+    <Content Include="Views\Configuration\_AddGddSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

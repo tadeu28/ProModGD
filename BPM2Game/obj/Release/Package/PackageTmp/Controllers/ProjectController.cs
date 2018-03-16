@@ -446,7 +446,8 @@ namespace BPM2Game.Controllers
             try
             {
                 var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelId(id);
-                
+
+                ViewBag.idModel = id;
                 return PartialView("_ElementInfomationPane", elements);
             }
             catch (Exception ex)

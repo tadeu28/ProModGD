@@ -573,6 +573,277 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ShowElementsAssociationDialog"));
             }
         }
-    }
 
+        public ActionResult GDDConfiguration()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gddsConfig = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return View(gddsConfig);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "Configuration", "GDDConfiguration"));
+            }
+        }
+
+        public PartialViewResult AddNewGdd()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gameGenres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(designer, false);
+
+                ViewData["GameGenre"] = new SelectList(gameGenres, "Id", "Name");
+
+                return PartialView("_AddGdd", new GddConfiguration());
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "AddNewGdd"));
+            }
+        }
+
+        public PartialViewResult SaveGdd(GddConfiguration gdd, Guid idGameGenre)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gameGenre = DbFactory.Instance.GameGenreRepository.FindFirstById(idGameGenre);
+
+                gdd.Designer = designer;
+                gdd.GameGenre = gameGenre;
+                gdd.Inactive = false;
+                gdd.IsConstant = false;
+                gdd.RegistrationDate = DateTime.Now;
+
+                DbFactory.Instance.GddConfigurationRepository.Save(gdd);
+
+                var gdds = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return PartialView("_TblGdds", gdds);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "SaveGdd"));
+            }
+        }
+
+        public PartialViewResult GddElements(Guid id)
+        {
+            try
+            {
+                var elements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(id)
+                    .OrderBy(o => o.PresentationOrder).ToList();
+
+                ViewBag.IdGdd = id;
+                return PartialView("_TblGddElements", elements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "GddElements"));
+            }
+        }
+
+        public PartialViewResult AddGddSection(Guid id)
+        {
+            try
+            {
+                var Gdd = DbFactory.Instance.GddConfigurationRepository.FindFirstById(id);
+                var GddSections = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(id).OrderBy(o => o.PresentationOrder).ToList();
+
+                GddSections.Insert(0, new GddConfigurationElements()
+                {
+                    Title = "[None] - In case of Chapter"
+                });
+
+                var selectGDDSections = new SelectList(GddSections, "Id", "Title");
+
+                var gameGenreElements = Gdd.GameGenre.Elements.OrderBy(o => o.Name).ToList();
+
+                ViewBag.Gdd = Gdd;
+                ViewBag.SelectGDDSections = selectGDDSections;
+                ViewBag.GameGenreElements = gameGenreElements;
+                return PartialView("_AddGddSection", new GddConfigurationElements());
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "AddGddSection"));
+            }
+        }
+
+        public PartialViewResult SaveGddSection(Guid IdGdd, Guid IdGddElement, Guid IdSection, GddConfigurationElements gddElement, Guid[] cklGenreElements)
+        {
+            try
+            {
+                var Gdd = DbFactory.Instance.GddConfigurationRepository.FindFirstById(IdGdd);
+
+                var parent = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(IdSection);
+                if (parent != null)
+                {
+                    gddElement.ParentElement = parent;
+                }
+
+                var maxOrder = DbFactory.Instance.GddConfigurationElementsRepository.GetMaxOrder(IdGdd);
+                maxOrder++;
+                gddElement.PresentationOrder = maxOrder;
+
+                if (IdGddElement != gddElement.Id)
+                {
+                    var gddElemetDb = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(IdGddElement);
+
+                    gddElemetDb.Title = gddElement.Title;
+                    gddElemetDb.Description = gddElement.Description;
+                    gddElemetDb.ParentElement = gddElement.ParentElement;
+                    gddElement = gddElemetDb;
+                }
+                
+                if (cklGenreElements != null)
+                {
+                    var elements = DbFactory.Instance.GameGenreElementRepository.FindAllElementsByListId(cklGenreElements);
+
+                    foreach (var element in elements)
+                    {
+                        gddElement.GameGenreElements.Add(element);
+                    }
+                }
+
+                gddElement.GddConfig = Gdd;
+                DbFactory.Instance.GddConfigurationElementsRepository.SaveOrUpdate(gddElement);
+
+                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(Gdd.Id).OrderBy(o => o.PresentationOrder).ToList();
+
+                ViewBag.IdGdd = Gdd.Id;
+                return PartialView("_TblGddElements", gddElements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "AddGddSection"));
+            }
+        }
+
+        public PartialViewResult UnGddGameElement(Guid Id, Guid idGddElement)
+        {
+            try
+            {
+                var gddElement = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(idGddElement);
+                var gameElement = gddElement.GameGenreElements.FirstOrDefault(f => f.Id == Id);
+                if (gameElement != null)
+                {
+                    gddElement.GameGenreElements.Remove(gameElement);
+                    DbFactory.Instance.GddConfigurationElementsRepository.Update(gddElement);
+                }
+
+                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(gddElement.GddConfig.Id).OrderBy(o => o.PresentationOrder).ToList();
+
+                ViewBag.IdGdd = gddElement.GddConfig.Id;
+                return PartialView("_TblGddElements", gddElements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "UnGddGameElement"));
+            }
+        }
+
+        public PartialViewResult RemoveGddElement(Guid Id)
+        {
+            try
+            {
+                var gddElement = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(Id);
+                var idGdd = gddElement.GddConfig.Id;
+                DbFactory.Instance.GddConfigurationElementsRepository.Delete(gddElement);
+
+                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(idGdd).OrderBy(o => o.PresentationOrder).ToList();
+
+                ViewBag.IdGdd = idGdd;
+                return PartialView("_TblGddElements", gddElements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveGddElement"));
+            }
+        }
+
+        public PartialViewResult OrderGddElement(Guid Id, int order, String op)
+        {
+            try
+            {
+                var gddElement = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(Id);
+                
+                var gddElementChange = op == "d" ? 
+                    DbFactory.Instance.GddConfigurationElementsRepository.GetElementsByGddIdAndOrder(gddElement.GddConfig.Id, ++order) : 
+                    DbFactory.Instance.GddConfigurationElementsRepository.GetElementsByGddIdAndOrder(gddElement.GddConfig.Id, --order);
+
+                if (gddElementChange != null)
+                {
+                    var orderAux = gddElementChange.PresentationOrder;
+                    gddElementChange.PresentationOrder = gddElement.PresentationOrder;
+                    gddElement.PresentationOrder = orderAux;
+
+                    DbFactory.Instance.GddConfigurationElementsRepository.Update(gddElementChange);
+                    DbFactory.Instance.GddConfigurationElementsRepository.Update(gddElement);
+                }
+
+                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(gddElement.GddConfig.Id).OrderBy(o => o.PresentationOrder).ToList();
+
+                ViewBag.IdGdd = gddElement.GddConfig.Id;
+                return PartialView("_TblGddElements", gddElements);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "OrderGddElement"));
+            }
+        }
+
+        public PartialViewResult UpdateGddElement(Guid id)
+        {
+            try
+            {
+                var gddElement = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(id);
+                var GddSections = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(gddElement.GddConfig.Id).OrderBy(o => o.PresentationOrder).ToList();
+                GddSections.Remove(gddElement);
+
+                GddSections.Insert(0, new GddConfigurationElements()
+                {
+                    Title = "[None] - In case of Chapter"
+                });
+
+                var selectGDDSections = new SelectList(GddSections, "Id", "Title", gddElement.ParentElement);
+
+                var gameGenreElements = gddElement.GddConfig.GameGenre.Elements.Where(ge => gddElement.GameGenreElements.FirstOrDefault(a => a.Id == ge.Id) == null)
+                    .OrderBy(o => o.Name).ToList();
+
+                ViewBag.Gdd = gddElement.GddConfig;
+                ViewBag.SelectGDDSections = selectGDDSections;
+                ViewBag.GameGenreElements = gameGenreElements;
+                return PartialView("_AddGddSection", gddElement);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "UpdateGddElement"));
+            }
+        }
+
+        public PartialViewResult RemoveGdd(Guid Id)
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gdd = DbFactory.Instance.GddConfigurationRepository.FindFirstById(Id);
+                gdd.Inactive = true;
+
+                DbFactory.Instance.GddConfigurationRepository.Update(gdd);
+
+                var gdds = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return PartialView("_TblGdds", gdds);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "RemoveGdd"));
+            }
+        }
+    }
 }

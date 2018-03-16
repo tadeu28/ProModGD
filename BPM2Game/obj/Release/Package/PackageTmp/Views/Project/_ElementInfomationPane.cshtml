@@ -1,12 +1,8 @@
 ﻿@model IEnumerable<Bpm2GP.Model.DataBase.Models.GameDesignMappingElements>
 
-@{
-    var idModel = Model.FirstOrDefault()?.ModelElementId;
-}
-
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h4>Element: <strong>@idModel</strong></h4>
+        <h4>Element: <strong>@ViewBag.idModel</strong></h4>
     </div>
     <div class="panel-body">
         <table class="table table-striped table-bordered table-responsive">
