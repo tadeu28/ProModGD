@@ -2,10 +2,9 @@
 @model Bpm2GP.Model.DataBase.Models.Project
 
 @{
-    var genres = (List<GameGenre>)ViewData["Genres"];
-    genres.Insert(0, new GameGenre(){});
-    var selectGenres = new SelectList(genres, "Id", "Name");
-
+    var associations = (List<AssociationConf>) ViewData["Associations"];
+    associations.Insert(0, new AssociationConf(){});
+    var selectAssociation = new SelectList(associations, "Id", "Name");
 }
 
 <script type="text/javascript">
@@ -27,20 +26,20 @@
 
         $('[data-toggle="tooltip"]').tooltip();
 
-        $("#IdGenre").change(function() {
-            $.ajax({
-                type: "GET",
-                url: "/Project/AllMappings/" + $("#IdGenre").val(),
-                success: function (r) {
-                    $("#idAssociations").html("");
-                    var data = jQuery.parseJSON(r);
+        //$("#IdGenre").change(function() {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "/Project/AllMappings/" + $("#IdGenre").val(),
+        //        success: function (r) {
+        //            $("#idAssociations").html("");
+        //            var data = jQuery.parseJSON(r);
 
-                    $.each(data, function (key, entry) {
-                        $("#idAssociations").append($('<option></option>').val(entry.Id).html(entry.Name));
-                    });
-                }
-            });
-        });
+        //            $.each(data, function (key, entry) {
+        //                $("#idAssociations").append($('<option></option>').val(entry.Id).html(entry.Name));
+        //            });
+        //        }
+        //    });
+        //});
 
         $("#idAssociations").change(function () {
             if (($("#idAssociations").val() !== "00000000-0000-0000-0000-000000000000") && (modelFile != "")) {
@@ -112,17 +111,10 @@
             <div class="panel panel-info">
                 <div class="panel-heading">Game Map Actions</div>
                 <div class="panel-body" id="mapFields">
-
-                    <div class="form-group">
-                        @Html.Label("Genre", htmlAttributes: new { @class = "control-label col-md-4" })
-                        <div class="col-md-8">
-                            @Html.DropDownList("IdGenre", selectGenres, new Dictionary<string, object>() {{"class", "form-control"}})
-                        </div>
-                    </div>
                     <div class="form-group">
                         @Html.Label("Associations", htmlAttributes: new { @class = "control-label col-md-4" })
                         <div class="col-md-8">
-                            <select id="idAssociations" name="idAssociations" class="form-control"></select>
+                            @Html.DropDownList("idAssociations", selectAssociation, new Dictionary<string, object>() { { "class", "form-control" } })
                         </div>
 
                     </div>

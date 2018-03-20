@@ -60,10 +60,10 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayName("Start Date")
+            @Html.DisplayName("Game Genre")
         </th>
         <th>
-            @Html.DisplayName("Last Update")
+            @Html.DisplayName("Start Date")
         </th>
         <th>
             @Html.DisplayName("Process Owner")
@@ -76,7 +76,9 @@
     {
         <tr>
             <td class="text-center">
-                <input type="checkbox" value="@item.Id" name="prjs[]" />
+                @if (item.Owner.Id == LoginUtils.User.Designer.Id) {
+                    <input type="checkbox" value="@item.Id" name="prjs[]"/>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -85,10 +87,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => item.GameGenre.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastUpdate)
+                @Html.DisplayFor(modelItem => item.StartDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Owner.Name)
@@ -125,4 +127,4 @@
 </div>
 }
 
-@Html.Partial("_AddProject", new Project())
+@Html.Partial("_AddProject", new Project(), new ViewDataDictionary() { { "Genres", ViewBag.Genres } })

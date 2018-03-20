@@ -21,38 +21,39 @@
         <li class="active">Process Modelling</li>
     </ol>
 </div>
+
 <div class="row"></div>
 <div class="alert alert-success row">
     <form class="form-inline" id="fileSelected">
-        <div class="form-group col-md-5">
-            <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
+        <div class="form-group col-md-10">
+            <input id="projectId" type="hidden" value="@ViewBag.ProjectId"/>
             <input class="form-control" id="edtBpmnInput" type="file">
-        </div>
-        <div class="col-md-5">
-            <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Open Process Model">
-                <i class="glyphicon glyphicon-cloud-upload "></i>
+            <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Upload Process Model">
+                <i class="glyphicon glyphicon-cloud-upload "></i> Upload Process
             </button>
             <a href="#" class="btn btn-default" id="newProcess" data-toggle="tooltip" data-placement="bottom" title="New Process Model">
-                <i class="glyphicon glyphicon-file "></i>
+                <i class="glyphicon glyphicon-file "></i> Create New Process
             </a>
             <a href="#" class="btn btn-success" id="save-button" data-toggle="tooltip" data-placement="bottom" title="Save Process Model">
-                <i class="glyphicon glyphicon-floppy-disk"></i>
+                <i class="glyphicon glyphicon-floppy-disk"></i> Save Process Model
             </a>
             <a href="#" class="btn btn-warning" id="save-download" data-toggle="tooltip" data-placement="bottom" title="Download Process Model">
-                <i class="glyphicon glyphicon-cloud-download"></i>
+                <i class="glyphicon glyphicon-cloud-download"></i> Download Model (BPMN)
             </a>
             <a href="#" class="btn btn-info" id="img-download" data-toggle="tooltip" data-placement="bottom" title="Download as Image">
-                <i class="glyphicon glyphicon-picture"></i>
+                <i class="glyphicon glyphicon-picture"></i> Download Model (PNG)
             </a>
             <a href="#" class="btn btn-info" id="img-svg" data-toggle="tooltip" data-placement="bottom" title="Download as SVG">
-                <i class="glyphicon glyphicon-compressed"></i>
+                <i class="glyphicon glyphicon-compressed"></i> Download Model (SVG)
             </a>
         </div>
         <div class="col-md-2 text-right">
-            
+
         </div>
     </form>
 </div>
+<strong>Obs.: To change something in the model, only make a double-click above the BPMN element, of click in "Show Properties".</strong>
+
 <!-- element to draw bpmn diagram in -->
 <div id="modelArea" class="text-right">
     <div class="btn-group-xs">

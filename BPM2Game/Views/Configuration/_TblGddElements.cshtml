@@ -51,79 +51,89 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td class="btn-group-xs text-center">
-                    @if (!item.GddConfig.IsConstant)
-                    {
-                        <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-xs"
-                           data-ajax-update="#tblGddElements" href="@Url.Action("RemoveGddElement", "Configuration", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Remove GDD Section">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </a>
-                        <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-default btn-xs" data-ajax-success="showGddSectionDialog" data-ajax-loading="#divCarregando"
-                           data-ajax-update="#tblAddSection" href="@Url.Action("UpdateGddElement", "Configuration", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Edit GDD Section">
-                            <i class="glyphicon glyphicon-edit"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        isConstant = item.GddConfig.IsConstant;
-                    }
-                </td>
-                <td class="btn-group-xs text-center">
+    @{ var i = 0; }
+    @foreach (var item in Model)
+    {
+        i++;
 
-                    <div class="badge">@item.PresentationOrder</div>
-                    @if (!item.GddConfig.IsConstant)
+        <tr>
+            <td class="btn-group-xs text-center">
+                @if (!item.GddConfig.IsConstant)
+                {
+                    <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-danger btn-xs"
+                        data-ajax-update="#tblGddElements" href="@Url.Action("RemoveGddElement", "Configuration", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Remove GDD Section">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                    <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-default btn-xs" data-ajax-success="showGddSectionDialog" data-ajax-loading="#divCarregando"
+                        data-ajax-update="#tblAddSection" href="@Url.Action("UpdateGddElement", "Configuration", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Edit GDD Section">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                }
+                else
+                {
+                    isConstant = item.GddConfig.IsConstant;
+                }
+            </td>
+            <td class="btn-group-xs text-center">
+
+                <div class="badge">@item.PresentationOrder</div>
+                @if (!item.GddConfig.IsConstant)
+                {
+                    if (i != 1)
                     {
                         <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-default btn-xs" data-ajax-loading="#divCarregando"
                            data-ajax-update="#tblGddElements" href="@Url.Action("OrderGddElement", "Configuration", new {id = item.Id, order = item.PresentationOrder, op = "u"})" data-toggle="tooltip"
                            data-placement="top" title="Up Order">
                             <i class="glyphicon glyphicon-arrow-up"></i>
                         </a>
+                    }
+
+                    if (i != Model.Count())
+                    {
                         <a data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" class="btn btn-default btn-xs" data-ajax-loading="#divCarregando"
                            data-ajax-update="#tblGddElements" href="@Url.Action("OrderGddElement", "Configuration", new {id = item.Id, order = item.PresentationOrder, op = "d"})" data-toggle="tooltip"
                            data-placement="top" title="Down Order">
                             <i class="glyphicon glyphicon-arrow-down"></i>
                         </a>
                     }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                    @if (item.ParentElement != null)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+                @if (item.ParentElement != null)
+                {
+                    <br/><small style="color: silver"> [Parent: @item.ParentElement.Title]</small>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td class="btn-group-sm">
+                @if (item.GameGenreElements.Count > 0)
+                {
+                    foreach (var ge in item.GameGenreElements)
                     {
-                        <small style="color: silver"> [Parent: @item.ParentElement.Title]</small>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td class="btn-group-sm">
-                    @if (item.GameGenreElements.Count > 0)
-                    {
-                        foreach (var ge in item.GameGenreElements)
+                        if (!isConstant)
                         {
-                            if (!isConstant)
-                            {
-                                <div class="btn btn-default">
-                                    <i class="glyphicon glyphicon-knight"></i> @ge.Name
-                                    <a class="btn btn-danger btn-xs btn-remove" data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-toggle="tooltip" data-placement="top" title="Remove Element"
-                                       data-ajax-mode="replace" data-ajax-update="#tblGddElements" href="@Url.Action("UnGddGameElement", "Configuration", new {id = ge.Id, idGddElement = item.Id})">
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                    </a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="btn btn-default">
-                                    <i class="glyphicon glyphicon-knight"></i> @ge.Name
-                                </div>
-                            }
+                            <div class="btn btn-default">
+                                <i class="glyphicon glyphicon-knight"></i> @ge.Name
+                                <a class="btn btn-danger btn-xs btn-remove" data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-toggle="tooltip" data-placement="top" title="Remove Element"
+                                   data-ajax-mode="replace" data-ajax-update="#tblGddElements" href="@Url.Action("UnGddGameElement", "Configuration", new {id = ge.Id, idGddElement = item.Id})">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="btn btn-default">
+                                <i class="glyphicon glyphicon-knight"></i> @ge.Name
+                            </div>
                         }
                     }
-                </td>
-            </tr>
-        }
+                }
+            </td>
+        </tr>
+    }
     </tbody>
     <tfoot></tfoot>
 </table>

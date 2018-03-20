@@ -25,6 +25,8 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual byte[] BpmnModel { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual Designer Owner { get; set; }
+        public virtual GameGenre GameGenre { get; set; }
+        public virtual ProjectGdd ProjectGdd { get; set; }
         public virtual IList<DesignMapping> DesignMappings { get; set; }
         public virtual IList<Designer> Designers { get; set; }
 
@@ -70,6 +72,12 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Lazy(LazyRelation.NoLazy);
             });
 
+            ManyToOne(x => x.GameGenre, m =>
+            {
+                m.Column("idGameGenre");
+                m.Lazy(LazyRelation.NoLazy);
+            });
+
             Bag(x => x.Designers, map =>
             {
                 map.Cascade(Cascade.None);
@@ -77,6 +85,12 @@ namespace Bpm2GP.Model.DataBase.Models
                 map.Key(k => k.Column("idProject"));
             }, 
             o => o.ManyToMany(p => p.Column("idDesigner")));
+
+            OneToOne(x => x.ProjectGdd, m =>
+            {
+                m.PropertyReference(typeof(ProjectGdd).GetProperty("Project"));
+                m.Lazy(LazyRelation.NoLazy);
+            });
         }   
     }
 }

@@ -792,19 +792,19 @@ namespace BPM2Game.Mapping.Bpmn
                 var alternativeTaskNodes = FindElementIgnoringNonActivities(bpmnElement, bpmnElement, new[] { "outgoing", "targetref" });
 
                 var description = "";
-                var ruleFormat = "If [{0}] in [{1}] them ({2})";
+                var ruleFormat = "If [{0}] in [{1}] then ({2})";
 
                 //Boundary that stop action
                 if (bpmnElement.Attributes.ContainsKey("cancelActivity") &&
                     bpmnElement.Attributes["cancelActivity"] != "")
                 {
-                    var themStr = "";
+                    var thenStr = "";
                     foreach (var alternativeNode in targetElementNodes)
                     {
                         var el = alternativeNode.Element;
                         var elStr = el.Attributes.ContainsKey("name") ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"]) : el.Attributes["id"];
 
-                        themStr += "|" + "[" + elStr + "]";
+                        thenStr += "|" + "[" + elStr + "]";
                     }
 
                     foreach (var alternativeNode in alternativeTaskNodes)
@@ -812,13 +812,13 @@ namespace BPM2Game.Mapping.Bpmn
                         var el = alternativeNode.Element;
                         var elStr = el.Attributes.ContainsKey("name") ? (el.Attributes["name"] != "" ? el.Attributes["name"] : el.Attributes["id"]) : el.Attributes["id"];
 
-                        themStr += "|" + "[" + elStr + "]";
+                        thenStr += "|" + "[" + elStr + "]";
                     }
 
-                    if (themStr.Trim() != "")
+                    if (thenStr.Trim() != "")
                     {
-                        themStr = themStr.Remove(0, 1).Trim();
-                        themStr = themStr.Replace("|", " and ");
+                        thenStr = thenStr.Remove(0, 1).Trim();
+                        thenStr = thenStr.Replace("|", " and ");
                     }
 
                     description = String.Format(ruleFormat,
@@ -828,7 +828,7 @@ namespace BPM2Game.Mapping.Bpmn
                         incomeTask.Attributes.ContainsKey("name")
                                 ? (incomeTask.Attributes["name"] != "" ? incomeTask.Attributes["name"] : incomeTask.Attributes["id"])
                                 : incomeTask.Attributes["id"],
-                        themStr);
+                        thenStr);
 
                     var ge = new GameDesignMappingElements()
                     {
@@ -844,7 +844,7 @@ namespace BPM2Game.Mapping.Bpmn
                 }
                 else
                 {
-                    ruleFormat = "If [{0}] in [{1}] them [{2}]";
+                    ruleFormat = "If [{0}] in [{1}] then [{2}]";
                     foreach (var alternativeNode in alternativeTaskNodes)
                     {
                         var el = alternativeNode.Element;
@@ -875,7 +875,7 @@ namespace BPM2Game.Mapping.Bpmn
 
                     foreach (var normalFlowNode in targetElementNodes)
                     {
-                        ruleFormat = "If [{0}] not in [{1}] them [{2}]";
+                        ruleFormat = "If [{0}] not in [{1}] then [{2}]";
                         var el = normalFlowNode.Element;
 
                         description = String.Format(ruleFormat,
@@ -982,7 +982,7 @@ namespace BPM2Game.Mapping.Bpmn
                                     seqFlowElement = targetElementNode.SequenceFlowIncomed;
                                 }
 
-                                var ruleFormat = "If [{0}] == [{1}] them [{2}]";
+                                var ruleFormat = "If [{0}] == [{1}] then [{2}]";
                                 var description = String.Format(ruleFormat,
                                     incomeTask.Attributes.ContainsKey("name")
                                         ? (incomeTask.Attributes["name"] != ""
@@ -1005,7 +1005,7 @@ namespace BPM2Game.Mapping.Bpmn
                                 if (bpmnElement.Attributes.ContainsKey("name") &&
                                     bpmnElement.Attributes["name"].Trim() != "")
                                 {
-                                    ruleFormat = "If [{0}] and [{1}] == [{2}] them [{3}]";
+                                    ruleFormat = "If [{0}] and [{1}] == [{2}] then [{3}]";
                                     description = String.Format(ruleFormat,
                                         incomeTask.Attributes.ContainsKey("name")
                                             ? (incomeTask.Attributes["name"] != ""
@@ -1073,7 +1073,7 @@ namespace BPM2Game.Mapping.Bpmn
                                         seqFlowElement = targetElementNode.SequenceFlowIncomed;
                                     }
 
-                                    var ruleFormat = "If [{0}] == [{1}] them [{2}]";
+                                    var ruleFormat = "If [{0}] == [{1}] then [{2}]";
                                     var description = String.Format(ruleFormat,
                                         incomeTask.Attributes.ContainsKey("name")
                                             ? (incomeTask.Attributes["name"] != ""
@@ -1096,7 +1096,7 @@ namespace BPM2Game.Mapping.Bpmn
                                     if (bpmnElement.Attributes.ContainsKey("name") &&
                                         bpmnElement.Attributes["name"].Trim() != "")
                                     {
-                                        ruleFormat = "If [{0}] and [{1}] == [{2}] them [{3}]";
+                                        ruleFormat = "If [{0}] and [{1}] == [{2}] then [{3}]";
                                         description = String.Format(ruleFormat,
                                             incomeTask.Attributes.ContainsKey("name")
                                                 ? (incomeTask.Attributes["name"] != ""
@@ -1190,7 +1190,7 @@ namespace BPM2Game.Mapping.Bpmn
                     {
                         var previousTask = previousTaskNode.Element;
 
-                        const string ruleString = "Perform [{0}] them perform in parallel [{1}]";
+                        const string ruleString = "Perform [{0}] then perform in parallel [{1}]";
                         var description = String.Format(ruleString,
                                 previousTask.Attributes.ContainsKey("name") ? 
                                 (previousTask.Attributes["name"] != "" ? previousTask.Attributes["name"] : previousTask.Attributes["id"]) : previousTask.Attributes["id"],

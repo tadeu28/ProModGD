@@ -128,6 +128,9 @@
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
     <Compile Include="DataBase\Models\ModelingLanguageElement.cs" />
     <Compile Include="DataBase\Models\Project.cs" />
+    <Compile Include="DataBase\Models\ProjectGdd.cs" />
+    <Compile Include="DataBase\Models\ProjectGddSection.cs" />
+    <Compile Include="DataBase\Models\ProjectGddSectionContent.cs" />
     <Compile Include="DataBase\Models\ProjectSolicitation.cs" />
     <Compile Include="DataBase\Models\User.cs" />
     <Compile Include="DataBase\Repository\AssociationConfElementRepository.cs" />
@@ -143,6 +146,8 @@
     <Compile Include="DataBase\Repository\GddConfigurationRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectGddRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectGddSectionRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectSolicitationRepository.cs" />
     <Compile Include="DataBase\Repository\RepositoryBase.cs" />

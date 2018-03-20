@@ -9,5 +9,5 @@
 </div>
 
 <div id="tblPrjs" class="col-md-12">
-    @Html.Partial("_TblProjects", Model)
+    @Html.Partial("_TblProjects", Model, new ViewDataDictionary() { {"Genres", ViewBag.Genres} })
 </div>
