@@ -597,10 +597,11 @@ namespace BPM2Game.Controllers
             {
                 var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(id);
 
-                var gddSections = DbFactory.Instance.ProjectGddSectionRepository.FindAllByProjectId(id);
+                var gddSections = DbFactory.Instance.ProjectGddSectionRepository.FindAllByProjectId(id).OrderBy(o => o.DtHoraCadastro).ToList();
                 gddSections.Insert(0, new ProjectGddSection()
                 {
-                    Title = ""
+                    Title = "",
+
                 });
 
                 ViewBag.Sections = new SelectList(gddSections, "Id", "Title");
@@ -625,6 +626,7 @@ namespace BPM2Game.Controllers
 
                 section.ProjectGdd = gdd;
                 section.ParentSection = parentSection;
+                section.DtHoraCadastro = DateTime.Now;
 
                 DbFactory.Instance.ProjectGddSectionRepository.Save(section);
 

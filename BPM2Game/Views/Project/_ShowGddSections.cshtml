@@ -1,0 +1,23 @@
+﻿@model Bpm2GP.Model.DataBase.Models.ProjectGddSection
+
+@{
+    var indent = (int) ViewData["indent"];
+}
+
+@foreach (var chapter in Model.ChildrenSections.OrderBy(o => o.DtHoraCadastro))
+{
+        <div class="col-md-8">
+            <h@(indent) style="margin-top: 0px; margin-bottom: 0px;">@chapter.Title</h@(indent)>
+        </div>
+        <div class="col-md-4 btn-group-xs text-right">
+            <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus-sign"></i> New Content</a>
+            <a href="#" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove Section</a>
+        </div>
+    
+        if (chapter.ChildrenSections.Count > 0)
+        {
+            @Html.Partial("_ShowGddSections", chapter, new ViewDataDictionary() { { "indent", indent + 1 } })
+        }
+        <hr/>
+}
+    

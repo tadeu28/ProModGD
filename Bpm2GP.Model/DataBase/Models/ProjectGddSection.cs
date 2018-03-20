@@ -14,6 +14,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String Title { get; set; }
         public virtual ProjectGdd ProjectGdd { get; set; }
         public virtual ProjectGddSection ParentSection { get; set; }
+        public virtual DateTime DtHoraCadastro { get; set; }
         public virtual IList<ProjectGddSection> ChildrenSections { get; set; }
         public virtual IList<ProjectGddSectionContent> Contents { get; set; }
 
@@ -31,6 +32,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Title);
+            Property(x => x.DtHoraCadastro);
 
             ManyToOne(x => x.ParentSection, m =>
             {

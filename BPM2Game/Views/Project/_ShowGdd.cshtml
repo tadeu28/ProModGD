@@ -23,7 +23,30 @@
             <h4>Created by: @(Model.DesignerName) in @(Model.CreationDate.ToShortDateString())</h4>
             <h6 style="color: silver;">Game Id: @(Model.Project.Id)</h6>
         </div>
-        <hr/>
+        @foreach (var chapter in Model.Sections.OrderBy(o => o.DtHoraCadastro))
+        {
+            if (chapter.ParentSection == null)
+            {
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 style="margin-top: 0px; margin-bottom: 0px;">@chapter.Title</h2>
+                    </div>
+                    <div class="col-md-4 text-right btn-group-xs">
+                        <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus-sign"></i> New Content</a>
+                        <a href="#" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove Section</a>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    @if (chapter.ChildrenSections.Count > 0)
+                    {
+                        @Html.Partial("_ShowGddSections", chapter, new ViewDataDictionary() {{"indent", 3}})
+                    }
+                </div>
+                <hr/>
+            }
+        }
     </div>
 }
 

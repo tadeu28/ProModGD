@@ -667,6 +667,7 @@
     <Content Include="Views\Configuration\_AddGddSection.cshtml" />
     <Content Include="Views\Project\_ShowGdd.cshtml" />
     <Content Include="Views\Project\_AddGddSection.cshtml" />
+    <Content Include="Views\Project\_ShowGddSections.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
