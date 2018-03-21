@@ -11697,11 +11697,11 @@ function SelectionBehavior(eventBus, selection, canvas, elementRegistry) {
   eventBus.on('element.click', function(event) {
 
     var element = event.element;
-
+      
     //TADEU: Informações do Elemento
     $.ajax({
         type: "GET",
-        url: "/Project/ShowElementInfo/" + element.id,
+        url: "/Project/ShowElementInfo/" + element.id + "?projectId=" + $("#projectId").val(),
         success: function (r) {
             $("#elementDetails").prop("open", true);
             $("#selElementView").html(r);

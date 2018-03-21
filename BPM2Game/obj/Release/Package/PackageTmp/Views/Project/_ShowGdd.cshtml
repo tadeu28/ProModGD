@@ -1,0 +1,53 @@
+﻿@model Bpm2GP.Model.DataBase.Models.ProjectGdd
+
+<script type="text/javascript">
+    function showSectionModal() {
+        $("#dlgGddSection").modal("show");
+    }
+</script>
+
+<div class="panel-heading">
+    <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddAddSection"
+       data-ajax-loading="#divCarregando" data-toggle="tooltip" data-ajax-success="showSectionModal"
+       data-placement="bottom" title="New Chapter/Section"
+       href="@Url.Action("NewGddSection", "Project", new {id = Model.Id})" class="btn btn-default">
+        <i class="glyphicon glyphicon-plus"></i> New Chapter/Section
+    </a>
+</div>
+@if (Model.Project != null)
+{
+    <div class="panel-body">
+        <div class="row text-center">
+            <h1>@Model.Project.Title</h1>
+            <h3>(Game Design Document)</h3>
+            <h4>Created by: @(Model.DesignerName) in @(Model.CreationDate.ToShortDateString())</h4>
+            <h6 style="color: silver;">Game Id: @(Model.Project.Id)</h6>
+        </div>
+        @foreach (var chapter in Model.Sections.OrderBy(o => o.DtHoraCadastro))
+        {
+            if (chapter.ParentSection == null)
+            {
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 style="margin-top: 0px; margin-bottom: 0px;">@chapter.Title</h2>
+                    </div>
+                    <div class="col-md-4 text-right btn-group-xs">
+                        <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus-sign"></i> New Content</a>
+                        <a href="#" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove Section</a>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    @if (chapter.ChildrenSections.Count > 0)
+                    {
+                        @Html.Partial("_ShowGddSections", chapter, new ViewDataDictionary() {{"indent", 3}})
+                    }
+                </div>
+                <hr/>
+            }
+        }
+    </div>
+}
+
+<div id="gddAddSection"></div>

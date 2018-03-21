@@ -451,11 +451,11 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public PartialViewResult ShowElementInfo(String id)
+        public PartialViewResult ShowElementInfo(String id, String projectId)
         {
             try
             {
-                var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelId(id);
+                var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelIdAndProjectId(id, projectId);
 
                 ViewBag.idModel = id;
                 return PartialView("_ElementInfomationPane", elements);

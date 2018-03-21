@@ -19,5 +19,11 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             return this.Session.Query<GameDesignMappingElements>().Where(w => w.ModelElementId.ToLower() == id.ToLower()).ToList();
         }
+
+        public List<GameDesignMappingElements> FindFirstByModelIdAndProjectId(String id, String projectId)
+        {
+            return this.Session.Query<GameDesignMappingElements>().Where(w => w.ModelElementId.ToLower() == id.ToLower() && 
+                                                                         w.DesignMapping.Project.Id.ToString() == projectId).ToList();
+        }
     }
 }

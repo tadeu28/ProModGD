@@ -219,6 +219,21 @@ namespace BPM2Game.Controllers
             }
         }
 
+        public PartialViewResult ReloadAllGdds()
+        {
+            try
+            {
+                var designer = LoginUtils.User.Designer;
+                var gdds = DbFactory.Instance.GddConfigurationRepository.FindAllGenresByDesigner(designer, false);
+
+                return PartialView("_TblGdds", gdds);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Configuration", "ReloadAllGenres"));
+            }
+        }
+
         public PartialViewResult SaveGenre(GameGenre genre)
         {
             try
@@ -773,8 +788,8 @@ namespace BPM2Game.Controllers
                 var gddElement = DbFactory.Instance.GddConfigurationElementsRepository.FindFirstById(Id);
                 
                 var gddElementChange = op == "d" ? 
-                    DbFactory.Instance.GddConfigurationElementsRepository.GetElementsByGddIdAndOrder(gddElement.GddConfig.Id, ++order) : 
-                    DbFactory.Instance.GddConfigurationElementsRepository.GetElementsByGddIdAndOrder(gddElement.GddConfig.Id, --order);
+                    DbFactory.Instance.GddConfigurationElementsRepository.GetNextElementInOrder(gddElement) : 
+                    DbFactory.Instance.GddConfigurationElementsRepository.GetPreviousElementInOrder(gddElement);
 
                 if (gddElementChange != null)
                 {
@@ -786,7 +801,8 @@ namespace BPM2Game.Controllers
                     DbFactory.Instance.GddConfigurationElementsRepository.Update(gddElement);
                 }
 
-                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(gddElement.GddConfig.Id).OrderBy(o => o.PresentationOrder).ToList();
+                var gddElements = DbFactory.Instance.GddConfigurationElementsRepository.FindAllElementsByGddId(gddElement.GddConfig.Id)
+                    .OrderBy(o => o.PresentationOrder).ToList();
 
                 ViewBag.IdGdd = gddElement.GddConfig.Id;
                 return PartialView("_TblGddElements", gddElements);

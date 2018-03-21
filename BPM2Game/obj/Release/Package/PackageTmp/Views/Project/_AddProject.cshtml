@@ -1,5 +1,11 @@
 ﻿@using System.Activities.Expressions
+@using Bpm2GP.Model.DataBase.Models
 @model Bpm2GP.Model.DataBase.Models.Project
+
+@{
+    var genres = (List<GameGenre>) ViewData["Genres"];
+    var dropGenres = new SelectList(genres, "Id", "Name");
+}
 
 <script>
     $.validator.unobtrusive.parse(document);
@@ -44,6 +50,13 @@
                             <div class="col-md-10">
                                 @Html.EditorFor(model => model.Title, new {htmlAttributes = new {@class = "form-control"}})
                                 @Html.ValidationMessageFor(model => model.Title, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Game Genre", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("IdGameGenre", dropGenres, new Dictionary<string, object>() { { "class", "form-control" } })
                             </div>
                         </div>
 

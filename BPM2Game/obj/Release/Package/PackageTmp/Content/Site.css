@@ -172,3 +172,7 @@ textarea {
     text-align: center;
     text-shadow: none;
 }
+
+.olclass { counter-reset: item}
+.liclass { display: block }
+.liclass:before { content: counters(item, ".") " "; counter-increment: item }

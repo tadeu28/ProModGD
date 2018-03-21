@@ -27,6 +27,8 @@ namespace BPM2Game.Controllers
             {
                 var projects = DbFactory.Instance.ProjectRepository.FindAll().Where(w => !w.Inactive).OrderByDescending(o => o.LastUpdate).ToList();
 
+                ViewBag.Genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer, false);
+
                 return View(projects);
             }
             catch (Exception ex)
@@ -36,19 +38,24 @@ namespace BPM2Game.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult SaveNewProject(Project project)
+        public PartialViewResult SaveNewProject(Project project, Guid IdGameGenre)
         {
             try
             {
+                var genre = DbFactory.Instance.GameGenreRepository.FindFirstById(IdGameGenre);
+
                 project.Owner = LoginUtils.User.Designer;
                 project.StartDate = DateTime.Now;
                 project.LastUpdate = DateTime.Now;
+                project.GameGenre = genre;
                 project.Designers.Add(project.Owner);
 
                 DbFactory.Instance.ProjectRepository.Save(project);
 
                 var projects = DbFactory.Instance.ProjectRepository.FindAll().Where(w => !w.Inactive).OrderByDescending(o => o.LastUpdate).ToList();
 
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer, false);
+                ViewData["Genres"] = genres;
                 return PartialView("_TblProjects", projects);
             }
             catch (Exception ex)
@@ -78,6 +85,8 @@ namespace BPM2Game.Controllers
                     projects = DbFactory.Instance.ProjectRepository.FindAll().Where(w => !w.Inactive).OrderByDescending(o => o.LastUpdate).ToList();
                 }
 
+                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer, false);
+                ViewData["Genres"] = genres;
                 return PartialView("_TblProjects", projects);
             }
             catch (Exception ex)
@@ -189,9 +198,10 @@ namespace BPM2Game.Controllers
             try
             {
                 var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
-                var genres = DbFactory.Instance.GameGenreRepository.FindAllGenresByDesigner(LoginUtils.User.Designer, false);
+                var associations =
+                    DbFactory.Instance.AssociationConfRepository.FindAllElementsByGenre(project.GameGenre.Id, false);
 
-                ViewData["Genres"] = genres;
+                ViewData["Associations"] = associations;
                 return PartialView("_GameConfiguration", project);
             }
             catch (Exception ex)
@@ -441,11 +451,11 @@ namespace BPM2Game.Controllers
             }
         }
 
-        public PartialViewResult ShowElementInfo(String id)
+        public PartialViewResult ShowElementInfo(String id, String projectId)
         {
             try
             {
-                var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelId(id);
+                var elements = DbFactory.Instance.GameDesignMappingElementsRepository.FindFirstByModelIdAndProjectId(id, projectId);
 
                 ViewBag.idModel = id;
                 return PartialView("_ElementInfomationPane", elements);
@@ -528,13 +538,107 @@ namespace BPM2Game.Controllers
             try
             {
                 var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
-                
-                return PartialView("_GameDesignDocument");
+
+                ViewBag.Gdd = project.ProjectGdd;
+
+                return PartialView("_GameDesignDocument", project);
             }
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "GameDesignDocument"));
             }
         }
+
+        public PartialViewResult CreateGdd(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+
+                var gdd = new ProjectGdd()
+                {
+                    CreationDate = DateTime.Now,
+                    Project = project,
+                    DesignerName = LoginUtils.User.Designer.Name
+                };
+
+                gdd = DbFactory.Instance.ProjectGddRepository.Save(gdd);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "CreateGdd"));
+            }
+        }
+
+        public PartialViewResult DeleteGdd(Guid id)
+        {
+            try
+            {
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(id);
+
+                if (gdd != null)
+                {
+                    DbFactory.Instance.ProjectGddRepository.Delete(gdd);
+                }
+
+                return PartialView("_ShowGdd", new ProjectGdd());
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "DeleteGdd"));
+            }
+        }
+
+        public PartialViewResult NewGddSection(Guid id)
+        {
+            try
+            {
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(id);
+
+                var gddSections = DbFactory.Instance.ProjectGddSectionRepository.FindAllByProjectId(id).OrderBy(o => o.DtHoraCadastro).ToList();
+                gddSections.Insert(0, new ProjectGddSection()
+                {
+                    Title = "",
+
+                });
+
+                ViewBag.Sections = new SelectList(gddSections, "Id", "Title");
+                return PartialView("_AddGddSection", new ProjectGddSection()
+                {
+                    ProjectGdd = gdd
+                });
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "NewGddSection"));
+            }
+        }
+
+
+        public PartialViewResult SaveGddSection(ProjectGddSection section, Guid idGdd, Guid idSection)
+        {
+            try
+            {
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(idGdd);
+                var parentSection = DbFactory.Instance.ProjectGddSectionRepository.FindFirstById(idSection);
+
+                section.ProjectGdd = gdd;
+                section.ParentSection = parentSection;
+                section.DtHoraCadastro = DateTime.Now;
+
+                DbFactory.Instance.ProjectGddSectionRepository.Save(section);
+
+                gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(idGdd);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "SaveGddSection"));
+            }
+        }
+        
     }
 }

@@ -52,7 +52,7 @@
         <div class="form-group">
             <label for="basic-url">Features</label>
             <div class="btn-group-sm">
-                @if (@Model.BpmnModelPath != "")
+                @if (!String.IsNullOrEmpty(Model.BpmnModelPath))
                 {
                     <div class="btn btn-success">
                         <i class="glyphicon glyphicon-ok-circle"></i> Business Process Model
