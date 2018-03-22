@@ -49,7 +49,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.GameGenreElements, map =>
             {
                 map.Cascade(Cascade.None);
-                map.Lazy(CollectionLazy.Lazy);
+                map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("idGddElement"));
             },
             o => o.ManyToMany(p => p.Column("idGameGenre")));

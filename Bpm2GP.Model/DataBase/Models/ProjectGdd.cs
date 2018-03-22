@@ -14,6 +14,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual DateTime CreationDate { get; set; }
         public virtual String DesignerName { get; set; }
         public virtual Project Project { get; set; }
+        public virtual Boolean BasedOnMapping { get; set; }
         public virtual IList<ProjectGddSection> Sections { get; set; }
 
         public ProjectGdd()
@@ -30,6 +31,7 @@ namespace Bpm2GP.Model.DataBase.Models
 
             Property(x => x.CreationDate);
             Property(x => x.DesignerName);
+            Property(x => x.BasedOnMapping);
 
             ManyToOne(x => x.Project, m =>
             {

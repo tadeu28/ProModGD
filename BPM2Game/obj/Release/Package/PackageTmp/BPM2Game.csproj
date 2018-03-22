@@ -222,6 +222,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Gdd\GddMappingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -416,60 +417,70 @@
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\filelist.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image001.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image001.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image002.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image003.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image003.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image004.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image005.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image005.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image006.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image007.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image007.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image008.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image009.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image009.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image010.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image011.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image011.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image012.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image013.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image013.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image014.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image015.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image015.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image016.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image017.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image017.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image018.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image019.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image019.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -479,42 +490,50 @@
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image021.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image022.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image022.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image023.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image024.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image024.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image025.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image026.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image026.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image027.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image028.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image028.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image029.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image030.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image030.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image031.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image032.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image032.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image033.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image033.png" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image034.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image034.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -527,30 +546,35 @@
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image037.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image038.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image038.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image039.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image040.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image040.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image041.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image042.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image042.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image043.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image044.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image044.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image045.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image046.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image046.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -656,6 +680,15 @@
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\image080.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image081.png" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image082.jpg" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image083.jpg" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image084.png" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image085.jpg" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image086.png" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image087.jpg" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image088.png" />
+    <Content Include="Help\ProModGD_Help_PtBr_arquivos\image089.jpg" />
     <Content Include="Help\ProModGD_Help_PtBr_arquivos\item0001.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -929,11 +962,13 @@
     <Content Include="Views\Project\_ShowGdd.cshtml" />
     <Content Include="Views\Project\_AddGddSection.cshtml" />
     <Content Include="Views\Project\_ShowGddSections.cshtml" />
+    <Content Include="Views\Project\_AddContentSection.cshtml" />
+    <Content Include="Views\Project\_ShowGddSectionContent.cshtml" />
+    <Content Include="Views\Project\_SelectGddConf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="files\bpmn\" />
-    <Folder Include="Models\" />
     <Folder Include="Scripts\process_modeler\vendor\bpmn-font\" />
   </ItemGroup>
   <ItemGroup>

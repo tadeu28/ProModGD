@@ -45,6 +45,7 @@ namespace Bpm2GP.Model.DataBase
         public GddConfigurationElementsRepository GddConfigurationElementsRepository { get; set; }
         public ProjectGddRepository ProjectGddRepository { get; set; }
         public ProjectGddSectionRepository ProjectGddSectionRepository { get; set; }
+        public ProjectGddContentSectionRepository ProjectGddContentSectionRepository { get; set; }
 
         private DbFactory()
         {
@@ -68,6 +69,7 @@ namespace Bpm2GP.Model.DataBase
             this.GddConfigurationRepository = new GddConfigurationRepository(this.Session);
             this.ProjectGddRepository = new ProjectGddRepository(this.Session);
             this.ProjectGddSectionRepository = new ProjectGddSectionRepository(this.Session);
+            this.ProjectGddContentSectionRepository = new ProjectGddContentSectionRepository(this.Session);
         }
 
         public void Initialize(object obj)

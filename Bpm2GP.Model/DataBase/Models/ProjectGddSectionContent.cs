@@ -13,6 +13,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public virtual Guid Id { get; set; }
         public virtual String Content { get; set; }
+        public virtual String GameGenreTitle { get; set; }
+        public virtual Boolean Automatic { get; set; }
         public virtual ProjectGddSection Section { get; set; }
 
     }
@@ -22,6 +24,9 @@ namespace Bpm2GP.Model.DataBase.Models
         public ProjectGddSectionContentMap()
         {
             Id(x => x.Id, m => m.Generator(Generators.Guid));
+
+            Property(x => x.GameGenreTitle);
+            Property(x => x.Automatic);
 
             Property(x => x.Content, m =>
             {

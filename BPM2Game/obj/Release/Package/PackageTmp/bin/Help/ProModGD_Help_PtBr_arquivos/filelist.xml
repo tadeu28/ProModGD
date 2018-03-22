@@ -4,7 +4,6 @@
  <o:File HRef="props002.xml"/>
  <o:File HRef="themedata.thmx"/>
  <o:File HRef="colorschememapping.xml"/>
- <o:File HRef="plchdr.html"/>
  <o:File HRef="image001.png"/>
  <o:File HRef="image002.jpg"/>
  <o:File HRef="image003.png"/>
@@ -85,5 +84,14 @@
  <o:File HRef="image078.jpg"/>
  <o:File HRef="image079.png"/>
  <o:File HRef="image080.jpg"/>
+ <o:File HRef="image081.png"/>
+ <o:File HRef="image082.jpg"/>
+ <o:File HRef="image083.jpg"/>
+ <o:File HRef="image084.png"/>
+ <o:File HRef="image085.jpg"/>
+ <o:File HRef="image086.png"/>
+ <o:File HRef="image087.jpg"/>
+ <o:File HRef="image088.png"/>
+ <o:File HRef="image089.jpg"/>
  <o:File HRef="filelist.xml"/>
 </xml>

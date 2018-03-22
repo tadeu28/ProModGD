@@ -147,6 +147,7 @@
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectGddRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectGddContentSectionRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectGddSectionRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectSolicitationRepository.cs" />

@@ -17,6 +17,10 @@
         $("#btnApagarGdd").removeClass("hide");
         $("#gpBtnGddCreate").addClass("hide");
     }
+
+    function showDlgSelectConfig() {
+        $("#dlgSelectConf").modal("show");
+    }
 </script>
 
 <br />
@@ -38,10 +42,10 @@
 
             @if (@Model.DesignMappings.Count > 0)
             {
-                <a id="btnNewGddMapping" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddPanel"
-                   data-ajax-loading="#divCarregando" data-toggle="tooltip" data-ajax-success="showGddElements"
+                <a id="btnNewGddMapping" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddSelectConfig"
+                   data-ajax-loading="#divCarregando" data-toggle="tooltip" data-ajax-success="showDlgSelectConfig"
                    data-placement="bottom" title="Create GDD Based on Mapping"
-                   href="@Url.Action("CreateGddBasedOnMapping", "Project", new {id = Model.Id})" class="btn btn-default navbar-btn">
+                   href="@Url.Action("ShowGddBasedOnMapping", "Project", new {id = Model.Id})" class="btn btn-default navbar-btn">
                     <i class="glyphicon glyphicon-plus"></i> Create GDD Based on Element Mapping
                 </a>
             }
@@ -52,3 +56,5 @@
 <div class="panel panel-default @(hide ? "" : "hide")" id="gddPanel">
     @Html.Partial("_ShowGdd", (Model.ProjectGdd ?? new ProjectGdd()))
 </div>
+
+<div id="gddSelectConfig"></div>

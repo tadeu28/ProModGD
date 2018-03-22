@@ -20,5 +20,12 @@ namespace Bpm2GP.Model.DataBase.Repository
                                                               w.Designer == designer))
                                                          .ToList();
         }
+
+        public List<GddConfiguration> FindAllByGameGenre(GameGenre gameGenre, bool isInactive)
+        {
+            return this.Session.Query<GddConfiguration>().Where(w => w.Inactive == isInactive &&
+                                                                     w.GameGenre.Id == gameGenre.Id)
+                                                         .ToList();
+        }
     }
 }

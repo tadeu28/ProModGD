@@ -826,7 +826,8 @@ namespace BPM2Game.Controllers
                     Title = "[None] - In case of Chapter"
                 });
 
-                var selectGDDSections = new SelectList(GddSections, "Id", "Title", gddElement.ParentElement);
+                var selectedSection = GddSections.FirstOrDefault(f => f.Id == gddElement.ParentElement.Id);
+                var selectGDDSections = new SelectList(GddSections, "Id", "Title", gddElement.ParentElement.Id);
 
                 var gameGenreElements = gddElement.GddConfig.GameGenre.Elements.Where(ge => gddElement.GameGenreElements.FirstOrDefault(a => a.Id == ge.Id) == null)
                     .OrderBy(o => o.Name).ToList();

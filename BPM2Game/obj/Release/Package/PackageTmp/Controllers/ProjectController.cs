@@ -11,6 +11,8 @@ using Bpm2GP.Model.DataBase.Adapter;
 using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
 using BPM2Game.Mapping.Bpmn;
+using BPM2Game.Models.Gdd;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Newtonsoft.Json;
 using Rotativa.Core;
 using Rotativa.MVC;
@@ -559,7 +561,8 @@ namespace BPM2Game.Controllers
                 {
                     CreationDate = DateTime.Now,
                     Project = project,
-                    DesignerName = LoginUtils.User.Designer.Name
+                    DesignerName = LoginUtils.User.Designer.Name,
+                    BasedOnMapping = false
                 };
 
                 gdd = DbFactory.Instance.ProjectGddRepository.Save(gdd);
@@ -639,6 +642,153 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "SaveGddSection"));
             }
         }
-        
+
+        public PartialViewResult RemoveSection(Guid id)
+        {
+            try
+            {
+                var gddSection = DbFactory.Instance.ProjectGddSectionRepository.FindFirstById(id);
+                var idGdd = gddSection.ProjectGdd.Id;
+
+                DbFactory.Instance.ProjectGddSectionRepository.Delete(gddSection);
+
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(idGdd);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveSection"));
+            }
+        }
+
+        public PartialViewResult NewGddSectionContent(Guid id)
+        {
+            try
+            {
+                var gddSection = DbFactory.Instance.ProjectGddSectionRepository.FindFirstById(id);
+                var idProject = gddSection.ProjectGdd.Project.Id;
+
+                var gameProject = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+                var gameGenreElements = gameProject.GameGenre.Elements.OrderBy(o => o.Name).ToList();
+                gameGenreElements.Insert(0, new GameGenreElement());
+
+                ViewBag.GenreElements = new SelectList(gameGenreElements, "Name", "Name");
+
+                return PartialView("_AddContentSection", new ProjectGddSectionContent()
+                {
+                    Section = gddSection
+                });
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "NewGddSectionContent"));
+            }
+        }
+
+        public PartialViewResult EditGddSectionContent(Guid id)
+        {
+            try
+            {
+                var gddContent = DbFactory.Instance.ProjectGddContentSectionRepository.FindFirstById(id);
+                var idProject = gddContent.Section.ProjectGdd.Project.Id;
+
+                var gameProject = DbFactory.Instance.ProjectRepository.FindFirstById(idProject);
+                var gameGenreElements = gameProject.GameGenre.Elements.OrderBy(o => o.Name).ToList();
+                gameGenreElements.Insert(0, new GameGenreElement());
+
+                ViewBag.GenreElements = new SelectList(gameGenreElements, "Name", "Name");
+                return PartialView("_AddContentSection", gddContent);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "EditGddSectionContent"));
+            }
+        }
+
+        public PartialViewResult SaveGddContentSection(ProjectGddSectionContent sessionContent, Guid idGddSection)
+        {
+            try
+            {
+                var gddSection = DbFactory.Instance.ProjectGddSectionRepository.FindFirstById(idGddSection);
+                sessionContent.Section = gddSection;
+                sessionContent.Automatic = false;
+
+                if (sessionContent.Id == new Guid())
+                {
+                    DbFactory.Instance.ProjectGddContentSectionRepository.Save(sessionContent);
+                }
+                else
+                {
+                    DbFactory.Instance.ProjectGddContentSectionRepository.Update(sessionContent);
+                }
+
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(gddSection.ProjectGdd.Id);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "SaveGddContentSection"));
+            }
+        }
+
+        public PartialViewResult RemoveContent(Guid id)
+        {
+            try
+            {
+                var content = DbFactory.Instance.ProjectGddContentSectionRepository.FindFirstById(id);
+                var idGdd = content.Section.ProjectGdd.Id;
+
+                DbFactory.Instance.ProjectGddContentSectionRepository.Delete(content);
+
+                var gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(idGdd);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveContent"));
+            }
+        }
+
+        public PartialViewResult ShowGddBasedOnMapping(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(id);
+
+                var gddConfigs = DbFactory.Instance.GddConfigurationRepository.FindAllByGameGenre(project.GameGenre, false);
+
+                var configs = new SelectList(gddConfigs, "Id", "Title");
+                ViewBag.GddConfig = configs;
+                ViewBag.IdProject = project.Id;
+
+                return PartialView("_SelectGddConf", configs);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "CreateGddBasedOnMapping"));
+            }
+        }
+
+        public PartialViewResult CreateGddBasedOnMapping(Guid idGddConfig, Guid IdProject)
+        {
+            try
+            {
+                var project = DbFactory.Instance.ProjectRepository.FindFirstById(IdProject);
+                var gddConf = DbFactory.Instance.GddConfigurationRepository.FindFirstById(idGddConfig);
+
+                var gdd = GddMappingEngine.ProcessGddBasedOnMapping(project, gddConf);
+
+                gdd = DbFactory.Instance.ProjectGddRepository.FindFirstById(gdd.Id);
+
+                return PartialView("_ShowGdd", gdd);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "CreateGddBasedOnMapping"));
+            }
+        }
     }
 }

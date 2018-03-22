@@ -6,18 +6,75 @@
 
 @foreach (var chapter in Model.ChildrenSections.OrderBy(o => o.DtHoraCadastro))
 {
-        <div class="col-md-8">
-            <h@(indent) style="margin-top: 0px; margin-bottom: 0px;">@chapter.Title</h@(indent)>
-        </div>
-        <div class="col-md-4 btn-group-xs text-right">
-            <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus-sign"></i> New Content</a>
-            <a href="#" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove Section</a>
-        </div>
-    
-        if (chapter.ChildrenSections.Count > 0)
-        {
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <h@(indent) style="margin-top: 6px; margin-bottom: 0px;">@chapter.Title</h@(indent)>
+                </div>
+                <div class="navbar-right btn-group-xs" style="padding-top: 15px; padding-right: 5px">
+                    <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddContentSection"
+                       data-ajax-loading="#divCarregando" data-toggle="tooltip" data-ajax-success="showSectionContentModal"
+                       data-placement="bottom" title="New Content"
+                       href="@Url.Action("NewGddSectionContent", "Project", new {id = chapter.Id})" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-plus-sign"></i> New Content
+                    </a>
+                    <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddPanel"
+                       data-ajax-loading="#divCarregando" data-toggle="tooltip"
+                       data-placement="bottom" title="New Content"
+                       href="@Url.Action("RemoveSection", "Project", new {id = chapter.Id})" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i> Remove Section
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+    if (chapter.Contents.Count > 0)
+    {
+        <table class="table table-responsive table-bordered" style="table-layout: fixed; width: 100%">
+            @foreach (var content in chapter.Contents)
+            {
+                <tr>
+                    <td class="text-center row-border btn-group-xs col-md-1" style="vertical-align: middle;">
+                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddContentSection"
+                           data-ajax-loading="#divCarregando" data-toggle="tooltip" data-ajax-success="showSectionContentModal"
+                           data-placement="bottom" title="Edit Content"
+                           href="@Url.Action("EditGddSectionContent", "Project", new {id = content.Id})" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-edit"></i> Edit Content
+                        </a>
+                        <p />
+                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddPanel"
+                           data-ajax-loading="#divCarregando" data-toggle="tooltip"
+                           data-placement="bottom" title="New Content"
+                           href="@Url.Action("RemoveContent", "Project", new {id = content.Id})" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-trash"></i> Remove Content
+                        </a>
+                        <p />
+                        <p>
+                            @if (content.Automatic)
+                            {
+                                <small><i class="glyphicon glyphicon-alert"></i><span> Content Generate Automatically</span></small>
+                            }
+                        </p>
+                    </td>
+                    <td class="text-justify row-border col-md-11" style="word-wrap: break-word">
+                        <p>
+                            @Html.Raw(Html.Encode(@content.Content).Replace("\n", "<br />").Replace("{", "<").Replace("}", ">"))
+                        <p />
+                        @if (!String.IsNullOrEmpty(content.GameGenreTitle))
+                        {   
+                            <small>
+                                This Content is related with the Game Element: <strong>@content.GameGenreTitle</strong>
+                            </small>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
+    if (chapter.ChildrenSections.Count > 0)
+    {
             @Html.Partial("_ShowGddSections", chapter, new ViewDataDictionary() { { "indent", indent + 1 } })
         }
-        <hr/>
 }
     

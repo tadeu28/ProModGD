@@ -18,6 +18,11 @@ namespace Bpm2GP.Model.DataBase.Repository
             return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == Id).ToList();
         }
 
+        public List<GddConfigurationElements> FindAllChildren(Guid Id)
+        {
+            return this.Session.Query<GddConfigurationElements>().Where(w => w.ParentElement.Id == Id).OrderBy(o => o.PresentationOrder).ToList();
+        }
+
         public GddConfigurationElements GetElementsByGddIdAndOrder(Guid Id, int order)
         {
             return this.Session.Query<GddConfigurationElements>().FirstOrDefault(w => w.GddConfig.Id == Id && w.PresentationOrder == order);
