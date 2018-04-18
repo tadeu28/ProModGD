@@ -19,6 +19,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public DesignMappingErrorsMap()
         {
+            Table("designmappingerrors");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Error);
@@ -26,6 +28,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.DesignMapping, m =>
             {
                 m.Column("idDesignMapping");
+                m.Lazy(LazyRelation.NoLazy);
             });
         }
     }

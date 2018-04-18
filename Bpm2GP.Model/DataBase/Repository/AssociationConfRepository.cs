@@ -11,18 +11,49 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class AssociationConfRepository : RepositoryBase<AssociationConf>
     {
-        public AssociationConfRepository(ISession session) : base(session)
-        {
-        }
-
         public List<AssociationConf> FindAllElementsByGenreAndLanguage(Guid genreId, Guid languageId, bool isInactive)
         {
-            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Language.Id == languageId && w.Inactive == isInactive).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Language.Id == languageId && w.Inactive == isInactive).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
+        }
+
+        public AssociationConf FirstById(Guid Id, bool isInactive)
+        {
+            try
+            {
+                return this.Session.Query<AssociationConf>().FirstOrDefault(w => w.Id == Id && w.Inactive == isInactive);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<AssociationConf> FindAllElementsByGenre(Guid genreId, bool isInactive)
         {
-            return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Inactive == isInactive).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConf>().Where(w => w.Genre.Id == genreId && w.Inactive == isInactive).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

@@ -11,16 +11,36 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class ProjectGddSectionRepository : RepositoryBase<ProjectGddSection>
     {
-        public ProjectGddSectionRepository(ISession session) : base(session) { }
+        
 
         public ProjectGddSection FindFirstByProjectId(Guid Id)
         {
-            return this.Session.Query<ProjectGddSection>().FirstOrDefault(f => f.ProjectGdd.Id == Id);
+            try
+            {
+                return this.Session.Query<ProjectGddSection>().FirstOrDefault(f => f.ProjectGdd.Id == Id);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public IList<ProjectGddSection> FindAllByProjectId(Guid Id)
         {
-            return this.Session.Query<ProjectGddSection>().Where(f => f.ProjectGdd.Id == Id).OrderBy(o => o.Title).ToList();
+            try
+            {
+                return this.Session.Query<ProjectGddSection>().Where(f => f.ProjectGdd.Id == Id).OrderBy(o => o.Title).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

@@ -9,17 +9,76 @@
     function hideGddElements() {
         $("#gddPanel").addClass("hide");
         $("#btnApagarGdd").addClass("hide");
+        $("#btnSalvarGdd").addClass("hide");
         $("#gpBtnGddCreate").removeClass("hide");
     }
 
     function showGddElements() {
         $("#gddPanel").removeClass("hide");
         $("#btnApagarGdd").removeClass("hide");
+        $("#btnSalvarGdd").removeClass("hide");
         $("#gpBtnGddCreate").addClass("hide");
+
+        var url = "@Url.Action("DeleteGdd", "Project", new {id = "[troca]"})";
+        url = url.replace("[troca]", $("#idGddCode").val());
+        $("#btnApagarGdd").attr("href", url);
     }
 
     function showDlgSelectConfig() {
         $("#dlgSelectConf").modal("show");
+    }
+
+    function saveGdd() {
+        var html = tinymce.activeEditor.getContent({ format: 'raw' });
+
+        console.log(tinymce.activeEditor.getContent());
+
+        var blob = new Blob([html], { encoding: "UTF-8", type: "text/txt;charset=UTF-8" });
+
+        var formData = new FormData();
+        formData.append("file", blob);
+        $.ajax({
+            type: "POST",
+            url: "/Project/SaveGddContentSection?id=" + $("#idGddCode").val(),
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (dados) {
+                if (dados) {
+                    toastr.success('The game design document has been saved with success!',
+                        null,
+                        {
+                            timeOut: 3000,
+                            closeButton: true,
+                            preventDuplicates: false,
+                            positionClass: "toast-bottom-right",
+                            newestOnTop: true
+                        });
+                } else {
+                    console.log(r);
+
+                    toastr.error("Something bad has happened into Gdd creation.<br/><br/>" + r, null, {
+                        timeOut: 3000,
+                        closeButton: true,
+                        preventDuplicates: false,
+                        positionClass: "toast-bottom-right",
+                        newestOnTop: true
+                    });
+                }
+            },
+            error: function (err) {
+                console.log(r);
+
+                toastr.error("Something bad has happened into Gdd creation.<br/><br/>" + r, null, {
+                    timeOut: 3000,
+                    closeButton: true,
+                    preventDuplicates: false,
+                    positionClass: "toast-bottom-right",
+                    newestOnTop: true
+                });
+            }
+        });
     }
 </script>
 
@@ -31,6 +90,9 @@
            data-placement="bottom" title="Add Section"
            href="@Url.Action("DeleteGdd", "Project", new {id = (Model.ProjectGdd != null ? Model.ProjectGdd.Id : new Guid())})" class="btn btn-danger navbar-btn @(hide ? "" : "hide")">
             <i class="glyphicon glyphicon-trash"></i> Delete GDD
+        </a>
+        <a id="btnSalvarGdd" onclick="saveGdd()"
+           data-placement="bottom" title="Add Section" class="btn btn-success navbar-btn @(hide ? "" : "hide")"><i class="glyphicon glyphicon-save"></i> Save GDD
         </a>
         <span id="gpBtnGddCreate" class="@(hide ? "hide" : "")">
             <a id="btnNewGdd" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#gddPanel"

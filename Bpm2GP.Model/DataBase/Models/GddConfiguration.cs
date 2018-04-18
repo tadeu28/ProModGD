@@ -32,6 +32,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public GddConfigurationMap()
         {
+            Table("gddconfiguration");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Title);
@@ -56,7 +58,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idGddConfig"));
                 m.Cascade(Cascade.DeleteOrphans);
                 m.Inverse(true);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }

@@ -1,6 +1,11 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.AssociationConf
 @using Bpm2GP.Model.DataBase
+@using Bpm2GP.Model.DataBase.Manager
 @using Bpm2GP.Model.DataBase.Models
+
+@{
+    var DbFactory = SessionManager.Instance.DbFactory;
+}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -56,7 +61,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var pe in Model.Language.Elements)
+            @foreach (var pe in Model.Language.Elements.Where(w => w.Inactive == false))
             {
                 <tr>
                     <td>@pe.Name</td>
@@ -71,12 +76,12 @@
                     </td>
                     <td class="btn-group-sm">
                         @{
-                            var assocElements = DbFactory.Instance.AssociationConfElementRepository.FindAllElementsByAssociantionAndLanguageElementId(pe.Id, Model.Id);
+                            var assocElements = DbFactory.AssociationConfElementRepository.FindAllElementsByAssociantionAndLanguageElementId(pe.Id, Model.Id);
                         }
 
                         @if (assocElements.Count > 0)
                         {
-                            foreach (var assElem in assocElements)
+                            foreach (var assElem in assocElements.Where(w => w.Inactive == false))
                             {
                                 if (assElem.Association.IsConstant)
                                 {

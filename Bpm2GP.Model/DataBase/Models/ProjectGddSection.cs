@@ -29,6 +29,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ProjectGddSectionMap()
         {
+            Table("projectgddsection");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Title);

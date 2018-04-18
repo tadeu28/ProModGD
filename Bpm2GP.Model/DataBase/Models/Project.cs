@@ -41,6 +41,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ProjectMap()
         {
+            Table("project");
+
             Id(x => x.Id, m =>
             {
                 m.Generator(Generators.Guid);
@@ -61,7 +63,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.DesignMappings, map =>
             {
                 map.Cascade(Cascade.DeleteOrphans);
-                map.Lazy(CollectionLazy.Lazy);
+                map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("IdProject"));
             },
             o => o.OneToMany());
@@ -81,8 +83,9 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.Designers, map =>
             {
                 map.Cascade(Cascade.None);
-                map.Lazy(CollectionLazy.Lazy);
+                map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("idProject"));
+                //map.Table("designers");
             }, 
             o => o.ManyToMany(p => p.Column("idDesigner")));
 

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using BPM2Game.Controllers;
+using WebGrease.Configuration;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace BPM2Game { 

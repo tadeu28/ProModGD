@@ -27,11 +27,26 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public AssociationConfElementsMap()
         {
+            Table("associationconfelements");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
+            Property(x => x.Inactive);
             
-            ManyToOne(x => x.ProcessElement, m => m.Column("idLanguageElement"));
-            ManyToOne(x => x.GameGenreElement, m => m.Column("idGenreElement"));
-            ManyToOne(x => x.Association, m => m.Column("idAssociation"));
+            ManyToOne(x => x.ProcessElement, m =>
+            {
+                m.Column("idLanguageElement");
+                m.Lazy(LazyRelation.NoLazy);
+            });
+            ManyToOne(x => x.GameGenreElement, m =>
+            {
+                m.Column("idGenreElement");
+                m.Lazy(LazyRelation.NoLazy);
+            });
+            ManyToOne(x => x.Association, m =>
+            {
+                m.Column("idAssociation");
+                m.Lazy(LazyRelation.NoLazy);
+            });
 
             Bag(x => x.Ruleses, m =>
             {

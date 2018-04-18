@@ -12,13 +12,20 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class DesignMappingRepository : RepositoryBase<DesignMapping>
     {
-        public DesignMappingRepository(ISession session) : base(session)
-        {
-        }
 
         public DesignMapping FindFirstByProjectId(Guid id)
         {
-            return this.Session.Query<DesignMapping>().FirstOrDefault(f => f.Project.Id == id);
+            try
+            {
+                return this.Session.Query<DesignMapping>().FirstOrDefault(f => f.Project.Id == id);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

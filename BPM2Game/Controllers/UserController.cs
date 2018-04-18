@@ -4,14 +4,18 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Bpm2GP.Model.DataBase;
+using Bpm2GP.Model.DataBase.Manager;
 using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
+
 
 namespace BPM2Game.Controllers
 {
     [Authorize]
     public class UserController : Controller
     {
+        public static DbFactory DbFactory = SessionManager.Instance.DbFactory;
+
         [AllowAnonymous]
         // GET: User
         public ActionResult SignIn(User user)
@@ -25,7 +29,7 @@ namespace BPM2Game.Controllers
             try
             {
                 var user =
-                    DbFactory.Instance.UserRepository.FindAll()
+                    DbFactory.UserRepository.FindAll()
                         .FirstOrDefault(f => String.Equals(f.UserName, UserName, StringComparison.CurrentCultureIgnoreCase));
 
                 if(user == null)
@@ -49,7 +53,7 @@ namespace BPM2Game.Controllers
                 {
                     Name = user.UserName
                 };
-                DbFactory.Instance.UserRepository.Save(user);
+                DbFactory.UserRepository.Save(user);
 
                 LoginUtils.Logar(user);
 
@@ -93,7 +97,7 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                var designer = LoginUtils.User.Designer;
+                var designer = LoginUtils.Designer;
 
                 return View(designer);
             }
@@ -107,9 +111,9 @@ namespace BPM2Game.Controllers
         {
             try
             {
-                LoginUtils.User.Designer = DbFactory.Instance.DesignerRepository.Save(designer);
+                LoginUtils.Designer = DbFactory.DesignerRepository.Save(designer);
 
-                return PartialView("_DesignerProfile", LoginUtils.User.Designer);
+                return PartialView("_DesignerProfile", LoginUtils.Designer);
             }
             catch (Exception ex)
             {

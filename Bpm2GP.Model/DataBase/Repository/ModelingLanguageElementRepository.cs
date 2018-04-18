@@ -11,11 +11,19 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class ModelingLanguageElementRepository : RepositoryBase<ModelingLanguageElement>
     {
-        public ModelingLanguageElementRepository(ISession session) : base(session) { }
-
         public List<ModelingLanguageElement> FindAllElementsByLanguageId(Guid languageId, bool isInactive)
         {
-            return this.Session.Query<ModelingLanguageElement>().Where(w => w.Language.Id == languageId && w.Inactive == isInactive).ToList();
+            try
+            {
+                return this.Session.Query<ModelingLanguageElement>().Where(w => w.Language.Id == languageId && w.Inactive == isInactive).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

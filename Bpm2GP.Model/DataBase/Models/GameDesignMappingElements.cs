@@ -24,6 +24,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public GameDesignMappingElementsMap()
         {
+            Table("gamedesignmappingelements");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Descricao, m =>
@@ -37,16 +39,19 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.GameGenreElement, m =>
             {
                 m.Column("idGenreElement");
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             ManyToOne(x => x.AssociateElement, m =>
             {
                 m.Column("idAssocElement");
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             ManyToOne(x => x.DesignMapping, m =>
             {
                 m.Column("idDesignMapping");
+                m.Lazy(LazyRelation.NoLazy);
             });
         }
     }

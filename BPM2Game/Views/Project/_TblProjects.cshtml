@@ -2,10 +2,6 @@
 @using Bpm2GP.Model.Utils
 @model IEnumerable<Bpm2GP.Model.DataBase.Models.Project>
 
-@{
-    var user = LoginUtils.User;
-}
-
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tblProjects').DataTable({
@@ -76,7 +72,7 @@
     {
         <tr>
             <td class="text-center">
-                @if (item.Owner.Id == LoginUtils.User.Designer.Id) {
+                @if (item.Owner.Id == LoginUtils.Designer.Id) {
                     <input type="checkbox" value="@item.Id" name="prjs[]"/>
                 }
             </td>
@@ -96,11 +92,11 @@
                 @Html.DisplayFor(modelItem => item.Owner.Name)
             </td>
             <td class="text-center">
-                @if (item.Designers.All(a => a.Id != user.Designer.Id))
+                @if (item.Designers.All(a => a.Id != LoginUtils.Designer.Id))
                 {
                     <a class="btn btn-default"
                        data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-mode="replace"  data-ajax-success="solicitationSuccess"
-                       href="@Url.Action("AskParticipation", "Project", new {id = user.Designer.Id, idProject = item.Id})"
+                       href="@Url.Action("AskParticipation", "Project", new {id = LoginUtils.Designer.Id, idProject = item.Id})"
                        data-toggle="tooltip" data-placement="top" title="Participate of this Project">
                         <i class="glyphicon glyphicon-log-in"> </i> Participate
                     </a>

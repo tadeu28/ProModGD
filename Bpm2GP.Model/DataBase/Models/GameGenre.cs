@@ -33,6 +33,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public GameGenreMap()
         {
+            Table("gamegenre");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Name);
@@ -60,7 +62,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idLanguage"));
                 m.Inverse(true);
                 m.Cascade(Cascade.DeleteOrphans);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
 
             Bag(x => x.Projects, m =>
@@ -68,7 +70,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idGameGenre"));
                 m.Inverse(true);
                 m.Cascade(Cascade.DeleteOrphans);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }

@@ -44,6 +44,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public AssociationConfMap()
         {
+            Table("associationconf");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Name);

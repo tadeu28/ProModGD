@@ -11,21 +11,49 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class ProjectSolicitationRepository : RepositoryBase<ProjectSolicitation>
     {
-        public ProjectSolicitationRepository(ISession session) : base(session) { }
-
         public List<ProjectSolicitation> FindByDesigner(Guid idDesigner)
         {
-            return this.Session.Query<ProjectSolicitation>().Where(f => f.Designer.Id == idDesigner).ToList();
+            try
+            {
+                return this.Session.Query<ProjectSolicitation>().Where(f => f.Designer.Id == idDesigner).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<ProjectSolicitation> FindByProject(Guid idProject)
         {
-            return this.Session.Query<ProjectSolicitation>().Where(f => f.Project.Id == idProject).ToList();
+            try
+            {
+                return this.Session.Query<ProjectSolicitation>().Where(f => f.Project.Id == idProject).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<ProjectSolicitation> FindByProjectAndDesigner(Guid idProject, Guid idDesigner)
         {
-            return this.Session.Query<ProjectSolicitation>().Where(f => f.Project.Id == idProject && f.Designer.Id == idDesigner).ToList();
+            try
+            {
+                return this.Session.Query<ProjectSolicitation>().Where(f => f.Project.Id == idProject && f.Designer.Id == idDesigner).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

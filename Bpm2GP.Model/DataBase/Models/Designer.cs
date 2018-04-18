@@ -30,6 +30,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public DesignerMap()
         {
+            Table("designer");
+
             Id(x => x.Id, m =>
             {
                 m.Generator(Generators.Guid);
@@ -41,14 +43,15 @@ namespace Bpm2GP.Model.DataBase.Models
             OneToOne(x => x.User, map =>
             {
                 map.PropertyReference(typeof (User).GetProperty("Designer"));
-                map.Lazy(LazyRelation.Proxy);
+                map.Lazy(LazyRelation.NoLazy);
             });
 
             Bag(x => x.Projects, map =>
             {
                 map.Cascade(Cascade.None);
-                map.Lazy(CollectionLazy.Lazy);
+                map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("idDesigner"));
+                //map.Table("designers");
             },
             o => o.ManyToMany(p => p.Column("idProject")));
 
@@ -57,7 +60,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idDesigner"));
                 m.Inverse(true);
                 m.Cascade(Cascade.DeleteOrphans);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
 
             Bag<GameGenre>(x => x.GameGenres, m =>
@@ -65,7 +68,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idDesigner"));
                 m.Inverse(true);
                 m.Cascade(Cascade.DeleteOrphans);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }

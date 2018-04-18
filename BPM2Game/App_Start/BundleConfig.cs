@@ -14,6 +14,7 @@ namespace BPM2Game
                         "~/Scripts/DataTables/jquery.dataTables*",
                         "~/Scripts/DataTables/dataTables.bootstrap*",
                         "~/Scripts/checkListBox_bootstrap.js",
+                        "~/Scripts/tinymce/tinymce.js",
                         "~/Scripts/toastr.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

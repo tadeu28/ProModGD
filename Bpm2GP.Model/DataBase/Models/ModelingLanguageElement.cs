@@ -46,6 +46,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ModelingLanguageElementMap()
         {
+            Table("modelinglanguageelement");
+
             Id(x => x.Id, m =>
             {
                 m.Generator(Generators.Guid);
@@ -65,20 +67,20 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.Language, m =>
             {
                 m.Column("idLanguage");
-                m.Lazy(LazyRelation.Proxy);
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             ManyToOne(x => x.ParentElement, m =>
             {
                 m.Column("idElement");
-                m.Lazy(LazyRelation.Proxy);
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             Bag(x => x.ChildElements, m =>
             {
                 m.Cascade(Cascade.DeleteOrphans);
                 m.Inverse(true);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idElement"));
             }, o => o.OneToMany());
             
@@ -87,7 +89,7 @@ namespace Bpm2GP.Model.DataBase.Models
                 m.Key(k => k.Column("idLanguageElement"));
                 m.Inverse(true);
                 m.Cascade(Cascade.DeleteOrphans);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
             }, o => o.OneToMany());
         }
     }

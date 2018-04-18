@@ -15,6 +15,8 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual String DesignerName { get; set; }
         public virtual Project Project { get; set; }
         public virtual Boolean BasedOnMapping { get; set; }
+        public virtual byte[] GddContent { get; set; }
+        public virtual String GddAsHtml { get; set; }
         public virtual IList<ProjectGddSection> Sections { get; set; }
 
         public ProjectGdd()
@@ -27,11 +29,14 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ProjectGddMap()
         {
+            Table("projectgdd");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.CreationDate);
             Property(x => x.DesignerName);
             Property(x => x.BasedOnMapping);
+            Property(x => x.GddContent);
 
             ManyToOne(x => x.Project, m =>
             {

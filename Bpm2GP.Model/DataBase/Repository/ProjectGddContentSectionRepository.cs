@@ -11,6 +11,6 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class ProjectGddContentSectionRepository : RepositoryBase<ProjectGddSectionContent>
     {
-        public ProjectGddContentSectionRepository(ISession session) : base(session) { }
+        
     }
 }

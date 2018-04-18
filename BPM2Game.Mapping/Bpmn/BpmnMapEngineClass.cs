@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Bpm2GP.Model.DataBase;
+using Bpm2GP.Model.DataBase.Manager;
 using Bpm2GP.Model.DataBase.Models;
 using BPMN;
 
@@ -10,6 +11,7 @@ namespace BPM2Game.Mapping.Bpmn
 {
     public class BpmnMapEngineClass
     {
+        public DbFactory DbFactory { get; set; }
         public Model Model { get; set; }
         public DesignMapping DesignMapping { get; set; }
         public Decimal ModelMappedScore { get; set; }
@@ -30,6 +32,7 @@ namespace BPM2Game.Mapping.Bpmn
             Errors = new List<DesignMappingErrors>();
             MappingList = new List<GameDesignMappingElements>();
             MappingScores = new List<DesignMappingScores>();
+            DbFactory = SessionManager.Instance.DbFactory;
         }
 
         public void StartMapping(DesignMapping designMapping)
@@ -38,13 +41,12 @@ namespace BPM2Game.Mapping.Bpmn
             var bpmnPath = HttpContext.Current.Server.MapPath("~/files/bpmn/") + designMapping.Project.Id + ".txt";
             Model = Model.Read(bpmnPath);
 
-            var bpmnStoredElements = DbFactory.Instance.ModelingLanguageElementRepository
+            var bpmnStoredElements = DbFactory.ModelingLanguageElementRepository
                 .FindAllElementsByLanguageId(designMapping.Language.Id, false).OrderBy(o => o.Metamodel).ToList();
 
             bpmnStoredElements.ForEach(f =>
             {
-                var assocElements = DbFactory.Instance
-                                        .AssociationConfElementRepository
+                var assocElements = DbFactory.AssociationConfElementRepository
                                         .FindAllElementsByElementeMetamodel(f.Metamodel)
                                         .OrderBy(o => o.ProcessElement.Name)
                                         .ToList();
@@ -79,8 +81,7 @@ namespace BPM2Game.Mapping.Bpmn
 
                 if (element.ProcessElement.ParentElement != null)
                 {
-                    var parentAssocElement = DbFactory.Instance
-                        .AssociationConfElementRepository
+                    var parentAssocElement = DbFactory.AssociationConfElementRepository
                         .FindByElementMetamodel(element.ProcessElement.ParentElement.Metamodel);
 
                     if (parentAssocElement != null)

@@ -10,6 +10,6 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class AssociationRulesRepository : RepositoryBase<AssociationRules>
     {
-        public AssociationRulesRepository(ISession session) : base(session) { }
+        
     }
 }

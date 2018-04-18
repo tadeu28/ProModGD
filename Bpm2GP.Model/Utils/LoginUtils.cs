@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
 using Bpm2GP.Model.DataBase;
+using Bpm2GP.Model.DataBase.Manager;
 using Bpm2GP.Model.DataBase.Models;
 
 namespace Bpm2GP.Model.Utils
 {
     public class LoginUtils
     {
-        private static User _user ;
+        public static DbFactory DbFactory = SessionManager.Instance.DbFactory;
+        
         public static User User
         {
             get
@@ -25,27 +27,46 @@ namespace Bpm2GP.Model.Utils
                     ticket = FormsAuthentication.Decrypt(authCookie.Value);
                 }
 
-                return ticket != null ? _user : null;
-            }
+                if (ticket != null)
+                {
+                    return HttpContext.Current.Session["Usuario"] != null
+                        ? (User) HttpContext.Current.Session["Usuario"]
+                        : null;
+                }
 
-            set { _user = value; }
+                return null;
+            }
+        }
+
+        public static Designer Designer
+        {
+            set { HttpContext.Current.Session["Designer"] = value; }
+            get
+            {
+                if (HttpContext.Current.Session["Designer"] == null)
+                    return null;
+
+                return (Designer)HttpContext.Current.Session["Designer"];
+            }
         }
 
         public static User Logar(User u)
         {
             try
             {
-                var user = DbFactory.Instance.UserRepository.FindAll().FirstOrDefault(f => f.Password == u.Password 
-                                                                       && (f.Email == u.UserName || f.UserName == u.UserName));
+                var user = DbFactory.UserRepository.Login(u.Password, u.UserName);
                 if (user == null)
                 {
                     throw new Exception("User or Password is not valid");
                 }
-                
-                FormsAuthentication.SetAuthCookie(user.UserName, true);
 
-                User = user;
-                return User;
+                var designer = DbFactory.DesignerRepository.FindByUserId(user.Id);
+                
+                HttpContext.Current.Session["Usuario"] = user;
+                HttpContext.Current.Session["Designer"] = designer;
+                FormsAuthentication.SetAuthCookie(user.UserName, true);
+                
+                return user;
             }
             catch (Exception ex)
             {
@@ -56,8 +77,10 @@ namespace Bpm2GP.Model.Utils
         public static void Deslogar()
         {
             FormsAuthentication.SignOut();
-
-            User = null;
+            HttpContext.Current.Session["Usuario"] = null;
+            HttpContext.Current.Session.Remove("Usuario");
+            HttpContext.Current.Session["Designer"] = null;
+            HttpContext.Current.Session.Remove("Designer");
         }
     }
 }

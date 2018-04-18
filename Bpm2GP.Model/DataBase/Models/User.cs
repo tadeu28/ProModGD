@@ -33,6 +33,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public UserMap()
         {
+            Table("user");
+
             Id(x => x.Id, m =>
             {
                 m.Generator(Generators.Guid);
@@ -45,7 +47,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(customer => customer.Designer, map =>
             {
                 map.Cascade(Cascade.All);
-                map.Lazy(LazyRelation.Proxy);
+                map.Lazy(LazyRelation.NoLazy);
                 map.Column("IdDesigner");
             });
         }

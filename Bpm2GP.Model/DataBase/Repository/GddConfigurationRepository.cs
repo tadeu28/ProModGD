@@ -11,21 +11,40 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class GddConfigurationRepository : RepositoryBase<GddConfiguration>
     {
-        public GddConfigurationRepository(ISession session) : base(session) { }
 
         public List<GddConfiguration> FindAllGenresByDesigner(Designer designer, bool isInactive)
         {
-            return this.Session.Query<GddConfiguration>().Where(w => w.Inactive == isInactive &&
+            try
+            {
+                return this.Session.Query<GddConfiguration>().Where(w => w.Inactive == isInactive &&
                                                              (w.IsConstant ||
                                                               w.Designer == designer))
                                                          .ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<GddConfiguration> FindAllByGameGenre(GameGenre gameGenre, bool isInactive)
         {
-            return this.Session.Query<GddConfiguration>().Where(w => w.Inactive == isInactive &&
+            try
+            {
+                return this.Session.Query<GddConfiguration>().Where(w => w.Inactive == isInactive &&
                                                                      w.GameGenre.Id == gameGenre.Id)
                                                          .ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

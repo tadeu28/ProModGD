@@ -23,6 +23,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ProjectGddSectionContentMap()
         {
+            Table("projectgddsectioncontent");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.GameGenreTitle);

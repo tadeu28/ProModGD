@@ -11,11 +11,19 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class ProjectGddRepository : RepositoryBase<ProjectGdd>
     {
-        public ProjectGddRepository(ISession session) : base(session) { }
-
         public ProjectGdd FindFirstByProjectId(Guid Id)
         {
-            return this.Session.Query<ProjectGdd>().FirstOrDefault(f => f.Project.Id == Id);
+            try
+            {
+                return this.Session.Query<ProjectGdd>().FirstOrDefault(f => f.Project.Id == Id);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
     }

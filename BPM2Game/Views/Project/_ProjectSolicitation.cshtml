@@ -1,8 +1,10 @@
 ﻿@using Bpm2GP.Model.DataBase
+@using Bpm2GP.Model.DataBase.Manager
 @model Bpm2GP.Model.DataBase.Models.Project
 
 @{
-    var solicitations = DbFactory.Instance.ProjectSolicitationRepository.FindByProject(Model.Id);
+    var DbFactory = SessionManager.Instance.DbFactory;
+    var solicitations = DbFactory.ProjectSolicitationRepository.FindByProject(Model.Id);
 }
 
 <div class="panel panel-warning">

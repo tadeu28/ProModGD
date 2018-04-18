@@ -11,36 +11,94 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class AssociationConfElementRepository : RepositoryBase<AssociationConfElements>
     {
-        public AssociationConfElementRepository(ISession session) : base(session) { }
-
         public List<AssociationConfElements> FindAllElementsByAssociantionAndLanguageElementId(Guid langElementId, Guid idAssociation)
         {
-            return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Id == langElementId && w.Association.Id == idAssociation).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Id == langElementId && w.Association.Id == idAssociation).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<AssociationConfElements> FindAllElementsByAssociantionAndGameElementId(Guid gameElementId, Guid idAssociation)
         {
-            return this.Session.Query<AssociationConfElements>().Where(w => w.GameGenreElement.Id == gameElementId && w.Association.Id == idAssociation).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().Where(w => w.GameGenreElement.Id == gameElementId && w.Association.Id == idAssociation).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<AssociationConfElements> FindAllElementsByAssociantion(Guid idAssociation)
         {
-            return this.Session.Query<AssociationConfElements>().Where(w => w.Association.Id == idAssociation).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().Where(w => w.Association.Id == idAssociation).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<AssociationConfElements> FindAllElementsByElementeMetamodel(String metamodel)
         {
-            return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Metamodel == metamodel).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().Where(w => w.ProcessElement.Metamodel == metamodel).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<AssociationConfElements> FindAllElementsByElements(List<ModelingLanguageElement> elements)
         {
-            return this.Session.Query<AssociationConfElements>().Where(w => elements.Contains(w.ProcessElement)).ToList();
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().Where(w => elements.Contains(w.ProcessElement)).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public AssociationConfElements FindByElementMetamodel(String metamodel)
         {
-            return this.Session.Query<AssociationConfElements>().FirstOrDefault(w => w.ProcessElement.Metamodel == metamodel);
+            try
+            {
+                return this.Session.Query<AssociationConfElements>().FirstOrDefault(w => w.ProcessElement.Metamodel == metamodel);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

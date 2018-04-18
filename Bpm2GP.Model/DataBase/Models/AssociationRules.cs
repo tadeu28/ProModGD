@@ -41,6 +41,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public AssociationRulesMap()
         {
+            Table("associationrules");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Field);
@@ -50,6 +52,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.Type, m =>
             {
                 m.Column("idType");
+                m.Lazy(LazyRelation.NoLazy);
             });
             ManyToOne(x => x.AssociationElement, m =>
             {

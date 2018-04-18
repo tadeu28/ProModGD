@@ -34,6 +34,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public DesignMappingMap()
         {
+            Table("designmapping");
+
             Id(x=> x.Id, map => map.Generator(Generators.Guid));
 
             Property(x => x.CreationDate);
@@ -42,6 +44,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.Project, m =>
             {
                 m.Column("IdProject");
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             ManyToOne(x => x.AssociationConf, m =>
@@ -53,7 +56,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.GameDesignMappingElements, m =>
             {
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Inverse(true);
                 m.Key(k => k.Column("idDesignMapping"));
             }, o => o.OneToMany());
@@ -61,7 +64,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.GameMappingScores, m =>
             {
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Inverse(true);
                 m.Key(k => k.Column("idDesignMapping"));
             }, o => o.OneToMany());
@@ -69,7 +72,7 @@ namespace Bpm2GP.Model.DataBase.Models
             Bag(x => x.DesignMappingErrors, m =>
             {
                 m.Cascade(Cascade.All);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Inverse(true);
                 m.Key(k => k.Column("idDesignMapping"));
             }, o => o.OneToMany());

@@ -1,0 +1,5 @@
+INSERT INTO `Designer` VALUES ('7cb0aa1b-7f26-4290-b24e-7577f25d1dfb','Administrador',NULL);
+
+INSERT INTO `User` VALUES ('45c43c8a-a43a-4d0f-a12d-4700a6765de6','Admin','admin@gmail.com','admin','7cb0aa1b-7f26-4290-b24e-7577f25d1dfb');
+
+INSERT INTO `ModelingLanguage` VALUES ('757a18f6-daaa-464e-a205-d10e8e9fe1c2','BPMN Copy','BPMN Copy\n [Copied from: BPMN and Othes Process Elements]','2.0','2018-01-26 14:29:47',0,1,'7cb0aa1b-7f26-4290-b24e-7577f25d1dfb'),('79aab718-d864-4cbc-8d61-84004f443793','2','2\n [Copied from: BPMN and Othes Process Elements]','2.0','2018-01-26 14:37:52',0,0,'7cb0aa1b-7f26-4290-b24e-7577f25d1dfb'),('b8b1b942-ac76-4752-abad-594aefdc463f','BPMN and Othes Process Elements','Business Process Modeling Notation Elements, and also some elements like goals, localizations, instances...','2.0','2017-12-26 08:51:37',1,0,'7cb0aa1b-7f26-4290-b24e-7577f25d1dfb');

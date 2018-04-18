@@ -18,6 +18,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public AssociationTypeMap()
         {
+            Table("associationtype");
+
             Id(x => x.Id, m => m.Generator(Generators.Identity));
             Property(x => x.Description);
         }

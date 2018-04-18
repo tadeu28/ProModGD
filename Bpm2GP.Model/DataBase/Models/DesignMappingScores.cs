@@ -25,6 +25,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public DesignMappingScoresMap()
         {
+            Table("designmappingscores");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.GameGenreElement);
@@ -37,6 +39,7 @@ namespace Bpm2GP.Model.DataBase.Models
             ManyToOne(x => x.DesignMapping, m =>
             {
                 m.Column("idDesignMapping");
+                m.Lazy(LazyRelation.NoLazy);
             });
         }
     }

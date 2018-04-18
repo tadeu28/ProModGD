@@ -12,21 +12,49 @@ namespace Bpm2GP.Model.DataBase.Repository
     
     public class GameGenreElementRepository : RepositoryBase<GameGenreElement>
     {
-        public GameGenreElementRepository(ISession session) : base(session) { }
-
-        public List<GameGenreElement> FindAllElementsByGenreId(Guid genreId)
+        public List<GameGenreElement> FindAllElementsByGenreId(Guid genreId, bool alsoInactive)
         {
-            return this.Session.Query<GameGenreElement>().Where(w => w.GameGenre.Id == genreId).ToList();
+            try
+            {
+                return this.Session.Query<GameGenreElement>().Where(w => w.GameGenre.Id == genreId && w.Inactive == alsoInactive).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<GameGenreElement> FindAllElementsByListId(Guid[] ids)
         {
-            return this.Session.Query<GameGenreElement>().Where(w => ids.Contains(w.Id)).ToList();
+            try
+            {
+                return this.Session.Query<GameGenreElement>().Where(w => ids.Contains(w.Id)).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<GameGenreElement> FindAllElementsByGenreNotInListId(Guid idGenre, Guid[] ids)
         {
-            return this.Session.Query<GameGenreElement>().Where(w =>  w.GameGenre.Id == idGenre && !ids.Contains(w.Id)).ToList();
+            try
+            {
+                return this.Session.Query<GameGenreElement>().Where(w => w.GameGenre.Id == idGenre && !ids.Contains(w.Id)).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

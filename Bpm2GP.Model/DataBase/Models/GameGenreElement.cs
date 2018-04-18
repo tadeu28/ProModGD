@@ -27,18 +27,24 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public GameGenreElementMap()
         {
+            Table("gamegenreelement");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Name);
             Property(x => x.Description);
             Property(x => x.Inactive);
 
-            ManyToOne(x => x.GameGenre, m => m.Column("idGenre"));
+            ManyToOne(x => x.GameGenre, m =>
+            {
+                m.Column("idGenre");
+                m.Lazy(LazyRelation.NoLazy);
+            });
 
             Bag(x => x.AssociationConfElements, map =>
             {
                 map.Cascade(Cascade.DeleteOrphans);
-                map.Lazy(CollectionLazy.Lazy);
+                map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("idGenreElement"));
             },
             o => o.OneToMany());

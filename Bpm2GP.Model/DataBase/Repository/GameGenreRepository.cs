@@ -11,14 +11,22 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class GameGenreRepository : RepositoryBase<GameGenre>
     {
-        public GameGenreRepository (ISession session) : base(session) { }
-
         public List<GameGenre> FindAllGenresByDesigner(Designer designer, bool isInactive)
         {
-            return this.Session.Query<GameGenre>().Where(w => w.Inactive == isInactive && 
+            try
+            {
+                return this.Session.Query<GameGenre>().Where(w => w.Inactive == isInactive &&
                                                              (w.IsConstant ||
                                                               w.Designer == designer))
                                                          .ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

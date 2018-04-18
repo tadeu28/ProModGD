@@ -11,42 +11,100 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class GddConfigurationElementsRepository : RepositoryBase<GddConfigurationElements>
     {
-        public GddConfigurationElementsRepository(ISession session) : base(session) { }
-
         public List<GddConfigurationElements> FindAllElementsByGddId(Guid Id)
         {
-            return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == Id).ToList();
+            try
+            {
+                return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == Id).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public List<GddConfigurationElements> FindAllChildren(Guid Id)
         {
-            return this.Session.Query<GddConfigurationElements>().Where(w => w.ParentElement.Id == Id).OrderBy(o => o.PresentationOrder).ToList();
+            try
+            {
+                return this.Session.Query<GddConfigurationElements>().Where(w => w.ParentElement.Id == Id).OrderBy(o => o.PresentationOrder).ToList();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public GddConfigurationElements GetElementsByGddIdAndOrder(Guid Id, int order)
         {
-            return this.Session.Query<GddConfigurationElements>().FirstOrDefault(w => w.GddConfig.Id == Id && w.PresentationOrder == order);
+            try
+            {
+                return this.Session.Query<GddConfigurationElements>().FirstOrDefault(w => w.GddConfig.Id == Id && w.PresentationOrder == order);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public GddConfigurationElements GetPreviousElementInOrder(GddConfigurationElements element)
         {
-            return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == element.GddConfig.Id 
+            try
+            {
+                return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == element.GddConfig.Id
                                                                           && w.PresentationOrder < element.PresentationOrder)
                                                                  .OrderByDescending(o => o.PresentationOrder).First();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public GddConfigurationElements GetNextElementInOrder(GddConfigurationElements element)
         {
-            return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == element.GddConfig.Id
+            try
+            {
+                return this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == element.GddConfig.Id
                                                                           && w.PresentationOrder > element.PresentationOrder)
                                                                  .OrderBy(o => o.PresentationOrder).First();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public int GetMaxOrder(Guid Id)
         {
-            var elements = this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == Id);
+            try
+            {
+                var elements = this.Session.Query<GddConfigurationElements>().Where(w => w.GddConfig.Id == Id);
 
-            return elements.Any() ? elements.Max(m => m.PresentationOrder) : 0;
+                return elements.Any() ? elements.Max(m => m.PresentationOrder) : 0;
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bpm2GP.Model.DataBase.Manager;
 using NHibernate;
+using NHibernate.Context;
 using NHibernate.Criterion;
 using NHibernate.Linq;
 using NHibernate.Proxy;
@@ -12,49 +14,74 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class RepositoryBase<T> where T : class
     {
-        public ISession Session;
-
-        public RepositoryBase(ISession session)
+        public IList<T> FindAll()
         {
-            this.Session = session;
+            try
+            {
+                return Session.CreateCriteria(typeof(T)).List<T>();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
-        public virtual IList<T> FindAll()
+        public T FirstById(Guid id)
         {
-            return this.Session.CreateCriteria(typeof(T)).List<T>();
+            try
+            {
+                return Session.Get<T>(id);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
-        public T FindFirstById(Guid id)
+        public T FirstOrDefault()
         {
-            return this.Session.CreateCriteria<T>()
-                        .Add(Restrictions.Eq("Id", id))
-                        .SetMaxResults(1)
-                        .List<T>()
-                        .FirstOrDefault();
-        }
-
-        public T FindFirstOrDefault()
-        {
-            return this.Session.Query<T>().FirstOrDefault();
+            try
+            {
+                return this.Session.Query<T>().FirstOrDefault();
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public virtual T SaveOrUpdate(T entity)
         {
             try
             {
-                this.Session.Clear();
+                var transacao = Session.BeginTransaction();
 
-                var transacao = this.Session.BeginTransaction();
-
-                this.Session.SaveOrUpdate(entity);
+                Session.SaveOrUpdate(entity);
 
                 transacao.Commit();
 
                 return entity;
+
             }
             catch (Exception ex)
             {
                 throw new Exception("Não foi possível salvar " + typeof(T) + "\nErro:" + ex.Message);
+            }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
             }
         }
 
@@ -62,11 +89,9 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             try
             {
-                this.Session.Clear();
+                var transacao = Session.BeginTransaction();
 
-                var transacao = this.Session.BeginTransaction();
-
-                this.Session.Save(entity);
+                Session.Save(entity);
 
                 transacao.Commit();
 
@@ -76,17 +101,22 @@ namespace Bpm2GP.Model.DataBase.Repository
             {
                 throw new Exception("Não foi possível salvar " + typeof(T) + "\nErro:" + ex.Message);
             }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public virtual T Update(T entity)
         {
             try
             {
-                this.Session.Clear();
+                var transacao = Session.BeginTransaction();
 
-                var transacao = this.Session.BeginTransaction();
-
-                this.Session.Update(entity);
+                Session.Update(entity);
 
                 transacao.Commit();
 
@@ -96,17 +126,22 @@ namespace Bpm2GP.Model.DataBase.Repository
             {
                 throw new Exception("Não foi possível editar " + typeof(T) + "\nErro:" + ex.Message);
             }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
         }
 
         public void Delete(T entity)
         {
             try
             {
-                this.Session.Clear();
+                var transacao = Session.BeginTransaction();
 
-                var transacao = this.Session.BeginTransaction();
-
-                this.Session.Delete(entity);
+                Session.Delete(entity);
 
                 transacao.Commit();
             }
@@ -114,19 +149,12 @@ namespace Bpm2GP.Model.DataBase.Repository
             {
                 throw new Exception("Não foi possível excluir " + typeof(T) + "\nErro:" + ex.Message);
             }
-        }
-
-        public void Delete(T entity, string id)
-        {
-            try
+            finally
             {
-                this.Session.CreateQuery(String.Format("delete from {0} where id = {1}", typeof(T).Name, id)).ExecuteUpdate();
-
-                this.Session.Clear();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Não foi possível excluir " + typeof(T) + "\nErro:" + ex.Message);
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
             }
         }
 
@@ -134,11 +162,9 @@ namespace Bpm2GP.Model.DataBase.Repository
         {
             try
             {
-                this.Session.Clear();
+                var transacao = Session.BeginTransaction();
 
-                var transacao = this.Session.BeginTransaction();
-
-                this.Session.Delete(entity);
+                Session.Delete(entity);
 
                 transacao.Commit();
             }
@@ -146,25 +172,48 @@ namespace Bpm2GP.Model.DataBase.Repository
             {
                 throw new Exception("Não foi possível excluir " + typeof(T) + "\nErro:" + ex.Message);
             }
+            finally
+            {
+                if (Session.IsOpen)
+                {
+                    Session.Close();
+                }
+            }
+        }
+
+        protected ISession Session
+        {
+            get
+            {
+                try
+                {
+                    var sessionFactory = SessionManager.Instance.LoadSessionManager("dbfactory");
+
+                    if (CurrentSessionContext.HasBind(sessionFactory))
+                    {
+                        if (sessionFactory.GetCurrentSession().IsOpen)
+                        {
+                            return sessionFactory.GetCurrentSession();
+                        }
+                    }
+
+                    var session = sessionFactory.OpenSession();
+                    session.FlushMode = FlushMode.Commit;
+
+                    CurrentSessionContext.Bind(session);
+
+                    return session;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Não foi possível criar a Sessão.", ex);
+                }
+            }
         }
 
         public void Clear()
         {
-            if(this.Session != null)
-                this.Session.Clear();
+            Session?.Clear();
         }
-
-        public virtual T UnProxy(T entity)
-        {
-            try
-            {
-                return (T) this.Session.GetSessionImplementation().PersistenceContext.Unproxy(entity);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Não foi possível salvar " + typeof(T) + "\nErro:" + ex.Message);
-            }
-        }
-
     }
 }

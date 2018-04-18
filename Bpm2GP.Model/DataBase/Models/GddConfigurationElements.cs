@@ -30,6 +30,8 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public GddConfigurationElementsMap()
         {
+            Table("gddconfigurationelements");
+
             Id(x => x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Title);
@@ -51,20 +53,21 @@ namespace Bpm2GP.Model.DataBase.Models
                 map.Cascade(Cascade.None);
                 map.Lazy(CollectionLazy.NoLazy);
                 map.Key(k => k.Column("idGddElement"));
+                //map.Table("gamegenreelements");
             },
             o => o.ManyToMany(p => p.Column("idGameGenre")));
 
             ManyToOne(x => x.ParentElement, m =>
             {
                 m.Column("idGddElement");
-                m.Lazy(LazyRelation.Proxy);
+                m.Lazy(LazyRelation.NoLazy);
             });
 
             Bag(x => x.ChildElements, m =>
             {
                 m.Cascade(Cascade.DeleteOrphans);
                 m.Inverse(true);
-                m.Lazy(CollectionLazy.Lazy);
+                m.Lazy(CollectionLazy.NoLazy);
                 m.Key(k => k.Column("idGddElement"));
             }, o => o.OneToMany());
         }

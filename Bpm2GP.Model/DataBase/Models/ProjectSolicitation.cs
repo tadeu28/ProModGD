@@ -19,12 +19,22 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public ProjectSolicitationMap()
         {
+            Table("projectsolicitation");
+
             Id(x =>x.Id, m => m.Generator(Generators.Guid));
 
             Property(x => x.Date);
 
-            ManyToOne(x => x.Designer, m => m.Column("idDesigner"));
-            ManyToOne(x => x.Project, m => m.Column("idProject"));
+            ManyToOne(x => x.Designer, m =>
+            {
+                m.Column("idDesigner");
+                m.Lazy(LazyRelation.NoLazy);
+            });
+            ManyToOne(x => x.Project, m =>
+            {
+                m.Column("idProject");
+                m.Lazy(LazyRelation.NoLazy);
+            });
         }
     }
 }

@@ -10,6 +10,16 @@
         showGddElements();
     }
 
+    function beginSaveConfigElement() {
+        $("#dlgSelectConf").modal("hide");
+    }
+
+    function errorSaveConfigElement() {
+        $("#dlgSelectConf").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+
 </script>
 
 <div id="dlgSelectConf" class="modal fade " role="dialog">
@@ -19,6 +29,8 @@
         HttpMethod = "post",
         InsertionMode = InsertionMode.Replace,
         OnSuccess = "postSaveConfigElement",
+        OnBegin = "beginSaveConfigElement",
+        OnFailure = "errorSaveConfigElement",
         LoadingElementId = "divCarregando"
     }))
     {
