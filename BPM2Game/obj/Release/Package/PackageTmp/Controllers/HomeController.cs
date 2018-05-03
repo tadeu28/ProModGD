@@ -25,7 +25,7 @@ namespace BPM2Game.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         public ActionResult About()
         {
             return View();
