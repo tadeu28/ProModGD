@@ -41,6 +41,8 @@ namespace Bpm2GP.Model.DataBase
         public ProjectGddSectionRepository ProjectGddSectionRepository { get; set; }
         public ProjectGddContentSectionRepository ProjectGddContentSectionRepository { get; set; }
 
+        public VersionRepository VersionRepository { get; set; }
+
         public DbFactory()
         {
             UserRepository = new UserRepository();
@@ -62,6 +64,7 @@ namespace Bpm2GP.Model.DataBase
             ProjectGddRepository = new ProjectGddRepository();
             ProjectGddSectionRepository = new ProjectGddSectionRepository();
             ProjectGddContentSectionRepository = new ProjectGddContentSectionRepository();
+            VersionRepository = new VersionRepository();
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+
+<ul class="nav navbar-nav navbar-left">
+    <li>
+        <a href="@Url.Content("~/Help/ProModGD_Help_PtBr.html")"><i class="glyphicon glyphicon-question-sign"></i> Help</a>
+    </li>
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-log-in"></i> Log-In <span class="caret"></span></a>
+        @Html.Partial("_Login", new User())
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-arrow-up"></i> Sign-Up <span class="caret"></span></a>
+        @Html.Partial("_NewUser", new User())
+    </li>
+</ul>
+

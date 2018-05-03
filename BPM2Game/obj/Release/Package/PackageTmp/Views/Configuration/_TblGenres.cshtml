@@ -1,0 +1,72 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model IEnumerable<Bpm2GP.Model.DataBase.Models.GameGenre>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tblGameGenres').DataTable({
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+
+<table id="tblGameGenres" class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (!item.IsConstant)
+                    {
+                        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenres"
+                           data-ajax-loading="#divCarregando" data-toggle="tooltip" data-placement="bottom" title="Remove Genre"
+                           href="@Url.Action("RemoveGameGenre", "Configuration", new {id = item.Id})" class="btn btn-sm btn-danger">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    }
+                    <a id="btnShowElement" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblGenreElements"
+                       data-ajax-loading="#divCarregando" data-ajax-success="OpenElementTab" data-toggle="tooltip"
+                       data-placement="bottom" title="Show Elements" 
+                       href="@Url.Action("GenreElements", "Configuration", new {id = item.Id})" class="btn btn-sm btn-default btnShowElement">
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot></tfoot>
+</table>
+
+<hr />
+<div class="text-right">
+    <a id="btnReloadLanguages" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace"
+       data-ajax-update="#tblGenres" data-ajax-loading="#divCarregando"
+       href="@Url.Action("ReloadAllGenres", "Configuration")" class="btn btn-warning">
+        <i class="glyphicon glyphicon-refresh"></i> Reload Genres
+    </a>
+    <button id="btnAddLanguage" class="btn btn-primary" data-toggle="modal" data-target="#dlgGenre">
+        <i class="glyphicon glyphicon-plus-sign"></i> New Genre
+    </button>
+</div>
+
+@Html.Partial("_AddGenre", new GameGenre())

@@ -1,0 +1,72 @@
+﻿@model Bpm2GP.Model.DataBase.Models.ProjectGddSectionContent
+
+@{
+    var genreElements = (SelectList)ViewBag.GenreElements;
+}
+
+<script type="text/javascript">
+
+    function postSaveContentElement() {
+        $("#dlgContentSection").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+
+</script>
+
+<div id="dlgContentSection" class="modal fade " role="dialog">
+    @using (Ajax.BeginForm("SaveGddContentSection", "Project", new AjaxOptions()
+    {
+        UpdateTargetId = "gddPanel",
+        HttpMethod = "post",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "postSaveContentElement",
+        LoadingElementId = "divCarregando"
+    }))
+    {
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Content</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                        <input type="hidden" id="Id" name="Id" value="@Model.Id"/>
+                        @Html.Hidden("idGddSection", Model.Section.Id)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Content, htmlAttributes: new {@class = "control-label col-md-3"})
+                            <div class="col-md-9">
+                                @Html.TextAreaFor(x => x.Content, new Dictionary<string, object>() {{"class", "form-control"}, {"rows", 20}})
+                                @Html.ValidationMessageFor(model => model.Content, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Game Genre Element", htmlAttributes: new {@class = "control-label col-md-3"})
+                            <div class="col-md-9">
+                                @Html.DropDownList("gameGenreTitle", genreElements, new Dictionary<string, object>() {{"class", "form-control"}})
+                                <small>*optional</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <p>
+                        *Tip: If you know HTML sintaxe, you can used it to format your content. But you must change the signal <strong>"&lt;" to "{"</strong> AND the signal <strong>"&gt;" to "}"</strong>.
+                        Example: to mark some text with &lt;strong&gt; you must put as <strong>{strong} my text {/strong}</strong>.
+                    </p>
+                </div>
+                <div class="modal-footer form-horizontal">
+                    <div class="btn btn-primary" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-remove-circle"></i> Cancel
+                    </div>
+                    <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

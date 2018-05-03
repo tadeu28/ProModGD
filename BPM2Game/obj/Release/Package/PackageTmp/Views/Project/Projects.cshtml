@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Bpm2GP.Model.DataBase.Models.Project>
+
+<h2>Projects</h2>
+<div class="col-md-12">
+    <ol class="breadcrumb">
+        <li class=""><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class="active">Projects</li>
+    </ol>
+</div>
+
+<div id="tblPrjs" class="col-md-12">
+    @Html.Partial("_TblProjects", Model, new ViewDataDictionary() { {"Genres", ViewBag.Genres} })
+</div>

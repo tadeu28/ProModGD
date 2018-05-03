@@ -1,0 +1,158 @@
+﻿@using Bpm2GP.Model.DataBase.Models
+@model Bpm2GP.Model.DataBase.Models.Project
+
+@{
+    var associations = (List<AssociationConf>) ViewData["Associations"];
+    associations.Insert(0, new AssociationConf(){});
+    var selectAssociation = new SelectList(associations, "Id", "Name");
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var modelFile = "@Model.BpmnModelPath";
+        var qtdeMap = "@Model.DesignMappings.Count";
+
+        $("#btnMapear").hide();
+        $("#btnDeletarMapear").hide();
+        $("#btnPrintMap").hide();
+        
+        $("#mapFields").show();
+        if (qtdeMap > 0) {
+            $("#btnDeletarMapear").show();
+            $("#btnPrintMap").show();
+            $("#mapFields").hide();
+        }
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        //$("#IdGenre").change(function() {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "/Project/AllMappings/" + $("#IdGenre").val(),
+        //        success: function (r) {
+        //            $("#idAssociations").html("");
+        //            var data = jQuery.parseJSON(r);
+
+        //            $.each(data, function (key, entry) {
+        //                $("#idAssociations").append($('<option></option>').val(entry.Id).html(entry.Name));
+        //            });
+        //        }
+        //    });
+        //});
+
+        $("#idAssociations").change(function () {
+            if (($("#idAssociations").val() !== "00000000-0000-0000-0000-000000000000") && (modelFile != "")) {
+                $("#btnMapear").show();
+            } else {
+                $("#btnMapear").hide();
+            }
+        });
+    });
+
+    function postDoneDelete(r) {
+        if (r === "ok") {
+            $("#mapFields").show();
+            $("#btnMapear").show();
+            $("#btnDeletarMapear").hide();
+            $("#btnPrintMap").hide();
+
+            toastr.success('The game design mapping has been deleted!', null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
+            
+            $("#tblMapElements").html("");
+        } else {
+            console.log(r);
+
+            toastr.error("Can't possible to delete the game design mapping.<br/><br/>" + r, null, {
+                timeOut: 3000,
+                closeButton: true,
+                preventDuplicates: false,
+                positionClass: "toast-bottom-right",
+                newestOnTop: true
+            });
+        }
+    }
+
+    function postDone(r) {
+        $("#mapFields").hide();
+        $("#btnMapear").hide();
+        $("#btnDeletarMapear").show();
+        $("#btnPrintMap").show();
+        
+        $("#tblMapElements").html(r);
+        
+        toastr.success('The game design mapping has been created with success!', null, {
+            timeOut: 3000,
+            closeButton: true,
+            preventDuplicates: false,
+            positionClass: "toast-bottom-right",
+            newestOnTop: true
+        });
+    }
+</script>
+
+<br />
+<div class="row">
+    <div class="col-md-3">
+        @using (Ajax.BeginForm("CreateMapping", "Project", new AjaxOptions()
+        {
+            HttpMethod = "post",
+            InsertionMode = InsertionMode.Replace,
+            OnSuccess = "postDone",
+            LoadingElementId = "divCarregando"
+        }))
+        {
+            <div class="panel panel-info">
+                <div class="panel-heading">Game Map Actions</div>
+                <div class="panel-body" id="mapFields">
+                    <div class="form-group">
+                        @Html.Label("Associations", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("idAssociations", selectAssociation, new Dictionary<string, object>() { { "class", "form-control" } })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    @Html.Hidden("IdProject", Model.Id)
+                    <button type="submit" class="btn btn-success" id="btnMapear"><i class="glyphicon glyphicon-search"></i> Create Element Map</button>
+                    <a data-ajax="true" data-ajax-loading="#divCarregando" data-ajax-method="post" data-ajax-success="postDoneDelete"
+                       href="@Url.Action("ExcluirMapeamento", "Project", new {id = Model.Id})" class="btn btn-danger" id="btnDeletarMapear">
+                        <i class="glyphicon glyphicon-erase"></i> Delete Element Map
+                    </a>
+                    <a href="@Url.Action("PrintMappping", "Project", new {id = Model.Id})" class="btn btn-primary" id="btnPrintMap">
+                        <i class="glyphicon glyphicon-print"></i> Print Element Map
+                    </a>
+                </div>
+            </div>
+        }
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Legend:</h4>
+                <hr/>
+                <i class="glyphicon glyphicon-knight" data-toggle="tooltip" data-placement="top" title="Game Element"></i> = Game element<br/>
+                <i class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="top" title="Information auto-generated"></i> = Information created by process mapping<br/>
+                <i class="glyphicon glyphicon-hand-up" data-toggle="tooltip" data-placement="top" title="Information auto-generated"></i> = Information created manually<br/>
+                <i class="glyphicon glyphicon-book" data-toggle="tooltip" data-placement="top" title='Information could exist in the "Process Model Documentation"'></i> = Information could exist in the "Process Model Documentation"<br/>
+                <i class="glyphicon glyphicon-pawn" data-toggle="tooltip" data-placement="top" title='Remove Element'></i> = Inclusion of a new element<br/>
+                <i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title='Remove Element'></i> = Remove selected element<br/>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Game Design Map</div>
+            <div class="panel-body" id="tblMapElements">
+                @Html.Partial("_TblMappingElements", Model.DesignMappings)
+            </div>
+        </div>
+    </div>
+</div>

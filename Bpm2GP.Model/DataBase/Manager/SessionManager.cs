@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -73,10 +74,70 @@ namespace Bpm2GP.Model.DataBase.Manager
                 }
 
                 ConfigurarNHibernate(stringConexao);
+
+                UpdateDataBase(stringConexao);
             }
             catch (Exception ex)
             {
                 throw new Exception("Não foi possivel conectar", ex);
+            }
+        }
+
+        private void UpdateDataBase(String stringConexao)
+        {
+            var diretorio = System.Environment.CurrentDirectory;
+            var arquivos = diretorio + "/Sql/";
+            arquivos = HttpContext.Current.Server.MapPath("/Sql/").Replace("\\", "/");
+            var sqls = Directory.EnumerateFiles(arquivos, "*.sql").ToList();
+
+            var mySql = new MySqlConnection(stringConexao);
+            var cmd = mySql.CreateCommand();
+            var version = 1;
+
+            try
+            {
+
+                mySql.Open();
+                cmd.CommandText = "Select VersionNumber from Version;";
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    version = Convert.ToInt32(reader["VersionNumber"].ToString());
+                    version++;
+
+                    var sql = sqls.FirstOrDefault(f => f.Contains("/" + version + ".sql"));
+                    if (!String.IsNullOrEmpty(sql))
+                    {
+                        var contents = File.ReadAllText(sql);
+
+                        cmd.CommandText = contents;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+                try
+                {
+                    var sql = sqls.FirstOrDefault(f => f.Contains("/" + version + ".sql"));
+                    if (!String.IsNullOrEmpty(sql))
+                    {
+                        var contents = File.ReadAllText(sql);
+
+                        cmd.CommandText = contents;
+                        cmd.ExecuteNonQuery();
+
+                        UpdateDataBase(stringConexao);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Não foi possivel criar a estrutura de banco de dados.", e);
+                }
+            }
+            finally
+            {
+                mySql.Close();
             }
         }
 
@@ -145,11 +206,11 @@ namespace Bpm2GP.Model.DataBase.Manager
                     // Provedor de conexão do MySQL 
                     i.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                     // GERA LOG DOS SQL EXECUTADOS NO CONSOLE
-                    i.LogSqlInConsole = true;
+                    //i.LogSqlInConsole = true;
                     // DESCOMENTAR CASO QUEIRA VISUALIZAR O LOG DE SQL FORMATADO NO CONSOLE
-                    i.LogFormattedSql = true;
+                    //i.LogFormattedSql = true;
                     // CRIA O SCHEMA DO BANCO DE DADOS SEMPRE QUE A CONFIGURATION FOR UTILIZADA
-                    i.SchemaAction = SchemaAutoAction.Update;
+                    //i.SchemaAction = SchemaAutoAction.Update;
                 });
 
                 //Realiza o mapeamento das classes

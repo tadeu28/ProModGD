@@ -39,3 +39,5 @@
 /Bpm2GP.Model/bin/Release
 /Bpm2GP.Model/obj/Release
 /BPM2Game/Properties/PublishProfiles
+*.dll
+*.pubxml

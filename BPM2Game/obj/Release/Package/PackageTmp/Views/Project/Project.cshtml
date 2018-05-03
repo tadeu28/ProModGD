@@ -1,0 +1,69 @@
+﻿@model Bpm2GP.Model.DataBase.Models.Project
+@{
+    ViewBag.Title = "Projects";
+}
+
+<script type="text/javascript">
+
+    var tabSheet = null;
+    var tabIndex = null;
+
+    $(document).ready(function () {
+        $("#tabNav > li > a").click(function (e) {
+            tabSheet = $(this).parent();
+            tabIndex = tabSheet.attr("tabindex");
+            $("#tabNav > li").removeClass("active");
+            tabSheet.addClass("active");
+        });
+    });
+</script>
+
+<h3>@Model.Title [#@Model.Id]</h3>
+<h5 style="color: silver">Project Owner: @Model.Owner.Name</h5>
+<div class="col-md-12">
+    <ol class="breadcrumb">
+        <li class=""><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class=""><a href="@Url.Action("Projects", "Project")">Projects</a></li>
+        <li class="active">@Model.Title</li>
+    </ol>
+</div>
+
+<ul class="nav nav-tabs" id="tabNav">
+    <li class="active" id="tbsInfo">
+        <a tabindex="tabInformation" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("ProjectInformation", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-info-sign"></i> Game Project Information
+        </a>
+    </li>
+    <li class="" id="tbsProcessModel">
+        <a tabindex="tabProcessModel" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("ProcessInformation", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-inbox"></i> Process Model Information
+        </a>
+    </li>
+    <li class="" id="tbsGameConfig">
+        <a tabindex="tabProcessModel" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("GameConfiguration", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-tower"></i> Game Design Elements Mapping
+        </a>
+    </li>
+    <li class="" id="tbsGameDesignDocument">
+        <a tabindex="tabProcessModel" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("GameDesignDocument", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-book"></i> Game Design Document
+        </a>
+    </li>
+</ul>
+
+<ul class="tab-content" id="tbContent" style="padding-left: 0px;">
+    <li class="tab-pane fade active in" id="tabInformation">
+        @Html.Partial("_ProjectInformation", Model)
+    </li>
+</ul>
+
+
+

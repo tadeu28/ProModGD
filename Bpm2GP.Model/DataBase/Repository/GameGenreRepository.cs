@@ -11,13 +11,13 @@ namespace Bpm2GP.Model.DataBase.Repository
 {
     public class GameGenreRepository : RepositoryBase<GameGenre>
     {
-        public List<GameGenre> FindAllGenresByDesigner(Designer designer, bool isInactive)
+        public List<GameGenre> FindAllGenresByDesigner(Guid idDesigner, bool isInactive)
         {
             try
             {
                 return this.Session.Query<GameGenre>().Where(w => w.Inactive == isInactive &&
                                                              (w.IsConstant ||
-                                                              w.Designer == designer))
+                                                              w.Designer.Id == idDesigner))
                                                          .ToList();
             }
             finally

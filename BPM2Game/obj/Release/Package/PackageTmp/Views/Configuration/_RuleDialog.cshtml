@@ -1,0 +1,37 @@
+﻿@model Bpm2GP.Model.DataBase.Models.AssociationConfElements
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#dlgRules").on("hide.bs.modal", function () {
+            
+        });
+    });
+    
+    function postDone() {
+        $("#dlgRules").modal("hide");
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+</script>
+<div id="dlgRules" class="modal fade " role="dialog">
+
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Mapping Rules </h4>
+                    <small style="color:silver">@("Model Element: " + Model.ProcessElement.Name + " - Game Element: " + Model.GameGenreElement.Name)</small>
+                </div>
+                <div class="modal-body" id="formRules">
+                    @Html.Partial("_AddAssociationRule", Model, new ViewDataDictionary() { { "RuleType", ViewBag.RuleTypes } })
+                </div>
+                <div class="modal-footer form-horizontal">
+                    <div class="btn btn-primary" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-remove-circle"></i> Close
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+

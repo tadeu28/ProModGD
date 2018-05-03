@@ -15,7 +15,7 @@ namespace Bpm2GP.Model.DataBase.Models
     {
         public virtual Guid Id { get; set; }
         [Required(ErrorMessage = "User name is required.")]
-        [Remote("UserCompare", "User", ErrorMessage = "Aready exists this user name, please try another.")]
+        //[Remote("UserCompare", "User", ErrorMessage = "Aready exists this user name, please try another.")]
         public virtual string UserName { get; set; }
         [Required(ErrorMessage = "E-mail is required.")]
         [DataType(DataType.EmailAddress)]

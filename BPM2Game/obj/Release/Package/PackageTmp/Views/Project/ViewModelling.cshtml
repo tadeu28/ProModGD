@@ -1,0 +1,31 @@
+﻿<h2>Process View</h2>
+<hr />
+<script type="text/javascript">
+    var modelFile = "@ViewBag.BpmnFilePath";
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+<div class="alert alert-success row">
+    <form class="form-inline">
+        <div class="left text-left">
+            <input id="projectId" type="hidden" value="@ViewBag.ProjectId" />
+            <a href="" class="btn btn-warning" id="save-download" data-toggle="tooltip" data-placement="bottom" title="Download Process Model">
+                <i class="glyphicon glyphicon-cloud-download"></i>
+            </a>
+        </div>
+    </form>
+</div>
+<!-- element to draw bpmn diagram in -->
+<div>
+    <div class="well" style="height: 600px" id="canvas"></div>
+</div>
+
+<hr/>
+<label>Selected BPMN Element</label>
+<p id="selElementView"></p>
+<!-- scripts -->
+<!-- bpmn-js modeler -->
+<script src="../../Scripts/bower_components/bpmn-js/dist/bpmn-navigated-viewer.js"></script>
+<!-- application -->
+<script src="../../Scripts/viwer-bpmn.js"></script>

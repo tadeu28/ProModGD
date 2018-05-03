@@ -1,0 +1,35 @@
+﻿@model Bpm2GP.Model.DataBase.Models.ProjectGdd
+
+<script src="/Scripts/tinymce/tinymce.js"></script>
+
+<script type="text/javascript">
+    function showSectionModal() {
+        $("#dlgGddSection").modal("show");
+    }
+
+    function showSectionContentModal() {
+        $("#dlgContentSection").modal("show");
+    }
+
+    tinymce.init(
+        {
+            selector: '#GddDocument',
+            toolbar: [
+                'undo redo removeformat searchreplace print | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontsizeselect cut copy paste forecolor backcolor | bullist numlist | subscript superscript link ',
+                ''
+            ],
+            menu: {
+                view: { title: 'Edit', items: 'undo redo | cut copy paste | selectall code' },
+            },
+            plugins: [
+                'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                'save table contextmenu directionality emoticons template paste textcolor autoresize'
+            ],
+            autoresize_on_init: false
+        });
+</script>
+
+<textarea id="GddDocument">@Html.Raw(Model.GddAsHtml)</textarea>
+
+<input type="hidden" id="idGddCode" name="idGddCode" value="@Model.Id"/>
