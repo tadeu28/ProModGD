@@ -253,3 +253,4 @@ G:\Projetos Doutorado\ProMolGD\BPM2Game\bin\Scripts\jquery-1.10.2.intellisense.j
 G:\Projetos Doutorado\ProMolGD\BPM2Game\bin\Scripts\jquery.validate-vsdoc.js
 G:\Projetos Doutorado\ProMolGD\BPM2Game\bin\Config\bpm2game_config.ini
 G:\Projetos Doutorado\ProMolGD\BPM2Game\bin\Sql\1.sql
+G:\Projetos Doutorado\ProMolGD\BPM2Game\bin\Sql\2.sql

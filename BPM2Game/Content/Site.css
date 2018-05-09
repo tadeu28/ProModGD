@@ -139,6 +139,7 @@ textarea {
         font-weight: bold;
         height: 50px;
         width: 80px;
+        z-index: 9999;
     }
 
 

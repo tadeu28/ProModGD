@@ -1,0 +1,27 @@
+﻿@model Bpm2GP.Model.DataBase.Models.Project
+
+<script type="text/javascript">
+    function showAddDocumentDialog() {
+        $("#dlgNewDocument").modal("show");
+    }
+</script>
+
+<br/>
+<nav class="navbar navbar-default">
+    <div class="container-fluid form-inline" style="padding: 10px">
+        <a data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#frmAddDocument"
+           data-ajax-loading="#divCarregando" data-toggle="tooltip"
+           data-placement="bottom" title="New Document" data-ajax-success="showAddDocumentDialog"
+           href="@Url.Action("AddNewDocument", "Project", new {id = Model.Id})" class="btn btn-default">
+            <i class="glyphicon glyphicon-plus"></i> New Document
+        </a>
+    </div>
+</nav>
+
+<div id="tblProjectFiles">
+    @Html.Partial("_ProjectDocuments", Model.Files)
+</div>
+
+<div id="frmAddDocument">
+    
+</div>

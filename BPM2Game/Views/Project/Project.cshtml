@@ -57,6 +57,13 @@
             <i class="glyphicon glyphicon-book"></i> Game Design Document
         </a>
     </li>
+    <li class="" id="tbsOthersDocuments">
+        <a tabindex="tabProcessModel" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tabInformation"
+           data-ajax-loading="#divCarregando"
+           href="@Url.Action("OthersDocuments", "Project", new {id = Model.Id})">
+            <i class="glyphicon glyphicon-folder-open"></i> Others Documents
+        </a>
+    </li>
 </ul>
 
 <ul class="tab-content" id="tbContent" style="padding-left: 0px;">

@@ -1188,6 +1188,9 @@
     <Content Include="Sql\1.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Sql\2.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1263,10 +1266,14 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-mobile.woff" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Project\_OthersDocuments.cshtml" />
+    <Content Include="Views\Project\_ProjectDocuments.cshtml" />
+    <Content Include="Views\Project\_AddDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="files\bpmn\" />
+    <Folder Include="files\projects\" />
     <Folder Include="Scripts\process_modeler\vendor\bpmn-font\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Bpm2GP.Model.DataBase.Models.ProjectFile>
+
+@{
+    var uploadPath = Server.MapPath("~/files/projects");
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tblFiles').DataTable({
+            "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]]
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<table class="table table-bordered table-striped table-responsive" id="tblFiles">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Insertion Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td style="word-wrap: break-word;">
+                @Html.Raw(item.Description.Replace("\n", "<br/>"))
+            </td>
+            <td>
+                @item.DtPersistence.ToShortDateString()
+            </td>
+            <td>
+                <a id="btnDeleteDocument" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tblProjectFiles"
+                   data-ajax-loading="#divCarregando" data-toggle="tooltip" 
+                   data-placement="bottom" title="Delete"
+                   href="@Url.Action("DeleteDocument", "Project", new {id = item.Id})" class="btn btn-default">
+                    <i class="glyphicon glyphicon-trash"></i> 
+                </a>
+                
+                <a href="@Url.Content("../../files/projects/" + item.FileName)" data-toggle="tooltip" class="btn btn-success"
+                   data-placement="bottom" title="@("Download " + item.Title)">
+                    <i class="glyphicon glyphicon-download"></i> 
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    <tfoot></tfoot>
+</table>

@@ -104,14 +104,25 @@ namespace Bpm2GP.Model.DataBase.Manager
                 {
                     version = Convert.ToInt32(reader["VersionNumber"].ToString());
                     version++;
+                }
 
-                    var sql = sqls.FirstOrDefault(f => f.Contains("/" + version + ".sql"));
-                    if (!String.IsNullOrEmpty(sql))
+                mySql.Close();
+
+                foreach (var sql in sqls)
+                {
+                    if (sql.Contains("/" + version + ".sql"))
                     {
-                        var contents = File.ReadAllText(sql);
+                        if (!String.IsNullOrEmpty(sql))
+                        {
+                            var contents = File.ReadAllText(sql);
 
-                        cmd.CommandText = contents;
-                        cmd.ExecuteNonQuery();
+                            mySql.Open();
+                            cmd.CommandText = contents;
+                            cmd.ExecuteNonQuery();
+                            mySql.Close();
+                        }
+
+                        version++;
                     }
                 }
             }

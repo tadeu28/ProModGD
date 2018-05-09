@@ -13,6 +13,7 @@ using Bpm2GP.Model.DataBase.Models;
 using Bpm2GP.Model.Utils;
 using BPM2Game.Mapping.Bpmn;
 using BPM2Game.Models.Gdd;
+using Microsoft.Ajax.Utilities;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Newtonsoft.Json;
 using Rotativa.Core;
@@ -539,6 +540,20 @@ namespace BPM2Game.Controllers
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "RemoveDesigner"));
             }
         }
+        
+        public PartialViewResult OthersDocuments(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.ProjectRepository.FirstById(id);
+
+                return PartialView("_OthersDocuments", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "OthersDocuments"));
+            }
+        }
 
         public PartialViewResult GameDesignDocument(Guid id)
         {
@@ -671,6 +686,84 @@ namespace BPM2Game.Controllers
             catch (Exception ex)
             {
                 return PartialView("Error", new HandleErrorInfo(ex, "Project", "CreateGddBasedOnMapping"));
+            }
+        }
+
+        public PartialViewResult ProjectFileUpload(String id)
+        {
+            try
+            {
+                var guidId = Guid.Parse(id);
+                var project = DbFactory.ProjectRepository.FirstById(guidId);
+
+                foreach (string fileName in Request.Files)
+                {
+                    var file = Request.Files[fileName];
+                    if (file != null)
+                    {
+                        var uploadPath = Server.MapPath("~/files/projects");
+                        string caminhoArquivo = Path.Combine(@uploadPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(caminhoArquivo);
+
+                        var fileProject = new ProjectFile()
+                        {
+                            Project = project, 
+                            Description = Request.Form["DocDescription"],
+                            Title = Request.Form["TitleDoc"],
+                            FileName = file.FileName,
+                            DtPersistence = DateTime.Now
+                        };
+                        
+                        DbFactory.ProjectFileRepository.Save(fileProject);
+                    }
+                }
+
+                project = DbFactory.ProjectRepository.FirstById(guidId);
+
+                return PartialView("_ProjectDocuments", project.Files);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProjectFileUpload"));
+            }
+        }
+
+        public PartialViewResult AddNewDocument(Guid id)
+        {
+            try
+            {
+                var project = DbFactory.ProjectRepository.FirstById(id);
+
+                return PartialView("_AddDocument", project);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "ProjectFileUpload"));
+            }
+        }
+
+        public ActionResult DeleteDocument(Guid id)
+        {
+            
+            try
+            {
+                var doc = DbFactory.ProjectFileRepository.FirstById(id);
+                var projectId = doc.Project.Id;
+
+                var uploadPath = Server.MapPath("~/files/projects");
+                string caminhoArquivo = Path.Combine(@uploadPath, Path.GetFileName(doc.FileName));
+                if (System.IO.File.Exists(caminhoArquivo))
+                {
+                    System.IO.File.Delete(caminhoArquivo);
+                    DbFactory.ProjectFileRepository.Delete(doc);
+                }
+
+                var project = DbFactory.ProjectRepository.FirstById(projectId);
+                return PartialView("_ProjectDocuments", project.Files);
+            }
+            catch (Exception ex)
+            {
+                return PartialView("Error", new HandleErrorInfo(ex, "Project", "DeleteDocument"));
             }
         }
     }

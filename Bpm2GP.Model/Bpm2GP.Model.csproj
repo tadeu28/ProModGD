@@ -133,6 +133,7 @@
     <Compile Include="DataBase\Models\ModelingLanguage.cs" />
     <Compile Include="DataBase\Models\ModelingLanguageElement.cs" />
     <Compile Include="DataBase\Models\Project.cs" />
+    <Compile Include="DataBase\Models\ProjectFile.cs" />
     <Compile Include="DataBase\Models\ProjectGdd.cs" />
     <Compile Include="DataBase\Models\ProjectGddSection.cs" />
     <Compile Include="DataBase\Models\ProjectGddSectionContent.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="DataBase\Repository\GddConfigurationRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageElementRepository.cs" />
     <Compile Include="DataBase\Repository\ModelingLanguageRepository.cs" />
+    <Compile Include="DataBase\Repository\ProjectFileRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectGddRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectGddContentSectionRepository.cs" />
     <Compile Include="DataBase\Repository\ProjectGddSectionRepository.cs" />

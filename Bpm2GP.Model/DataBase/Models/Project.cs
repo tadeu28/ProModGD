@@ -29,11 +29,13 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual ProjectGdd ProjectGdd { get; set; }
         public virtual IList<DesignMapping> DesignMappings { get; set; }
         public virtual IList<Designer> Designers { get; set; }
+        public virtual IList<ProjectFile> Files { get; set; }
 
         public Project()
         {
             this.Designers = new List<Designer>();
             DesignMappings = new List<DesignMapping>();
+            Files = new List<ProjectFile>();
         }
     }
 
@@ -88,6 +90,15 @@ namespace Bpm2GP.Model.DataBase.Models
                 //map.Table("designers");
             }, 
             o => o.ManyToMany(p => p.Column("idDesigner")));
+
+            
+            Bag(x => x.Files, map =>
+            {
+                map.Cascade(Cascade.DeleteOrphans);
+                map.Lazy(CollectionLazy.NoLazy);
+                map.Key(k => k.Column("idProject"));
+            },
+            o => o.OneToMany());
 
             OneToOne(x => x.ProjectGdd, m =>
             {
