@@ -1,6 +1,14 @@
 ﻿@model Bpm2GP.Model.DataBase.Models.User
 
-<form method="POST" action="@Url.Action("SaveNewUser", "User")"
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#frmNewUser").submit(function() {
+            $("#divCarregando").show();
+        });
+    });
+</script>
+
+<form id="frmNewUser" method="POST" action="@Url.Action("SaveNewUser", "User")"
       class="dropdown-menu panel panel-info" style="padding-bottom: 0px;border-top-width: 0px;padding-top: 1px;width: 350px;">
     <div class="panel-heading"><h5><i class="glyphicon glyphicon-user"></i> New User</h5></div>
     <div class="panel-body">
