@@ -13,7 +13,9 @@ namespace Bpm2GP.Model.DataBase.Models
     public class Project
     {
         public virtual Guid Id { get; set; }
+        [Required(ErrorMessage = "Title field is required.")]
         public virtual String Title { get; set; }
+        [Required(ErrorMessage = "Description field is required.")]
         public virtual String Description { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
@@ -25,6 +27,7 @@ namespace Bpm2GP.Model.DataBase.Models
         public virtual byte[] BpmnModel { get; set; }
         public virtual bool Inactive { get; set; }
         public virtual Designer Owner { get; set; }
+        [Required(ErrorMessage = "Game Genre field is required.")]
         public virtual GameGenre GameGenre { get; set; }
         public virtual ProjectGdd ProjectGdd { get; set; }
         public virtual IList<DesignMapping> DesignMappings { get; set; }

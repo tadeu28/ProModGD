@@ -2,6 +2,8 @@
 
 <script type="text/javascript">
 
+    $.validator.unobtrusive.parse("form");
+
     $(document).on({
         ajaxStart: function () {
             $("#divCarregando").show();
@@ -52,32 +54,34 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.Id)
-                    @Html.Hidden("projectId", Model.Id)
+                    <form>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+                        @Html.Hidden("projectId", Model.Id)
 
-                    <div class="form-group">
-                        @Html.Label("Title", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.Editor("TitleDoc", new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Title", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.Editor("TitleDoc", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
                     
-                    <div class="form-group">
-                        @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.TextArea("DocDescription", new Dictionary<string, object>()  { { "class", "form-control" }, { "rows", "5" } })
-                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextArea("DocDescription", new Dictionary<string, object>()  { { "class", "form-control" }, { "rows", "5" } })
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        @Html.Label("Document", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <input class="form-control" id="edtDocument" type="file">
+                        <div class="form-group">
+                            @Html.Label("Document", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <input class="form-control" id="edtDocument" type="file">
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer form-horizontal">

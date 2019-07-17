@@ -2,6 +2,8 @@
 
 <script type="text/javascript">
     
+    $.validator.unobtrusive.parse("form");
+
     function postSaveElement() {
         $("#dlgNewMapElement").modal("hide");
         $('body').removeClass('modal-open');
@@ -33,8 +35,8 @@
                     @Html.Hidden("idAssociationElement", Model.AssociateElement.Id)
                     @Html.Hidden("idDesignMap", Model.DesignMapping.Id)
                     <div class="form-group">
-                        @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
-                        @Html.TextAreaFor(model => model.Descricao, new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 3 } })
+                        @Html.Label("Description", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Descricao, new Dictionary<string, object>() { { "class", "form-control" }, { "rows", 6 } })
                         @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
                     </div>
                 </div>

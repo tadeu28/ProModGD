@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace Bpm2GP.Model.DataBase.Models
     public class GameDesignMappingElements
     {
         public virtual Guid Id { get; set; }
+        [Required(ErrorMessage = "Description field is required.")]
         public virtual String Descricao { get; set; }
         public virtual DesignMapping DesignMapping { get; set; }
         public virtual AssociationConfElements AssociateElement { get; set; }
